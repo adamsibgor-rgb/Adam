@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kazalke - Trgovina</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #FFF8EC;
+            color: #546B41;
+        }
+
+        h1 { text-align: center; color: #546B41; margin-bottom: 10px; }
+        .subtitle { text-align: center; margin-bottom: 30px; opacity: 0.8; }
+
+        .pricelist-container {
+            max-width: 950px;
+            margin: 0 auto 40px auto;
+            background-color: white;
+            border: 2px solid #99AD7A;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.02);
+        }
+        .pricelist-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #4A5D39;
+        }
+        .price-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .badge {
+            background-color: #99AD7A22;
+            border: 1px solid #99AD7A;
+            color: #4A5D39;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .badge strong { color: #2F3E22; }
+        .badge.base {
+            background-color: #99AD7A;
+            color: white;
+            border-color: #99AD7A;
+        }
+        .badge.base strong { color: white; }
+
+        h2 {
+            margin-top: 50px;
+            border-bottom: 2px solid #99AD7A;
+            padding-bottom: 10px;
+            color: #4A5D39;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #DCCCAC;
+            border: 2px solid #546B41;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        /* UNIVERZALNA STILIZACIJA ZA TOP ZNAČKE */
+        .bestseller-badge {
+            display: none; /* Privzeto skrito */
+            position: absolute;
+            top: -12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 10;
+            letter-spacing: 0.5px;
+        }
+
+        /* 🥇 1. MESTO: ZLATA ZNAČKA Z ANIMIRANIM SVETLEČIM ROBOM */
+        .bestseller-gold {
+            display: block !important;
+            background: linear-gradient(45deg, #ffe066, #f5b041);
+            color: #4a3300;
+            border: 2px solid #fff;
+            animation: glow-gold 1.8s infinite ease-in-out;
+            box-shadow: 0 4px 15px rgba(245, 176, 65, 0.4);
+        }
+        
+        /* 🥈 2. MESTO: SREBRNA ZNAČKA */
+        .bestseller-silver {
+            display: block !important;
+            background: linear-gradient(45deg, #e5e8e8, #bdc3c7);
+            color: #2c3e50;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(189, 195, 199, 0.3);
+        }
+
+        /* 🥉 3. MESTO: BRONASTA ZNAČKA */
+        .bestseller-bronze {
+            display: block !important;
+            background: linear-gradient(45deg, #edbb99, #dc7633);
+            color: #512e14;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(220, 118, 51, 0.3);
+        }
+        
+        /* PULZIRAJOČI SVETLEČI UČINEK ZA ZLATO */
+        @keyframes glow-gold {
+            0% { box-shadow: 0 0 5px rgba(245, 176, 65, 0.5), 0 4px 10px rgba(245, 176, 65, 0.3); }
+            50% { box-shadow: 0 0 22px rgba(245, 176, 65, 0.9), 0 4px 15px rgba(245, 176, 65, 0.5); border-color: #ffe066; }
+            100% { box-shadow: 0 0 5px rgba(245, 176, 65, 0.5), 0 4px 10px rgba(245, 176, 65, 0.3); }
+        }
+
+        .image-box {
+            width: 100%;
+            height: 220px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+            cursor: zoom-in;
+        }
+
+        .image-box img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        h3 { margin: 10px 0 5px 0; font-size: 1.1rem; text-align: center; }
+
+        .counter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .counter button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background-color: #546B41;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .counter input {
+            width: 45px;
+            text-align: center;
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #546B41;
+            border-radius: 5px;
+        }
+
+        .live-total-box {
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            color: #4A5D39;
+            font-weight: bold;
+        }
+        #live-discount {
+            color: #b85c5c;
+        }
+
+        /* MAKIRANO IN RAZPOTEGNEJŠE OBMOČJE ZA NAROČILO */
+        .order-section {
+            max-width: 950px; /* Raztegnjeno na enako širino kot tabela zgoraj */
+            margin: 60px auto 20px auto;
+            padding: 40px;
+            background: #99AD7A22;
+            border: 2px solid #546B41;
+            border-radius: 20px;
+            box-shadow: 0px 6px 15px rgba(0,0,0,0.03);
+            box-sizing: border-box;
+        }
+
+        .order-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Večji razmak, da ne izgleda natrpano */
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #4A5D39;
+        }
+
+        .form-group input {
+            padding: 14px; /* Večji vnosni prostori */
+            border: 1px solid #99AD7A;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            background-color: #FFFDF9;
+            color: #2F3E22;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #546B41;
+            box-shadow: 0 0 5px rgba(84, 107, 65, 0.2);
+        }
+
+        .buy-btn {
+            margin-top: 20px;
+            padding: 16px 60px;
+            border: none;
+            border-radius: 30px;
+            background-color: #546B41;
+            color: white;
+            font-size: 19px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: background-color 0.2s;
+            align-self: center; /* Gumb je lepo na sredini raztegnjenega obrazca */
+        }
+
+        .buy-btn:hover {
+            background-color: #425433;
+        }
+
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 3px solid white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" alt="Povečava">
+    </div>
+
+    <h1>Katalog Kazalk</h1>
+    <p class="subtitle">Izberi svoje najljubše motive. Klikni na sliko za povečavo.</p>
+
+    <div class="pricelist-container">
+        <div class="pricelist-title">Ugodnosti ob nakupu več kazalk:</div>
+        <div class="price-badges">
+            <div class="badge base">1 kazalka: <strong>4.00 €</strong></div>
+            <div class="badge">2 kazalki: <strong>10% popust</strong> (3.60 €/kos)</div>
+            <div class="badge">3 kazalke: <strong>20% popust</strong> (3.20 €/kos)</div>
+            <div class="badge">4 kazalke: <strong>30% popust</strong> (2.80 €/kos)</div>
+            <div class="badge">5+ kazalk: <strong>40% popust</strong> (2.40 €/kos)</div>
+        </div>
+    </div>
+
+    <h2>Muce</h2>
+    <div class="products" id="cats-grid"></div>
+
+    <h2>Psički</h2>
+    <div class="products" id="dogs-grid"></div>
+
+    <h2>Narava in ostalo</h2>
+    <div class="products" id="nature-grid"></div>
+
+    <div class="order-section">
+        <div class="live-total-box" style="text-align: center;">
+            Skupaj izbrano: <span id="live-qty">0</span> kos | 
+            <span id="live-discount" style="display:none;">Popust: -0% | </span>
+            Znesek: <span id="live-total-price">0.00</span> €
+        </div>
+
+        <hr style="border: 0; height: 1px; background: #99AD7A; margin: 25px 0;">
+        <h3 style="text-align: center; margin-bottom: 5px; color: #4A5D39; font-size: 1.3rem;">Podatki o naročniku</h3>
+        <p style="text-align: center; font-size: 0.9rem; margin: 0 0 25px 0; opacity: 0.8;">Izpolnite spodnji polji za uspešno oddajo naročila.</p>
+
+        <div class="order-form">
+            <div class="form-group">
+                <label for="cust-name">Ime in Priimek</label>
+                <input type="text" id="cust-name" placeholder="Vpišite vaše ime in priimek">
+            </div>
+            <div class="form-group">
+                <label for="cust-phone">Telefonska številka</label>
+                <input type="tel" id="cust-phone" placeholder="npr. 041 123 456">
+            </div>
+            <div class="form-group">
+                <label for="cust-address">Prevzem po dogovoru (Opombe / Želje glede prevzema)</label>
+                <input type="text" id="cust-address" placeholder="Tukaj lahko zapišete, kje ali kako želite prevzeti kazalke (izbirno)">
+            </div>
+            
+            <button class="buy-btn" onclick="sendOrder()">Oddaj Naročilo</button>
+        </div>
+
+        <a href="program.html" style="color: #546B41; text-decoration: none; display: block; margin-top: 30px; font-weight: bold; text-align: center;">← Nazaj na glavno stran</a>
+    </div>
+
+    <script>
+        emailjs.init({ publicKey: "ZTUaQ3NrrN6CV6MUq" });
+
+        // VPISI SVOJE FIREBASE PODATKE TUKAJ
+        const firebaseConfig = {
+            apiKey: "TUKAJ_VPIŠI_SVOJ_API_KEY", 
+            authDomain: "adam-2e249.firebaseapp.com",
+            databaseURL: "https://adam-2e249-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "adam-2e249",
+            storageBucket: "adam-2e249.appspot.com",
+            messagingSenderId: "367204753066", 
+            appId: "TUKAJ_VPIŠI_SVOJ_APP_ID"
+        };
+        
+        // Inicializacija baze podatkov
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const categories = {
+            cats: [
+                { id: "bela", name: "Bela Muca", img: "slike/Bela.png" },
+                { id: "crna", name: "Črna Muca", img: "slike/Črna.png" },
+                { id: "crnapada", name: "Črna Pada", img: "slike/črnapada.png" },
+                { id: "hecna", name: "Hecna Muca", img: "slike/hecna.png" },
+                { id: "l_gor", name: "Luškana Gor", img: "slike/Luškana gor.png" },
+                { id: "l_bela", name: "Luškana Bela", img: "slike/Luškanabela.png" },
+                { id: "naga", name: "Nagajiva Muca", img: "slike/nagajiva_muca.png" },
+                { id: "oknu", name: "Muca na oknu", img: "slike/naoknu.png" },
+                { id: "real", name: "Realistična Muca", img: "slike/realistična.png" },
+                { id: "spre", name: "Spreščena Muca", img: "slike/Spreščena.png" },
+                { id: "zunaj", name: "Muca Zunaj", img: "slike/zunaj.png" }
+            ],
+            dogs: [
+                { id: "kuza_tek", name: "Kuža med tekom", img: "slike/Kuža_med_tekom.png" },
+                { id: "kuza_psen", name: "Kuža v pšenici", img: "slike/Kuza_pšenica.png" },
+                { id: "kuza1", name: "Kuža 1", img: "slike/Kuza1.png" },
+                { id: "kuza2", name: "Kuža 2", img: "slike/Kuza2.png" }
+            ],
+            nature: [
+                { id: "cesnja", name: "Češnja", img: "slike/Češnja.png" },
+                { id: "cvetje", name: "Cvetje (rastline)", img: "slike/cvetje(rasline).png" },
+                { id: "gora", name: "Gora", img: "slike/Gora.png" },
+                { id: "gozd", name: "Gozd", img: "slike/gozd.png" },
+                { id: "modraroza", name: "Modra roža", img: "slike/Modraroža.png" },
+                { id: "palma", name: "Palma", img: "slike/palma.png" },
+                { id: "r_veja", name: "Rdeča veja", img: "slike/Rdečaveja.png" },
+                { id: "r_cvetje", name: "Rdeče cvetje", img: "slike/rdececetje.png" },
+                { id: "r_roze", name: "Rdeče rože", img: "slike/rdečeroze.png" },
+                { id: "samuraj", name: "Samuraj", img: "slike/samuraj.png" },
+                { id: "sova", name: "Sova", img: "slike/Sova.png" },
+                { id: "srna_jez", name: "Srna na jezeru", img: "slike/Srna na jezeru.png" },
+                { id: "srnjak", name: "Srnjak", img: "slike/srnjak.png" }
+            ]
+        };
+
+        function renderItems(catKey, gridId) {
+            const grid = document.getElementById(gridId);
+            categories[catKey].forEach(p => {
+                grid.innerHTML += `
+                    <div class="card" id="card-${p.id}">
+                        <div class="bestseller-badge" id="badge-${p.id}">Prodajano</div>
+                        <div class="image-box" onclick="openLightbox('${p.img}')">
+                            <img src="${p.img}" alt="${p.name}">
+                        </div>
+                        <h3>${p.name}</h3>
+                        <div class="counter">
+                            <button onclick="changeVal('${p.id}', -1)">-</button>
+                            <input type="number" id="${p.id}" value="0" min="0" onchange="calculateTotal()">
+                            <button onclick="changeVal('${p.id}', 1)">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        renderItems('cats', 'cats-grid');
+        renderItems('dogs', 'dogs-grid');
+        renderItems('nature', 'nature-grid');
+
+        function updateBestsellers() {
+            database.ref('sales').once('value', (snapshot) => {
+                const salesData = snapshot.val() || {};
+                
+                let itemsList = [];
+                for (let cat in categories) {
+                    categories[cat].forEach(p => {
+                        itemsList.push({
+                            id: p.id,
+                            sales: salesData[p.id] || 0
+                        });
+                    });
+                }
+                
+                itemsList.sort((a, b) => b.sales - a.sales);
+                
+                itemsList.forEach(item => {
+                    const badge = document.getElementById(`badge-${item.id}`);
+                    if (badge) {
+                        badge.style.display = 'none';
+                        badge.classList.remove('bestseller-gold', 'bestseller-silver', 'bestseller-bronze');
+                    }
+                });
+
+                for (let i = 0; i < 3; i++) {
+                    if (itemsList[i] && itemsList[i].sales > 0) {
+                        const topBadge = document.getElementById(`badge-${itemsList[i].id}`);
+                        if (topBadge) {
+                            if (i === 0) {
+                                topBadge.innerText = "🏆 1. Najbolj prodajano";
+                                topBadge.classList.add('bestseller-gold'); 
+                            } else if (i === 1) {
+                                topBadge.innerText = "🥈 2. Prodajano";
+                                topBadge.classList.add('bestseller-silver'); 
+                            } else if (i === 2) {
+                                topBadge.innerText = "🥉 3. Prodajano";
+                                topBadge.classList.add('bestseller-bronze'); 
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        updateBestsellers();
+
+        function openLightbox(src) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = src;
+            lb.style.display = 'flex';
+        }
+
+        function changeVal(id, delta) {
+            let el = document.getElementById(id);
+            let val = Number(el.value) + delta;
+            if (val >= 0) {
+                el.value = val;
+                calculateTotal();
+            }
+        }
+
+        function calculateTotal() {
+            let totalQty = 0;
+            
+            for (let cat in categories) {
+                categories[cat].forEach(p => {
+                    let qty = Number(document.getElementById(p.id).value);
+                    if (qty > 0) totalQty += qty;
+                });
+            }
+
+            let pricePerItem = 4;
+            let discount = 0;
+
+            if (totalQty === 2) {
+                discount = 0.10;
+            } else if (totalQty === 3) {
+                discount = 0.20;
+            } else if (totalQty === 4) {
+                discount = 0.30;
+            } else if (totalQty >= 5) {
+                discount = 0.40;
+            }
+
+            let rawPrice = totalQty * pricePerItem;
+            let finalPrice = rawPrice * (1 - discount);
+
+            document.getElementById('live-qty').innerText = totalQty;
+            document.getElementById('live-total-price').innerText = finalPrice.toFixed(2);
+
+            let discEl = document.getElementById('live-discount');
+            if (discount > 0) {
+                discEl.style.display = 'inline';
+                discEl.innerText = `Popust: -${discount * 100}% | `;
+            } else {
+                discEl.style.display = 'none';
+            }
+
+            return { totalQty, finalPrice, discount };
+        }
+
+        function sendOrder() {
+            const priceInfo = calculateTotal();
+            
+            if (priceInfo.totalQty === 0) {
+                alert("Prosimo, izberite vsaj eno kazalko pred oddajo naročila.");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const note = document.getElementById('cust-address').value.trim(); // Opombe za prevzem
+
+            if (!name || !phone) {
+                alert("Prosimo, izpolnite obvezni polji (Ime in Telefonska številka).");
+                return;
+            }
+            
+            let text = `NOVO NAROČILO KAZALK:\n`;
+            text += `-------------------------\n`;
+            text += `Stranka: ${name}\n`;
+            text += `Telefon: ${phone}\n`;
+            text += `Način prevzema: Prevzem po dogovoru\n`;
+            if(note) {
+                text += `Opombe stranke: ${note}\n`;
+            }
+            text += `-------------------------\n\n`;
+            text += `NAROČENI ARTIKLI:\n`;
+
+            let orderedItems = {}; 
+
+            for (let cat in categories) {
+                categories[cat].forEach(p => {
+                    let qty = Number(document.getElementById(p.id).value);
+                    if (qty > 0) {
+                        text += `- ${p.name}: ${qty} kos\n`;
+                        orderedItems[p.id] = qty;
+                    }
+                });
+            }
+
+            text += `\n-------------------------\n`;
+            text += `Skupaj kosov: ${priceInfo.totalQty}\n`;
+            if (priceInfo.discount > 0) text += `Uveljavljen popust: ${priceInfo.discount * 100}%\n`;
+            text += `Končni znesek za plačilo: ${priceInfo.finalPrice.toFixed(2)} €`;
+
+            emailjs.send("service_pxv5wgw", "template_xf1e0im", {
+                to_email: "adam.sibgor@gmail.com",
+                message: text
+            }).then(() => {
+                for (let itemId in orderedItems) {
+                    database.ref('sales/' + itemId).transaction((currentSales) => {
+                        return (currentSales || 0) + orderedItems[itemId];
+                    });
+                }
+
+                alert("Naročilo je bilo uspešno poslano!");
+                
+                document.getElementById('cust-name').value = "";
+                document.getElementById('cust-phone').value = "";
+                document.getElementById('cust-address').value = "";
+
+                for (let cat in categories) {
+                    categories[cat].forEach(p => document.getElementById(p.id).value = 0);
+                }
+                calculateTotal();
+                
+                setTimeout(updateBestsellers, 1000);
+
+            }).catch(() => alert("Napaka pri pošiljanju. Preverite nastavitve EmailJS."));
+        }
+    </script>
+</body>
+</html>

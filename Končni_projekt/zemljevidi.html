@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Zemljevidi - 3D Tiskanje</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 60px auto 0 auto;
+            max-width: 1250px;
+            background-color: #FFF8EC;
+            color: #546B41;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #546B41;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .hero-section {
+            background-color: #99AD7A;
+            color: white;
+            padding: 40px 20px;
+            border-radius: 25px;
+            text-align: center;
+            border: 3px solid #546B41;
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+
+        .instructions-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 25px;
+            border: 2px solid #99AD7A;
+            margin-bottom: 40px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .instructions-box h3 { margin-top: 0; color: #2C3E1F; }
+        .instructions-box ol { padding-left: 20px; }
+        .instructions-box li { margin-bottom: 10px; }
+
+        .important-note {
+            background-color: #FFF8EC;
+            border-left: 5px solid #546B41;
+            padding: 10px 15px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #c44512;
+        }
+
+        .maps-link-btn {
+            display: inline-block;
+            background-color: #546B41;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+        }
+        .maps-link-btn:hover { background-color: #435433; }
+
+        /* MREŽA ZA KARTICE */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background-color: #DCCCAC;
+            border: 3px solid #546B41;
+            padding: 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #546B41;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.08);
+            min-height: 420px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: scale(1.04);
+            box-shadow: 0px 14px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        /* VEČJE SLIKE BREZ NASLOVOV */
+        .card-img {
+            width: 100%;
+            height: 380px;
+            border-radius: 18px;
+            background-color: white;
+            object-fit: cover;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* POPUP MODALNO OKNO */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 600px;
+            width: 90%;
+            border: 3px solid #546B41;
+            position: relative;
+            text-align: left;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #546B41;
+        }
+
+        /* OBRAZEC NA DNU */
+        .form-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 25px;
+            border: 2px solid #DCCCAC;
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+        .form-section h2 { margin-top: 0; margin-bottom: 20px; }
+
+        .upload-box {
+            background-color: #f9f4e8;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px dashed #546B41;
+        }
+
+        input[type="email"], input[type="file"], textarea {
+            display: block; width: 100%;
+            margin-top: 10px; margin-bottom: 20px; padding: 12px;
+            border-radius: 8px; border: 1px solid #546B41;
+            box-sizing: border-box;
+            background-color: white;
+        }
+
+        button {
+            display: block; width: 100%;
+            background-color: #546B41; color: white;
+            font-weight: bold; cursor: pointer; border: none; margin-top: 20px;
+            padding: 15px; border-radius: 8px; font-size: 1.1rem;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: #435433; }
+
+        @media (max-width: 800px) {
+            .container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="program.html" class="back-link">← Nazaj na začetno stran</a>
+
+    <div class="hero-section">
+        <h1>Primeri 3D zemljevidov in reliefov</h1>
+        <p>Kliknite na posamezno sliko za ogled podrobnosti modela.</p>
+    </div>
+
+    <div class="instructions-box">
+        <h3>Navodila za uporabo in pripravo modela</h3>
+        <ol>
+            <li>Preko spodnjega gumba odprite zunanji program <strong>Map2Model</strong>, kjer lahko izberete poljubno lokacijo na svetu.</li>
+            <li>Prilagodite izrez, višino ter podrobnosti reliefa po svojih željah.</li>
+            <li><strong>Pomembno obvestilo o barvah:</strong> 3D tiskalnik je omejen na maksimalno <strong>4 barve</strong>. Vse ostale želene barvne podrobnosti (kot so npr. manjše reke, potoki ali specifične oznake) je potrebno naknadno ročno pobarvati.</li>
+            <li>Ko ste z izgledom zadovoljni, shranite 3D datoteko ali naredite jasen posnetek zaslona (sliko).</li>
+            <li>Naložite prejeto datoteko ali sliko v obrazec na dnu te strani in nam pošljite povpraševanje.</li>
+        </ol>
+
+        <div class="important-note">
+            ⚠️ OPOZORILO: Največja možna velikost posameznega 3D tiskanega zemljevida je 25x25 cm!
+        </div>
+
+        <a href="https://map2model.com/" target="_blank" class="maps-link-btn">Odpri Map2Model →</a>
+    </div>
+
+    <div class="container">
+        
+        <div class="card" onclick="openModal('Zemljevid Triglav', 'To je podroben opis reliefa Triglava in Julijskih Alp. Odličen primer za reliefni prikaz gorskega sveta v merilu.')">
+            <img src="slike za zemljevide/Posnetek zaslona 2026-05-22 165829.png" alt="3D Reliefni zemljevid 1" class="card-img">
+        </div>
+
+        <div class="card" onclick="openModal('Zemljevid Blejsko jezero', 'To je podroben opis za drugi reliefni zemljevid, ki prikazuje vdolbine, doline in okolico Blejskega jezera z okoliškimi hribi.')">
+            <img src="slike za zemljevide/Posnetek zaslona 2026-05-22 170357.png" alt="3D Reliefni zemljevid 2" class="card-img">
+        </div>
+
+    </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="color: #546B41; margin-top: 0;"></h2>
+            <p id="modalDescription" style="font-size: 1.15rem; color: #435433; line-height: 1.7;"></p>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>Oddajte naročilo za svoj Zemljevid</h2>
+        <div class="upload-box">
+            <form action="https://getform.io/f/xw07q11t3iq" method="POST" enctype="multipart/form-data">
+                
+                <label><strong>Vaš E-naslov:</strong></label>
+                <input type="email" name="fi-sender-email" placeholder="primer@gmail.com" required>
+                
+                <label style="margin-top: 15px; display: block;"><strong>Naložite sliko reliefa ali shranjeno 3D datoteko:</strong></label>
+                <input type="file" name="fi-file-upload" accept="image/*,.stl,.obj,.3mf" required>
+                
+                <label style="margin-top: 15px; display: block;"><strong>Dodatne želje glede zemljevida:</strong></label>
+                <textarea name="fi-text-message" rows="5" placeholder="Vpišite želeno barvo, okvir, specifične predele ali želene dimenzije (do max 25x25 cm)..." required></textarea>
+                
+                <button type="submit">Oddaj povpraševanje za zemljevid</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDescription').innerText = text;
+            document.getElementById('infoModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('infoModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

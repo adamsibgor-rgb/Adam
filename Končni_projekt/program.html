@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="sl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Dprojekti - 3D Tiskanje in Modeliranje</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 30px auto 0 auto;
+            max-width: 1600px;
+            background-color: #FFF8EC;
+            color: #546B41;
+            padding: 0 40px;
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .brand-logo {
+            height: 220px; 
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 5.5rem;
+            font-weight: 900;
+            color: #2C3E1F;
+            margin: 0;
+            letter-spacing: -1.5px;
+        }
+
+        h1 {
+            color: #546B41;
+            text-align: center;
+            font-size: 2.6rem; 
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 1.5rem; 
+            font-weight: 500;
+        }
+
+        .ločilna-črta {
+            border: 0;
+            height: 1px;
+            background-color: rgba(84, 107, 65, 0.25);
+            margin: 0 calc(-50vw + 50%);
+            width: 100vw;
+            margin-bottom: 50px;
+        }
+
+        .glavna-gora {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .stranski-stolpec-levo, 
+        .stranski-stolpec-desno {
+            flex: 1;
+            min-width: 320px;
+            max-width: 360px;
+        }
+
+        .vsebina-sredina {
+            flex: 2;
+            min-width: 600px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .card {
+            background-color: #DCCCAC;
+            border: 3px solid #546B41;
+            padding: 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #546B41;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+            min-height: 360px;
+            box-sizing: border-box;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0px 16px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 240px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            background-color: white;
+            object-fit: contain;
+            padding: 15px;
+            box-sizing: border-box;
+            border: 1px solid rgba(84, 107, 65, 0.15);
+        }
+
+        .card-title {
+            margin: 10px 0 0 0;
+            font-size: 1.6rem; 
+            font-weight: bold;
+            color: #2C3E1F;
+        }
+
+        .bambu-card {
+            background-color: #DCCCAC;
+            border: 3px solid #546B41;
+            padding: 35px 25px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .bambu-title-box {
+            background-color: #ECECEC;
+            padding: 12px 20px;
+            border-radius: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .bambu-card h4 {
+            margin: 0;
+            font-size: 2.2rem; 
+            color: #2C3E1F;
+            font-weight: bold;
+        }
+
+        .side-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .bambu-btn {
+            display: block;
+            width: 100%;
+            background-color: #546B41;
+            color: white;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 18px;
+            font-size: 1.2rem; 
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .bambu-btn:hover {
+            background-color: #435433;
+            transform: translateY(-2px);
+        }
+
+        .navodila-box {
+            margin-top: 25px;
+            text-align: left;
+            width: 100%;
+            border-top: 2px solid rgba(84, 107, 65, 0.3);
+            padding-top: 25px;
+        }
+
+        .navodila-box h5 {
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2C3E1F;
+            background-color: #ECECEC;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .navodila-box ol {
+            margin: 0;
+            padding-left: 25px;
+            font-size: 1.45rem; 
+            color: #2C3E1F;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .navodila-box li {
+            margin-bottom: 15px;
+        }
+
+        footer {
+            margin-top: 100px;
+            padding: 40px 30px;
+            border-top: 2px solid #99AD7A;
+            text-align: center;
+            width: 100%;
+            font-size: 1.2rem;
+        }
+
+        .contact-link {
+            color: #546B41;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1200px) {
+            .glavna-gora {
+                flex-direction: column;
+                align-items: center;
+            }
+            .stranski-stolpec-levo, 
+            .stranski-stolpec-desno,
+            .vsebina-sredina {
+                width: 100%;
+                max-width: 700px;
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .brand-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .brand-logo {
+                height: 140px;
+            }
+            .brand-name {
+                font-size: 3.5rem;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="brand-header">
+        <img src="slike Prva str/Logo.png" alt="3Dprojekti Logo" class="brand-logo">
+        <h2 class="brand-name">3Dprojekti</h2>
+    </div>
+
+    <h1>Dobrodošli na moji spletni strani</h1>
+    <p class="intro">Kot začetnik v podjetništvu se ukvarjam s 3D tiskanjem in modeliranjem. <br> Spodaj preverite mojo ponudbo.</p>
+
+    <hr class="ločilna-črta">
+
+    <div class="glavna-gora">
+        
+        <div class="stranski-stolpec-levo">
+            <div class="bambu-card">
+                <div class="bambu-title-box">
+                    <h4>Bambu Handy</h4>
+                </div>
+                
+                <a href="https://makerworld.com" target="_blank" class="bambu-btn">
+                    Splet za 3D modele
+                </a>
+
+                <a href="https://play.google.com/store/apps/details?id=com.bambulab.bambuhandy" id="mobilniLink" target="_blank" class="bambu-btn">
+                    Naložite si aplikacijo
+                </a>
+
+                <div class="navodila-box">
+                    <h5>Navodila za uporabo:</h5>
+                    <ol>
+                        <li>Kliknite na <strong>Splet za 3D modele</strong> in poiščite želeni izdelek.</li>
+                        <li>Naložite si aplikacijo <strong>Bambu Handy</strong> na svojo mobilno napravo.</li>
+                        <li>In pošljite željo na moj gmail.</li>
+                        <li>Cena po dogovoru</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="vsebina-sredina">
+            <div class="container">
+                
+                <a href="kazalke.html" class="card">
+                    <img src="slike/samuraj.png" alt="3D kazalka Samuraj" class="card-img">
+                    <h5 class="card-title">Katalog Kazalk</h5>
+                </a>
+
+                <a href="vaze.html" class="card">
+                    <img src="slike/Vaza.png" alt="3D tiskana vaza" class="card-img">
+                    <h5 class="card-title">3D Vaze & Po meri</h5>
+                </a>
+
+                <a href="projekti.html" class="card">
+                    <img src="slike Prva str/projekti.png" alt="Moji 3D Projekti" class="card-img">
+                    <h5 class="card-title">Moji Projekti</h5>
+                </a>
+                
+                <a href="posebne-zelje.html" class="card">
+                    <img src="slike Prva str/Posebne želje.png" alt="Posebne želje 3D tisk" class="card-img">
+                    <h5 class="card-title">Posebne želje</h5>
+                </a>
+
+                <a href="fotografije.html" class="card">
+                    <img src="slike Prva str/3d slika.png" alt="3D tisk fotografij" class="card-img">
+                    <h5 class="card-title">3D Tisk Fotografij</h5>
+                </a>
+
+                <a href="zemljevidi.html" class="card">
+                    <img src="slike Prva str/3D_zeljevid.png" alt="3D tisk zemljevidov" class="card-img">
+                    <h5 class="card-title">3D Zemljevidi</h5>
+                </a>
+                
+            </div>
+        </div>
+
+        <div class="stranski-stolpec-desno">
+            <div class="bambu-card">
+                <div class="bambu-title-box">
+                    <img src="slike Prva str/logo onshape.png" alt="Onshape" class="side-logo">
+                    <h4>Onshape</h4>
+                </div>
+                
+                <a href="onshape.html" class="bambu-btn">
+                    Odpri Onshape Vodnik
+                </a>
+
+                <a href="https://www.onshape.com/en/products/free" target="_blank" class="bambu-btn" style="background-color: #2C3E1F;">
+                    Ustvari brezplačen račun
+                </a>
+
+                <div class="navodila-box">
+                    <h5>Hitre prednosti:</h5>
+                    <ol>
+                        <li><strong>Brez namestitve:</strong> Deluje neposredno v vašem brskalniku.</li>
+                        <li><strong>Natančnost:</strong> Idealno za tehnične kose po meri.</li>
+                        <li><strong>Izvoz modela:</strong> Izdelke izvozite v formatu <strong>.STL</strong>.</li>
+                        <li><strong>Brezplačno:</strong> Popolnoma brez stroškov za hobiste!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Vse pravice pridržane.</p>
+        <span class="label">Gmail:</span>
+        <a href="mailto:adam.sibgor@gmail.com" class="contact-link">adam.sibgor@gmail.com</a>
+        <br>
+        <span class="label">Telefon: +38664172788</span>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const mobilniGumb = document.getElementById('mobilniLink');
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                mobilniGumb.href = "https://apps.apple.com/us/app/bambu-handy/id1637418641";
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="sl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Tisk Fotografij - Lithophane</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 60px auto 0 auto;
+            max-width: 1250px;
+            background-color: #FFF8EC;
+            color: #546B41;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #546B41;
+            text-align: center;
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.5rem;
+        }
+
+        .ločilna-črta {
+            border: 0;
+            height: 1px;
+            background-color: rgba(84, 107, 65, 0.25);
+            margin: 0 calc(-50vw + 50%);
+            width: 100vw;
+            margin-bottom: 50px;
+        }
+
+        .glavna-gora {
+            display: flex;
+            gap: 40px;
+            align-items: stretch;
+        }
+
+        .vsebina-levo {
+            flex: 1.2;
+            min-width: 320px;
+        }
+
+        /* Naročniški obrazec */
+        .bambu-card {
+            background-color: #DCCCAC;
+            border: 3px solid #546B41;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #546B41;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+            background-color: #FFF8EC;
+            color: #546B41;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .bambu-btn {
+            display: block;
+            width: 100%;
+            background-color: #546B41;
+            color: white;
+            border: none;
+            padding: 18px 20px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .bambu-btn:hover {
+            background-color: #435433;
+            transform: translateY(-2px);
+        }
+
+        /* Desni del s primeri */
+        .vsebina-desno {
+            flex: 2;
+        }
+
+        .naslov-primeri {
+            background-color: #ECECEC;
+            padding: 10px 25px;
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 2.2rem;
+            color: #2C3E1F;
+            margin-top: 0;
+            margin-bottom: 35px;
+            font-weight: bold;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            align-items: stretch;
+            margin-bottom: 35px;
+        }
+
+        .card {
+            background-color: #DCCCAC;
+            border: 3px solid #546B41;
+            padding: 25px;
+            border-radius: 25px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.08);
+            min-height: 340px;
+            box-sizing: border-box;
+        }
+
+        .card-img-zoom {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+            object-fit: cover;
+            padding: 5px;
+            box-sizing: border-box;
+            border: 1px solid rgba(84, 107, 65, 0.3);
+        }
+
+        .card-title {
+            margin: 5px 0 0 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2C3E1F;
+        }
+
+        .navodila-box {
+            text-align: left;
+            width: 100%;
+            background-color: #ECECEC;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-sizing: border-box;
+            border-left: 5px solid #546B41;
+        }
+
+        .navodila-box p {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #435433;
+            line-height: 1.6;
+        }
+
+        /* Stil za gumb na dnu strani */
+        .gumb-izhod-container {
+            margin-top: 50px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .bambu-btn-nazaj {
+            display: inline-block;
+            background-color: #ECECEC;
+            color: #546B41;
+            border: 2px solid #546B41;
+            padding: 12px 30px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .bambu-btn-nazaj:hover {
+            background-color: #546B41;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 1px solid #99AD7A;
+            text-align: center;
+            width: 100%;
+        }
+
+        .contact-link {
+            color: #546B41;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 950px) {
+            .glavna-gora {
+                flex-direction: column-reverse;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .vsebina-levo {
+                width: 100%;
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>3D Tisk Fotografij (Lithophane)</h1>
+    <p class="intro">Pretvorite svoje najljubše spomine v unikatne reliefne 3D izdelke, ki zaživijo ob siju svetlobe.</p>
+
+    <hr class="ločilna-črta">
+
+    <div class="glavna-gora">
+        
+        <div class="vsebina-levo">
+            <form class="bambu-card" action="mailto:adam.sibgor@gmail.com" method="post" enctype="multipart/form-data">
+                
+                <div class="form-group">
+                    <label for="email">Vaš E-naslov:</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="primer@gmail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="datoteka">Izberite fotografijo za tisk:</label>
+                    <input type="file" id="datoteka" name="datoteka" class="form-control" accept="image/*" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="opombe">Opombe in posebne želje (npr. dimenzije):</label>
+                    <textarea id="opombe" name="opombe" class="form-control" placeholder="Tukaj vpišite vaše želje glede velikosti, oblike (pravokotna, okrogla) ali stojala..."></textarea>
+                </div>
+
+                <button type="submit" class="bambu-btn">Pošlji fotografijo</button>
+                
+            </form>
+        </div>
+
+        <div class="vsebina-desno">
+            <h4 class="naslov-primeri">Primeri 3D tiskanih fotografij:</h4>
+            
+            <div class="container">
+                
+                <div class="card">
+                    <img src="slike_Slike/Družinske slike.png" alt="3D tisk družinske fotografije" class="card-img-zoom">
+                    <h5 class="card-title">Družinska fotografija</h5>
+                </div>
+
+                <div class="card">
+                    <img src="slike_Slike/lucka.png" alt="3D tisk namizne lučke s kužkom" class="card-img-zoom">
+                    <h5 class="card-title">Hišni ljubljenčki (Lučka)</h5>
+                </div>
+
+                <div class="card">
+                    <img src="slike_Slike/gora.png" alt="3D tisk čudovite pokrajine" class="card-img-zoom">
+                    <h5 class="card-title">Pokrajina / Narava</h5>
+                </div>
+                
+                <div class="card">
+                    <img src="slike_Slike/Slika v okverju.png" alt="3D tisk litofanije v okvirju" class="card-img-zoom">
+                    <h5 class="card-title">Potovanja / V okvirju</h5>
+                </div>
+
+            </div>
+
+            <div class="navodila-box">
+                <p>💡 <strong>Nasvet za boljši efekt:</strong> Končni izdelek je veliko lepši in bolj podroben, če izberete fotografijo, ki ima bolj izrazit motiv in močan kontrast med svetlimi in temnimi deli!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="gumb-izhod-container">
+        <a href="program.html" class="bambu-btn-nazaj">⬅ Nazaj na glavno stran</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Vse pravice pridržane.</p>
+        <span class="label">Gmail:</span>
+        <a href="mailto:adam.sibgor@gmail.com" class="contact-link">adam.sibgor@gmail.com</a>
+        <br>
+        <span class="label">Telefon: +38664172788</span>
+    </footer>
+
+</body>
+</html>
