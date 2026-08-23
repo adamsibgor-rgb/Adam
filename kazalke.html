@@ -8,16 +8,32 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 40px;
+            padding: 20px;
             background-color: #FFF8EC;
             color: #546B41;
         }
 
-        h1 { text-align: center; color: #546B41; margin-bottom: 10px; }
-        .subtitle { text-align: center; margin-bottom: 30px; opacity: 0.8; }
+        h1 { 
+            text-align: center; 
+            color: #546B41; 
+            margin-top: 10px;
+            margin-bottom: 10px; 
+            font-size: 2rem;
+        }
+
+        .subtitle { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            opacity: 0.8; 
+            font-size: 1rem;
+        }
 
         .pricelist-container {
             max-width: 950px;
@@ -29,18 +45,21 @@
             text-align: center;
             box-shadow: 0px 4px 10px rgba(0,0,0,0.02);
         }
+
         .pricelist-title {
             font-weight: bold;
             font-size: 1.1rem;
             margin-bottom: 15px;
             color: #4A5D39;
         }
+
         .price-badges {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 12px;
         }
+
         .badge {
             background-color: #99AD7A22;
             border: 1px solid #99AD7A;
@@ -50,12 +69,15 @@
             font-size: 0.95rem;
             font-weight: 500;
         }
+
         .badge strong { color: #2F3E22; }
+
         .badge.base {
             background-color: #99AD7A;
             color: white;
             border-color: #99AD7A;
         }
+
         .badge.base strong { color: white; }
 
         h2 {
@@ -63,12 +85,13 @@
             border-bottom: 2px solid #99AD7A;
             padding-bottom: 10px;
             color: #4A5D39;
+            font-size: 1.5rem;
         }
 
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
@@ -160,18 +183,21 @@
         }
 
         .counter button {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border: none;
             border-radius: 50%;
             background-color: #546B41;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .counter input {
-            width: 45px;
+            width: 50px;
             text-align: center;
             font-size: 16px;
             padding: 5px;
@@ -181,23 +207,24 @@
 
         .live-total-box {
             margin-bottom: 25px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #4A5D39;
             font-weight: bold;
+            line-height: 1.5;
         }
+
         #live-discount {
             color: #b85c5c;
         }
 
         .order-section {
             max-width: 950px;
-            margin: 60px auto 20px auto;
-            padding: 40px;
+            margin: 50px auto 20px auto;
+            padding: 30px 20px;
             background: #99AD7A22;
             border: 2px solid #546B41;
             border-radius: 20px;
             box-shadow: 0px 6px 15px rgba(0,0,0,0.03);
-            box-sizing: border-box;
         }
 
         .order-form {
@@ -224,13 +251,12 @@
             padding: 14px;
             border: 1px solid #99AD7A;
             border-radius: 8px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             background-color: #FFFDF9;
             color: #2F3E22;
             outline: none;
             transition: border-color 0.2s;
             width: 100%;
-            box-sizing: border-box;
         }
 
         .form-group input:focus {
@@ -240,17 +266,19 @@
 
         .buy-btn {
             margin-top: 20px;
-            padding: 16px 60px;
+            padding: 16px 40px;
             border: none;
             border-radius: 30px;
             background-color: #546B41;
             color: white;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: background-color 0.2s;
             align-self: center;
+            width: 100%;
+            max-width: 320px;
         }
 
         .buy-btn:hover {
@@ -269,13 +297,64 @@
             justify-content: center;
             align-items: center;
             cursor: zoom-out;
+            padding: 20px;
         }
 
         #lightbox img {
-            max-width: 90%;
+            max-width: 95%;
             max-height: 90%;
             border: 3px solid white;
             border-radius: 10px;
+        }
+
+        /* Responsive prilagoditve za mobilne naprave */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .pricelist-container {
+                padding: 15px 10px;
+            }
+
+            .price-badges {
+                gap: 8px;
+            }
+
+            .badge {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+                width: 100%;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .card {
+                padding: 10px;
+            }
+
+            .image-box {
+                height: 150px;
+            }
+
+            h3 {
+                font-size: 0.95rem;
+            }
+
+            .live-total-box {
+                font-size: 1rem;
+            }
+
+            .order-section {
+                padding: 20px 15px;
+            }
         }
     </style>
 </head>
@@ -310,7 +389,7 @@
 
     <div class="order-section">
         <div class="live-total-box" style="text-align: center;">
-            Skupaj izbrano: <span id="live-qty">0</span> kos | 
+            Skupaj izbrano: <span id="live-qty">0</span> kos <br class="mobile-break">| 
             <span id="live-discount" style="display:none;">Popust: -0% | </span>
             Znesek: <span id="live-total-price">0.00</span> €
         </div>
@@ -487,7 +566,7 @@
                 });
             }
 
-            let pricePerItem = 7; // Posodobljena cena na 7 evrov
+            let pricePerItem = 7;
             let discount = 0;
 
             if (totalQty === 2) {
