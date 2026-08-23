@@ -3,52 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prodaja 3D kazalnikov za knjige</title>
+    <title>3D Kazalke | 3Dprojekti</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; text-align: center; }
-        header { background-color: #333; color: white; padding: 20px 0; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-        .container { padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
-        .card { background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 15px; text-align: center; }
-        .card img { max-width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-        .card h3 { margin: 10px 0 5px; font-size: 1.1em; }
-        .card p { color: #555; font-weight: bold; font-size: 1.1em; margin: 5px 0 15px; }
-        .btn-add { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 1em; }
-        .btn-add:hover { background-color: #218838; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: #fdfbf7; 
+            color: #2d5a27;
+            text-align: center; 
+        }
+
+        h1 { color: #2d5a27; margin-bottom: 15px; }
+
+        /* Filtri kategorij */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .filter-btn {
+            background-color: #e3d5b5;
+            color: #2d5a27;
+            border: 2px solid #2d5a27;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: capitalize;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: #2d5a27;
+            color: white;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 20px; 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+
+        .card { 
+            background-color: #e3d5b5; 
+            border: 2px solid #2d5a27; 
+            border-radius: 18px; 
+            padding: 15px; 
+            text-align: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .img-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card img { 
+            max-width: 100%; 
+            height: 180px; 
+            object-fit: contain; 
+            border-radius: 6px; 
+        }
+
+        .card h3 { 
+            margin: 5px 0; 
+            color: #2d5a27; 
+            font-size: 1.2rem;
+        }
+
+        .card p { 
+            color: #2d5a27; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            margin: 5px 0 12px 0; 
+        }
+
+        .btn-add { 
+            background-color: #2d5a27; 
+            color: white; 
+            border: none; 
+            padding: 10px 18px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover { background-color: #1e3d1a; }
 
         /* Košarica */
-        .cart-section { max-width: 600px; margin: 40px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        .checkout-btn { background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 1.1em; margin-top: 15px; width: 100%; }
-        .checkout-btn:hover { background-color: #0069d9; }
+        .cart-section { 
+            max-width: 600px; 
+            margin: 40px auto 0 auto; 
+            background-color: #e3d5b5; 
+            border: 2px solid #2d5a27; 
+            border-radius: 18px; 
+            padding: 20px; 
+            text-align: left;
+        }
+
+        .cart-section h2 { 
+            text-align: center; 
+            margin-top: 0; 
+            color: #2d5a27;
+        }
+
+        .cart-item { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 8px 0; 
+            border-bottom: 1px solid #c8b998; 
+            color: #2d5a27;
+        }
+
+        .checkout-btn { 
+            background-color: #2d5a27; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 1.1em; 
+            font-weight: bold;
+            margin-top: 15px; 
+            width: 100%; 
+        }
+
+        .checkout-btn:hover { background-color: #1e3d1a; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>3D Kazalke za Knjige</h1>
-        <nav>
-            <a href="index.html">Domov</a>
-            <a href="kazalke.html">Kazalke</a>
-        </nav>
-    </header>
+    <h1>Katalog Kazalk</h1>
 
-    <div class="container">
-        <h2>Izberite svojo kazalko</h2>
-        <br>
-        <div id="product-grid" class="grid">
-            <p>Nalaganje izdelkov iz baze...</p>
-        </div>
+    <!-- Avtomatski gumbi za kategorije -->
+    <div id="category-filters" class="category-filters"></div>
+
+    <div id="product-grid" class="grid">
+        <p>Nalaganje kazalk...</p>
     </div>
 
     <div class="cart-section">
-        <h2>Nakupovalna košarica</h2>
+        <h2>Košarica</h2>
         <div id="cart-items">
-            <p style="color: #777;">Košarica je prazna.</p>
+            <p style="color: #666; text-align: center;">Košarica je prazna.</p>
         </div>
-        <h3 style="margin-top: 15px; text-align: right;">Skupaj: <span id="cart-total">0.00 €</span></h3>
+        <h3 style="margin-top: 15px; text-align: right; color: #2d5a27;">Skupaj: <span id="cart-total">0.00 €</span></h3>
         <button class="checkout-btn" onclick="checkout()">Zaključi nakup</button>
     </div>
 
@@ -68,20 +186,51 @@
                 return;
             }
             allProducts = data;
+            buildCategoryFilters();
             renderProducts(allProducts);
+        }
+
+        function buildCategoryFilters() {
+            const filterContainer = document.getElementById('category-filters');
+            
+            // Poišče vse unikatne kategorije v bazi
+            const categories = ['Vse', ...new Set(allProducts.map(p => p.category).filter(Boolean))];
+
+            filterContainer.innerHTML = '';
+            categories.forEach((cat, index) => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${index === 0 ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = (e) => filterCategory(cat, e.target);
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        function filterCategory(category, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            if (category === 'Vse') {
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
         }
 
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             if (products.length === 0) {
-                grid.innerHTML = '<p>Trenutno ni izdelkov v bazi.</p>';
+                grid.innerHTML = '<p>Trenutno ni izdelkov v tej kategoriji.</p>';
                 return;
             }
             products.forEach(p => {
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
+                        <div class="img-container">
+                            <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
+                        </div>
                         <h3>${p.name}</h3>
                         <p>${p.price.toFixed(2)} €</p>
                         <button class="btn-add" onclick="addToCart('${p.id}')">Dodaj v košarico</button>
@@ -102,7 +251,7 @@
             const cartContainer = document.getElementById('cart-items');
             const totalContainer = document.getElementById('cart-total');
             if (cart.length === 0) {
-                cartContainer.innerHTML = '<p style="color: #777;">Košarica je prazna.</p>';
+                cartContainer.innerHTML = '<p style="color: #666; text-align: center;">Košarica je prazna.</p>';
                 totalContainer.innerText = '0.00 €';
                 return;
             }
