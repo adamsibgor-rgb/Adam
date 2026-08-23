@@ -5,17 +5,200 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Zemljevidi - 3D Tiskanje</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 60px auto 0 auto; max-width: 1250px; background-color: #FFF8EC; color: #546B41; padding: 0 20px; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: #546B41; text-decoration: none; font-weight: bold; }
-        .hero-section { background-color: #99AD7A; color: white; padding: 40px 20px; border-radius: 25px; text-align: center; border: 3px solid #546B41; margin-bottom: 40px; }
-        .instructions-box { background-color: white; padding: 30px; border-radius: 25px; border: 2px solid #99AD7A; margin-bottom: 40px; }
-        .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 35px; margin-bottom: 50px; }
-        .card { background-color: #DCCCAC; border: 3px solid #546B41; padding: 15px; border-radius: 25px; cursor: pointer; text-align: center; }
-        .card-img { width: 100%; height: 380px; border-radius: 18px; object-fit: cover; }
-        .form-section { background-color: white; padding: 40px; border-radius: 25px; border: 2px solid #DCCCAC; margin-top: 40px; margin-bottom: 60px; }
-        input, textarea { display: block; width: 100%; margin: 10px 0 20px; padding: 12px; border-radius: 8px; border: 1px solid #546B41; }
-        button { background-color: #546B41; color: white; padding: 15px; border-radius: 8px; border: none; width: 100%; font-weight: bold; cursor: pointer; }
-        .warning { color: #d9534f; font-weight: bold; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 0 auto; 
+            max-width: 1100px; 
+            background-color: #FFF8EC; 
+            color: #546B41; 
+            padding: 20px; 
+        }
+
+        .back-link { 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            color: #546B41; 
+            text-decoration: none; 
+            font-weight: bold; 
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #425433;
+        }
+
+        .hero-section { 
+            background-color: #99AD7A; 
+            color: white; 
+            padding: 30px 20px; 
+            border-radius: 20px; 
+            text-align: center; 
+            border: 2px solid #546B41; 
+            margin-bottom: 30px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .hero-section h1 {
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        .hero-section p {
+            margin-bottom: 0;
+            opacity: 0.95;
+        }
+
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            margin-bottom: 40px; 
+        }
+
+        .card { 
+            background-color: #DCCCAC; 
+            border: 2px solid #546B41; 
+            padding: 15px; 
+            border-radius: 20px; 
+            text-align: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-img { 
+            width: 100%; 
+            height: 280px; 
+            border-radius: 12px; 
+            object-fit: cover; 
+            background-color: white;
+        }
+
+        .instructions-box { 
+            background-color: white; 
+            padding: 25px 30px; 
+            border-radius: 20px; 
+            border: 2px solid #99AD7A; 
+            margin-bottom: 40px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .instructions-box h3 {
+            margin-top: 0;
+            color: #4A5D39;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #99AD7A;
+            padding-bottom: 8px;
+        }
+
+        .instructions-box ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .instructions-box li {
+            margin-bottom: 10px;
+        }
+
+        .instructions-box a {
+            color: #546B41;
+            font-weight: bold;
+        }
+
+        .warning { 
+            color: #b85c5c; 
+            font-weight: bold; 
+            margin-top: 15px;
+            display: block;
+        }
+
+        .form-section { 
+            background-color: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 2px solid #99AD7A; 
+            margin-bottom: 40px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .form-section h2 {
+            margin-top: 0;
+            color: #4A5D39;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #4A5D39;
+        }
+
+        input[type="email"], input[type="file"], textarea { 
+            display: block; 
+            width: 100%; 
+            margin-bottom: 20px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #99AD7A; 
+            background-color: #FFFDF9;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #546B41;
+            box-shadow: 0 0 5px rgba(84, 107, 65, 0.2);
+        }
+
+        button { 
+            background-color: #546B41; 
+            color: white; 
+            padding: 15px; 
+            border-radius: 25px; 
+            border: none; 
+            width: 100%; 
+            font-size: 1.1rem;
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        button:hover { 
+            background-color: #425433; 
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .hero-section {
+                padding: 20px 15px;
+            }
+
+            .hero-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .card-img {
+                height: 200px;
+            }
+
+            .instructions-box, .form-section {
+                padding: 20px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -23,39 +206,40 @@
     <a href="index.html" class="back-link">← Nazaj na začetno stran</a>
 
     <div class="hero-section">
-        <h1>Primeri 3D zemljevidov in reliefov</h1>
-        <p>Kliknite na posamezno sliko za ogled podrobnosti modela.</p>
+        <h1>3D Zemljevidi in Reliefi</h1>
+        <p>Ustvarite si unikaten 3D model katerega koli dela sveta po vaši izbiri.</p>
     </div>
 
     <div class="container">
-        <div class="card"><img src="slike za zemljevide/Posnetek zaslona 2026-05-22 165829.png" class="card-img"></div>
-        <div class="card"><img src="slike za zemljevide/Posnetek zaslona 2026-05-22 170357.png" class="card-img"></div>
-        
-        <div class="card" style="grid-column: span 2; text-align: left; cursor: default;">
-            <h3>Navodila za uporabo</h3>
-            <ol>
-                <li>Odprite <a href="https://map2model.com/" target="_blank"><strong>Map2Model</strong></a>, izberite lokacijo in prilagodite relief.</li>
-                <li>3D tiskalnik podpira do 4 barve; ostalo je treba pobarvati ročno.</li>
-                <li>Shranite datoteko (STL/OBJ/3MF) ali posnetek zaslona.</li>
-                <li>Naložite datoteko v obrazec spodaj.</li>
-                <li class="warning">POZOR: Največja možna dimenzija modela za tisk je 25 x 25 cm.</li>
-            </ol>
-        </div>
+        <div class="card"><img src="slike za zemljevide/Posnetek zaslona 2026-05-22 165829.png" alt="3D Zemljevid 1" class="card-img"></div>
+        <div class="card"><img src="slike za zemljevide/Posnetek zaslona 2026-05-22 170357.png" alt="3D Zemljevid 2" class="card-img"></div>
+    </div>
+
+    <div class="instructions-box">
+        <h3>Navodila za izbiro lokacije</h3>
+        <ol>
+            <li>Odprite spletno orodje <a href="https://touchterrain.geol.iastate.edu/" target="_blank"><strong>TouchTerrain</strong></a> ali <a href="https://maptoglobe.com/" target="_blank"><strong>MapToGlobe</strong></a>.</li>
+            <li>Na zemljevidu označite želeno območje (npr. vaše najljubše gorovje, mesto ali otok).</li>
+            <li>3D tiskalnik omogoča tiskanje do 4 barv hkrati (ostale podrobnosti se po želji pobarvajo ročno).</li>
+            <li>Shranite posnetek zaslona izbranega območja ali izvoženo 3D datoteko (STL / OBJ / 3MF).</li>
+            <li>Naložite datoteko v spodnji obrazec ter dodajte svoje želje.</li>
+        </ol>
+        <span class="warning">⚠️ OPOMBA: Največja možna dimenzija posameznega natisnjenega modela je 25 x 25 cm.</span>
     </div>
 
     <div class="form-section">
-        <h2>Oddajte naročilo za svoj Zemljevid</h2>
+        <h2>Oddajte povpraševanje za svoj Zemljevid</h2>
         <form action="https://getform.io/f/xw07q11t3iq" method="POST" enctype="multipart/form-data">
-            <label><strong>Vaš E-naslov:</strong></label>
-            <input type="email" name="fi-sender-email" placeholder="primer@gmail.com" required>
+            <label for="email"><strong>Vaš E-naslov:</strong></label>
+            <input type="email" id="email" name="fi-sender-email" placeholder="primer@gmail.com" required>
             
-            <label><strong>Naložite sliko reliefa ali shranjeno 3D datoteko:</strong></label>
-            <input type="file" name="fi-file-upload" accept="image/*,.stl,.obj,.3mf" required>
+            <label for="file"><strong>Naložite sliko izbrane lokacije ali 3D datoteko:</strong></label>
+            <input type="file" id="file" name="fi-file-upload" accept="image/*,.stl,.obj,.3mf" required>
             
-            <label><strong>Dodatne želje glede zemljevida (maksimalne dimenzije 25x25 cm):</strong></label>
-            <textarea name="fi-text-message" rows="5" placeholder="Vpišite želeno barvo, okvir ali dimenzije..."></textarea>
+            <label for="message"><strong>Dodatne želje in opombe:</strong></label>
+            <textarea id="message" name="fi-text-message" rows="5" placeholder="Vpišite želene barve, dimenzije ali druge posebnosti..."></textarea>
             
-            <button type="submit">Oddaj povpraševanje za zemljevid</button>
+            <button type="submit">Oddaj povpraševanje</button>
         </form>
     </div>
 
