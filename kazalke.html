@@ -3,256 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Kazalke | 3Dprojekti</title>
+    <title>Katalog Kazalk - 3Dprojekti</title>
+    <!-- Supabase Client JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            background-color: #fdfbf7; 
-            color: #2d5a27;
-            text-align: center; 
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFF8EC;
+            color: #546B41;
+            margin: 0;
+            padding: 20px;
         }
 
-        h1 { color: #2d5a27; margin-bottom: 15px; }
+        .header-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-        .category-filters {
+        .back-btn {
+            display: inline-block;
+            background-color: #546B41;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Traker s popusti na vrhu */
+        .discount-banner {
+            background-color: #2C3E1F;
+            color: #FFF8EC;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .discount-banner h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.3rem;
+            color: #DCCCAC;
+        }
+
+        .discount-grid {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin-bottom: 25px;
+            font-weight: bold;
         }
 
-        .filter-btn {
-            background-color: #e3d5b5;
-            color: #2d5a27;
-            border: 2px solid #2d5a27;
-            padding: 8px 16px;
+        .discount-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(220, 204, 172, 0.3);
+        }
+
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            background-color: #DCCCAC;
+            border: 2px solid #546B41;
+            color: #546B41;
+            padding: 10px 20px;
             border-radius: 20px;
-            cursor: pointer;
             font-weight: bold;
-            text-transform: capitalize;
+            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .filter-btn.active, .filter-btn:hover {
-            background-color: #2d5a27;
+        .cat-btn.active, .cat-btn:hover {
+            background-color: #546B41;
             color: white;
         }
 
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-            gap: 20px; 
-            max-width: 900px; 
-            margin: 0 auto; 
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .card { 
-            background-color: #e3d5b5; 
-            border: 2px solid #2d5a27; 
-            border-radius: 18px; 
-            padding: 15px; 
-            text-align: center; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        .card {
+            background-color: #DCCCAC;
+            border: 2px solid #546B41;
+            border-radius: 18px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .img-container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 10px;
             width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 12px;
+            height: 220px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
         }
 
-        .card img { 
-            max-width: 100%; 
-            height: 180px; 
-            object-fit: contain; 
-            border-radius: 6px; 
+        .img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
-        .card h3 { 
-            margin: 5px 0; 
-            color: #2d5a27; 
-            font-size: 1.2rem;
-        }
-
-        .card p { 
-            color: #2d5a27; 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-            margin: 5px 0 12px 0; 
-        }
-
-        /* Upravljanje količine */
         .qty-controls {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
+            gap: 15px;
+            background-color: #FFF8EC;
+            padding: 6px 15px;
+            border-radius: 25px;
+            border: 1px solid #546B41;
         }
 
         .qty-btn {
-            background-color: #2d5a27;
+            background-color: #546B41;
             color: white;
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+
+        .qty-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Košarica in naročilo */
+        .cart-summary {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #DCCCAC;
+            border: 3px solid #546B41;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .pay-btn {
+            background-color: #635BFF; /* Stripe vijolična barva */
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
             transition: background 0.2s;
         }
 
-        .qty-btn:hover { background-color: #1e3d1a; }
+        .pay-btn:hover {
+            background-color: #4B45C6;
+        }
 
-        .qty-count {
+        .email-btn {
+            background-color: #546B41;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
             font-weight: bold;
-            font-size: 1.1rem;
-            min-width: 24px;
-            color: #2d5a27;
-        }
-
-        .cart-section { 
-            max-width: 600px; 
-            margin: 40px auto 0 auto; 
-            background-color: #e3d5b5; 
-            border: 2px solid #2d5a27; 
-            border-radius: 18px; 
-            padding: 20px; 
-            text-align: left;
-        }
-
-        .cart-section h2 { 
-            text-align: center; 
-            margin-top: 0; 
-            color: #2d5a27;
-        }
-
-        .cart-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 8px 0; 
-            border-bottom: 1px solid #c8b998; 
-            color: #2d5a27;
-        }
-
-        .discount-note {
-            color: #2d5a27;
-            font-weight: bold;
-            font-size: 0.95rem;
+            border-radius: 12px;
+            cursor: pointer;
             margin-top: 10px;
-            text-align: right;
+            width: 100%;
         }
-
-        .checkout-btn { 
-            background-color: #2d5a27; 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 1.1em; 
-            font-weight: bold;
-            margin-top: 15px; 
-            width: 100%; 
-        }
-
-        .checkout-btn:hover { background-color: #1e3d1a; }
     </style>
 </head>
 <body>
 
-    <h1>Katalog Kazalk</h1>
-
-    <div id="category-filters" class="category-filters"></div>
-
-    <div id="product-grid" class="grid">
-        <p>Nalaganje kazalk...</p>
+    <div class="header-bar">
+        <a href="index.html" class="back-btn">← Nazaj na glavno stran</a>
+        <h1>Katalog 3D Kazalk</h1>
     </div>
 
-    <div class="cart-section">
-        <h2>Košarica</h2>
-        <div id="cart-items">
-            <p style="color: #666; text-align: center;">Košarica je prazna.</p>
+    <!-- Traker s količinskimi popusti na vrhu -->
+    <div class="discount-banner">
+        <h3>🎁 KOLIČINSKI POPUSTI</h3>
+        <div class="discount-grid">
+            <div class="discount-item">1x = 7,00 €</div>
+            <div class="discount-item">2x = 12,00 € (Prihranek 2€)</div>
+            <div class="discount-item">3x = 15,00 € (Prihranek 6€)</div>
+            <div class="discount-item">5x = 20,00 € (Najugodneje!)</div>
         </div>
-        <div id="discount-info" class="discount-note"></div>
-        <h3 style="margin-top: 15px; text-align: right; color: #2d5a27;">Skupaj: <span id="cart-total">0.00 €</span></h3>
-        <button class="checkout-btn" onclick="checkout()">Zaključi nakup</button>
+    </div>
+
+    <!-- Kategorije za filtriranje -->
+    <div class="category-nav">
+        <button class="cat-btn active" onclick="filterCategory('vse')">Vse</button>
+        <button class="cat-btn" onclick="filterCategory('psi')">Psi</button>
+        <button class="cat-btn" onclick="filterCategory('mačke')">Mačke</button>
+        <button class="cat-btn" onclick="filterCategory('ostalo')">Ostalo</button>
+    </div>
+
+    <!-- Mreža izdelkov -->
+    <div class="product-grid" id="product-grid">
+        <p style="text-align: center; width: 100%;">Nalaganje izdelkov...</p>
+    </div>
+
+    <!-- Košarica -->
+    <div class="cart-summary">
+        <h2>Skupaj izbrano: <span id="total-qty">0</span> kazalk</h2>
+        <h3>Skupna cena: <span id="total-price">0.00</span> €</h3>
+        <p id="savings-text" style="color: #2C3E1F; font-weight: bold;"></p>
+
+        <!-- Gumb za plačilo preko spleta -->
+        <button class="pay-btn" onclick="payOnline()">💳 Plačaj varno s kartico (Stripe)</button>
+        <button class="email-btn" onclick="sendEmailOrder()">✉️ Pošlji povpraševanje na Gmail</button>
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://uvzphptvnscphptmvyuq.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_d9Nfy7-esxlS9_8Uxm_iYw_drUfUDky';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Supabase Povezava (Vnesi svoje podatke iz Supabase)
+        const SUPABASE_URL = 'https://TVOJ-SUPABASE-ID.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'TVOJ-ANON-KEY';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let allProducts = [];
-        let cart = {}; // Struktura: { 'id_izdelka': kolicina }
+        let cart = {}; // Vsebuje izbrane količine { product_id: quantity }
 
+        // Pridobivanje podatkov iz baze
         async function fetchProducts() {
-            const { data, error } = await supabaseClient.from('products').select('*');
+            const { data, error } = await _supabase.from('products').select('*');
             if (error) {
-                console.error('Napaka pri nalaganju:', error);
+                console.error("Napaka:", error);
                 document.getElementById('product-grid').innerHTML = '<p>Napaka pri nalaganju izdelkov.</p>';
                 return;
             }
-
-            allProducts = data.map(p => ({
-                ...p,
-                price: (p.price && p.price > 0) ? p.price : 7.00
-            }));
-
-            buildCategoryFilters();
+            allProducts = data;
             renderProducts(allProducts);
         }
 
-        function buildCategoryFilters() {
-            const filterContainer = document.getElementById('category-filters');
-            const categories = ['Vse', ...new Set(allProducts.map(p => p.category).filter(Boolean))];
-
-            filterContainer.innerHTML = '';
-            categories.forEach((cat, index) => {
-                const btn = document.createElement('button');
-                btn.className = `filter-btn ${index === 0 ? 'active' : ''}`;
-                btn.innerText = cat;
-                btn.onclick = (e) => filterCategory(cat, e.target);
-                filterContainer.appendChild(btn);
-            });
-        }
-
-        function filterCategory(category, btnElement) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            if (category === 'Vse') {
-                renderProducts(allProducts);
-            } else {
-                const filtered = allProducts.filter(p => p.category === category);
-                renderProducts(filtered);
-            }
-        }
-
+        // Prikaz izdelkov (Čist izgled: samo slika + gumbi)
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             if (products.length === 0) {
-                grid.innerHTML = '<p>Trenutno ni izdelkov v tej kategoriji.</p>';
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Ni izdelkov v tej kategoriji.</p>';
                 return;
             }
             products.forEach(p => {
@@ -260,10 +273,8 @@
                 grid.innerHTML += `
                     <div class="card">
                         <div class="img-container">
-                            <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
+                            <img src="${p.img}" alt="Kazalka" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
                         </div>
-                        <h3>${p.name}</h3>
-                        <p>${p.price.toFixed(2)} €</p>
                         <div class="qty-controls">
                             <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
                             <span class="qty-count" id="qty-${p.id}">${qty}</span>
@@ -274,98 +285,98 @@
             });
         }
 
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (cat === 'vse') {
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => p.category && p.category.toLowerCase() === cat.toLowerCase());
+                renderProducts(filtered);
+            }
+        }
+
         function changeQty(id, delta) {
             const current = cart[id] || 0;
-            const updated = current + delta;
-
-            if (updated > 0) {
-                cart[id] = updated;
-            } else {
+            const newQty = Math.max(0, current + delta);
+            if (newQty === 0) {
                 delete cart[id];
-            }
-
-            // Posodobi števec na kartici izdelka
-            const qtyElement = document.getElementById(`qty-${id}`);
-            if (qtyElement) {
-                qtyElement.innerText = cart[id] || 0;
-            }
-
-            updateCart();
-        }
-
-        function updateCart() {
-            const cartContainer = document.getElementById('cart-items');
-            const totalContainer = document.getElementById('cart-total');
-            const discountInfo = document.getElementById('discount-info');
-
-            const itemIds = Object.keys(cart);
-
-            if (itemIds.length === 0) {
-                cartContainer.innerHTML = '<p style="color: #666; text-align: center;">Košarica je prazna.</p>';
-                totalContainer.innerText = '0.00 €';
-                discountInfo.innerText = '';
-                return;
-            }
-
-            cartContainer.innerHTML = '';
-
-            let bookmarkCount = 0;
-            let otherTotal = 0;
-
-            itemIds.forEach(id => {
-                const product = allProducts.find(p => p.id === id);
-                if (!product) return;
-
-                const qty = cart[id];
-
-                if (product.category === 'vaze') {
-                    otherTotal += product.price * qty;
-                } else {
-                    bookmarkCount += qty;
-                }
-
-                cartContainer.innerHTML += `
-                    <div class="cart-item">
-                        <div>
-                            <b>${product.name}</b>
-                            <br>
-                            <small>${qty}x (${product.price.toFixed(2)} €/kos)</small>
-                        </div>
-                        <div class="qty-controls" style="width: auto;">
-                            <button class="qty-btn" onclick="changeQty('${product.id}', -1)">-</button>
-                            <span class="qty-count">${qty}</span>
-                            <button class="qty-btn" onclick="changeQty('${product.id}', 1)">+</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Odstotkovni popust za kazalke
-            let discountPercent = 0;
-            if (bookmarkCount === 2) discountPercent = 10;
-            else if (bookmarkCount === 3) discountPercent = 20;
-            else if (bookmarkCount === 4) discountPercent = 30;
-            else if (bookmarkCount >= 5) discountPercent = 40;
-
-            let bookmarkBaseTotal = bookmarkCount * 7.00;
-            let bookmarkTotal = bookmarkBaseTotal * (1 - discountPercent / 100);
-
-            if (discountPercent > 0) {
-                discountInfo.innerText = `Upoštevan ${discountPercent}% popust na ${bookmarkCount} kazalk!`;
             } else {
-                discountInfo.innerText = '';
+                cart[id] = newQty;
             }
-
-            const total = bookmarkTotal + otherTotal;
-            totalContainer.innerText = total.toFixed(2) + ' €';
+            const el = document.getElementById(`qty-${id}`);
+            if (el) el.innerText = newQty;
+            updateCartSummary();
         }
 
-        function checkout() {
-            if (Object.keys(cart).length === 0) {
-                alert('Vaša košarica je prazna!');
+        // Izračun cen in količinskih popustov
+        function calculatePrice(count) {
+            if (count === 0) return 0;
+            let price = 0;
+            let remaining = count;
+
+            // Paketi po 5 = 20€
+            const p5 = Math.floor(remaining / 5);
+            price += p5 * 20;
+            remaining %= 5;
+
+            // Paketi po 3 = 15€
+            const p3 = Math.floor(remaining / 3);
+            price += p3 * 15;
+            remaining %= 3;
+
+            // Paketi po 2 = 12€
+            const p2 = Math.floor(remaining / 2);
+            price += p2 * 12;
+            remaining %= 2;
+
+            // Posamezne = 7€
+            price += remaining * 7;
+
+            return price;
+        }
+
+        function updateCartSummary() {
+            const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
+            const totalPrice = calculatePrice(totalQty);
+            const regularPrice = totalQty * 7;
+            const savings = regularPrice - totalPrice;
+
+            document.getElementById('total-qty').innerText = totalQty;
+            document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+            
+            const savingsEl = document.getElementById('savings-text');
+            if (savings > 0) {
+                savingsEl.innerText = `Skupni prihranek s popustom: ${savings.toFixed(2)} €!`;
+            } else {
+                savingsEl.innerText = '';
+            }
+        }
+
+        // 1. Možnost plačila preko spleta (Stripe)
+        function payOnline() {
+            const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
+            if (totalQty === 0) {
+                alert("Prosimo, izberite vsaj eno kazalko.");
                 return;
             }
-            alert('Hvala za naročilo!');
+            
+            // TUKAJ PRILEPIŠ SVOJO STRIPE PAYMENT LINK POVEZAVO:
+            const stripeUrl = "https://buy.stripe.com/TVOJA_STRIPE_POVEZAVA";
+            window.open(stripeUrl, '_blank');
+        }
+
+        // 2. Možnost povpraševanja po e-pošti
+        function sendEmailOrder() {
+            const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
+            if (totalQty === 0) {
+                alert("Košarica je prazna.");
+                return;
+            }
+            const price = calculatePrice(totalQty);
+            const body = encodeURIComponent(`Pozdravljeni,\n\nŽelim naročiti skupaj ${totalQty} kazalk za ceno ${price.toFixed(2)} €.\n\nLep pozdrav!`);
+            window.location.href = `mailto:adam.sibgor@gmail.com?subject=Naročilo Kazalk&body=${body}`;
         }
 
         fetchProducts();
