@@ -36,7 +36,6 @@
             background-color: #3f5230;
         }
 
-        /* Domač in opazen cenik */
         .price-box {
             background-color: #DCCCAC;
             border: 2px dashed #546B41;
@@ -157,7 +156,6 @@
             text-align: center;
         }
 
-        /* Območje za naročilo */
         .cart-summary {
             max-width: 550px;
             margin: 40px auto;
@@ -194,7 +192,7 @@
             background-color: #FFF8EC;
             border: 1px solid #546B41;
             border-radius: 10px;
-            padding: 8px;
+            padding: 10px;
             margin-bottom: 15px;
             font-weight: bold;
             color: #2C3E1F;
@@ -224,23 +222,23 @@
         <h1>Katalog 3D Kazalk</h1>
     </div>
 
-    <!-- Cenik -->
+    <!-- Cenik Opcija A -->
     <div class="price-box">
         <h3>🏷️ Količinski popusti</h3>
         <div class="price-tags">
             <div class="tag">1x = 7,00 €</div>
             <div class="tag">2x = 12,00 €</div>
-            <div class="tag">3x = 15,00 €</div>
-            <div class="tag">5x = 20,00 €</div>
+            <div class="tag">3x = 16,00 €</div>
+            <div class="tag">5x = 24,00 €</div>
         </div>
     </div>
 
     <!-- Kategorije -->
     <div class="category-nav">
-        <button class="cat-btn active" onclick="filterCategory('vse')">Vse</button>
-        <button class="cat-btn" onclick="filterCategory('psi')">Psi</button>
-        <button class="cat-btn" onclick="filterCategory('mačke')">Mačke</button>
-        <button class="cat-btn" onclick="filterCategory('ostalo')">Ostalo</button>
+        <button class="cat-btn active" onclick="filterCategory('vse', event)">Vse</button>
+        <button class="cat-btn" onclick="filterCategory('psi', event)">Psi</button>
+        <button class="cat-btn" onclick="filterCategory('mačke', event)">Mačke</button>
+        <button class="cat-btn" onclick="filterCategory('ostalo', event)">Ostalo</button>
     </div>
 
     <!-- Mreža izdelkov -->
@@ -255,7 +253,7 @@
         <p id="savings-text" style="color: #2C3E1F; font-weight: bold;"></p>
 
         <div class="payment-info">
-            📦 Način plačila: Plačilo po povzetju
+            💳 Način plačila: Po povzetju ali preko Flik-a
         </div>
 
         <div class="email-input-group">
@@ -267,9 +265,10 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://TVOJ-SUPABASE-ID.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'TVOJ-ANON-KEY';
-        const PHONE_NUMBER = "040 123 456"; // Tvoja telefonska številka za večja naročila
+        // Nastavitve Supabase
+        const SUPABASE_URL = 'https://uvzphtvmscphptmvyuq.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'TVOJ_SUPABASE_ANON_KEY'; // Kopiraj iz: Supabase -> Project Settings -> API
+        const PHONE_NUMBER = "040 123 456";
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -280,10 +279,10 @@
             const { data, error } = await _supabase.from('products').select('*');
             if (error) {
                 console.error("Napaka:", error);
-                document.getElementById('product-grid').innerHTML = '<p style="grid-column: 1/-1;">Napaka pri nalaganju izdelkov.</p>';
+                document.getElementById('product-grid').innerHTML = '<p style="grid-column: 1/-1;">Napaka pri nalaganju izdelkov z baze.</p>';
                 return;
             }
-            allProducts = data;
+            allProducts = data || [];
             renderProducts(allProducts);
         }
 
@@ -299,7 +298,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <div class="img-container">
-                            <img src="${p.img}" alt="Kazalka" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
+                            <img src="${p.img}" alt="${p.name || 'Kazalka'}" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
                         </div>
                         <div class="qty-controls">
                             <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
@@ -311,14 +310,31 @@
             });
         }
 
-        function filterCategory(cat) {
+        // Pametno filtriranje glede na različne zapise v bazi (kužki, cats, muca, itd.)
+        function filterCategory(cat, e) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (e && e.target) e.target.classList.add('active');
 
             if (cat === 'vse') {
                 renderProducts(allProducts);
+            } else if (cat === 'psi') {
+                const filtered = allProducts.filter(p => {
+                    const c = (p.category || '').toLowerCase();
+                    return c === 'psi' || c === 'kužki' || c === 'kuzki' || c === 'pes';
+                });
+                renderProducts(filtered);
+            } else if (cat === 'mačke') {
+                const filtered = allProducts.filter(p => {
+                    const c = (p.category || '').toLowerCase();
+                    return c === 'mačke' || c === 'macke' || c === 'cats' || c === 'muca';
+                });
+                renderProducts(filtered);
             } else {
-                const filtered = allProducts.filter(p => p.category && p.category.toLowerCase() === cat.toLowerCase());
+                const filtered = allProducts.filter(p => {
+                    const c = (p.category || '').toLowerCase();
+                    const isDogOrCat = ['psi', 'kužki', 'kuzki', 'pes', 'mačke', 'macke', 'cats', 'muca'].includes(c);
+                    return !isDogOrCat;
+                });
                 renderProducts(filtered);
             }
         }
@@ -326,7 +342,6 @@
         function changeQty(id, delta) {
             const currentTotal = Object.values(cart).reduce((a, b) => a + b, 0);
             
-            // Omejitev na 25 kosov
             if (delta > 0 && currentTotal >= 25) {
                 alert(`Za naročila večja od 25 kosov me prosim pokliči direktno na telefonsko številko:\n📞 ${PHONE_NUMBER}`);
                 return;
@@ -352,11 +367,11 @@
             let remaining = count;
 
             const p5 = Math.floor(remaining / 5);
-            price += p5 * 20;
+            price += p5 * 24;
             remaining %= 5;
 
             const p3 = Math.floor(remaining / 3);
-            price += p3 * 15;
+            price += p3 * 16;
             remaining %= 3;
 
             const p2 = Math.floor(remaining / 2);
@@ -392,8 +407,6 @@
             }
 
             const emailInput = document.getElementById('user-email').value.trim();
-            
-            // Preverjanje ali gre za veljaven Gmail naslov
             const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
             
             if (!gmailRegex.test(emailInput)) {
@@ -414,7 +427,7 @@
                 `Kupčev Gmail: ${emailInput}\n` +
                 `Skupno število kazalk: ${totalQty}\n` +
                 `Skupna cena: ${price.toFixed(2)} €\n` +
-                `Način plačila: Plačilo po povzetju\n\n` +
+                `Način plačila: Po povzetju ali Flik\n\n` +
                 `Lep pozdrav!`
             );
             
