@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #FFF8EC;
             color: #546B41;
             margin: 0;
@@ -17,7 +17,7 @@
 
         .header-bar {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .back-btn {
@@ -29,45 +29,50 @@
             border-radius: 12px;
             font-weight: bold;
             margin-bottom: 15px;
+            transition: background 0.2s;
         }
 
-        /* Traker s popusti na vrhu */
-        .discount-banner {
-            background-color: #2C3E1F;
-            color: #FFF8EC;
-            padding: 15px;
+        .back-btn:hover {
+            background-color: #3f5230;
+        }
+
+        /* Domač in opazen cenik */
+        .price-box {
+            background-color: #DCCCAC;
+            border: 2px dashed #546B41;
             border-radius: 15px;
-            text-align: center;
-            max-width: 1000px;
+            padding: 15px;
+            max-width: 650px;
             margin: 0 auto 30px auto;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
-        .discount-banner h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.3rem;
-            color: #DCCCAC;
+        .price-box h3 {
+            margin: 0 0 10px 0;
+            color: #2C3E1F;
+            font-size: 1.2rem;
         }
 
-        .discount-grid {
+        .price-tags {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 12px;
             flex-wrap: wrap;
+            font-size: 0.95rem;
             font-weight: bold;
         }
 
-        .discount-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 15px;
+        .tag {
+            background-color: #FFF8EC;
+            padding: 6px 12px;
             border-radius: 8px;
-            border: 1px solid rgba(220, 204, 172, 0.3);
+            border: 1px solid #546B41;
         }
 
         .category-nav {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
@@ -76,11 +81,10 @@
             background-color: #DCCCAC;
             border: 2px solid #546B41;
             color: #546B41;
-            padding: 10px 20px;
+            padding: 9px 18px;
             border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
         .cat-btn.active, .cat-btn:hover {
@@ -90,33 +94,32 @@
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .card {
             background-color: #DCCCAC;
             border: 2px solid #546B41;
-            border-radius: 18px;
+            border-radius: 16px;
             padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .img-container {
             width: 100%;
-            height: 220px;
+            height: 200px;
             background-color: white;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .img-container img {
@@ -128,10 +131,10 @@
         .qty-controls {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             background-color: #FFF8EC;
-            padding: 6px 15px;
-            border-radius: 25px;
+            padding: 5px 12px;
+            border-radius: 20px;
             border: 1px solid #546B41;
         }
 
@@ -139,24 +142,24 @@
             background-color: #546B41;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
         }
 
         .qty-count {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             min-width: 20px;
             text-align: center;
         }
 
-        /* Košarica in naročilo */
+        /* Območje za naročilo */
         .cart-summary {
-            max-width: 600px;
+            max-width: 550px;
             margin: 40px auto;
             background-color: #DCCCAC;
             border: 3px solid #546B41;
@@ -165,35 +168,52 @@
             text-align: center;
         }
 
-        .pay-btn {
-            background-color: #635BFF; /* Stripe vijolična barva */
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.2rem;
+        .email-input-group {
+            margin: 20px 0 10px 0;
+            text-align: left;
+        }
+
+        .email-input-group label {
+            display: block;
             font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #2C3E1F;
+        }
+
+        .email-input-group input {
             width: 100%;
-            transition: background 0.2s;
+            padding: 10px;
+            border: 2px solid #546B41;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background-color: #FFF8EC;
         }
 
-        .pay-btn:hover {
-            background-color: #4B45C6;
+        .payment-info {
+            background-color: #FFF8EC;
+            border: 1px solid #546B41;
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #2C3E1F;
         }
 
-        .email-btn {
+        .send-btn {
             background-color: #546B41;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
+            padding: 14px 28px;
+            font-size: 1.1rem;
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
-            margin-top: 10px;
             width: 100%;
+        }
+
+        .send-btn:hover {
+            background-color: #3f5230;
         }
     </style>
 </head>
@@ -204,18 +224,18 @@
         <h1>Katalog 3D Kazalk</h1>
     </div>
 
-    <!-- Traker s količinskimi popusti na vrhu -->
-    <div class="discount-banner">
-        <h3>🎁 KOLIČINSKI POPUSTI</h3>
-        <div class="discount-grid">
-            <div class="discount-item">1x = 7,00 €</div>
-            <div class="discount-item">2x = 12,00 € (Prihranek 2€)</div>
-            <div class="discount-item">3x = 15,00 € (Prihranek 6€)</div>
-            <div class="discount-item">5x = 20,00 € (Najugodneje!)</div>
+    <!-- Cenik -->
+    <div class="price-box">
+        <h3>🏷️ Količinski popusti</h3>
+        <div class="price-tags">
+            <div class="tag">1x = 7,00 €</div>
+            <div class="tag">2x = 12,00 €</div>
+            <div class="tag">3x = 15,00 €</div>
+            <div class="tag">5x = 20,00 €</div>
         </div>
     </div>
 
-    <!-- Kategorije za filtriranje -->
+    <!-- Kategorije -->
     <div class="category-nav">
         <button class="cat-btn active" onclick="filterCategory('vse')">Vse</button>
         <button class="cat-btn" onclick="filterCategory('psi')">Psi</button>
@@ -225,42 +245,48 @@
 
     <!-- Mreža izdelkov -->
     <div class="product-grid" id="product-grid">
-        <p style="text-align: center; width: 100%;">Nalaganje izdelkov...</p>
+        <p style="text-align: center; grid-column: 1/-1;">Nalaganje izdelkov...</p>
     </div>
 
     <!-- Košarica -->
     <div class="cart-summary">
-        <h2>Skupaj izbrano: <span id="total-qty">0</span> kazalk</h2>
-        <h3>Skupna cena: <span id="total-price">0.00</span> €</h3>
+        <h2>Izbrano: <span id="total-qty">0</span> / 25 kazalk</h2>
+        <h3>Skupni znesek: <span id="total-price">0.00</span> €</h3>
         <p id="savings-text" style="color: #2C3E1F; font-weight: bold;"></p>
 
-        <!-- Gumb za plačilo preko spleta -->
-        <button class="pay-btn" onclick="payOnline()">💳 Plačaj varno s kartico (Stripe)</button>
-        <button class="email-btn" onclick="sendEmailOrder()">✉️ Pošlji povpraševanje na Gmail</button>
+        <div class="payment-info">
+            📦 Način plačila: Plačilo po povzetju
+        </div>
+
+        <div class="email-input-group">
+            <label for="user-email">Vnesi svoj Gmail naslov za potrditev:</label>
+            <input type="email" id="user-email" placeholder="tvoje.ime@gmail.com">
+        </div>
+
+        <button class="send-btn" onclick="sendEmailOrder()">✉️ Oddaj naročilo na Email</button>
     </div>
 
     <script>
-        // Supabase Povezava (Vnesi svoje podatke iz Supabase)
         const SUPABASE_URL = 'https://TVOJ-SUPABASE-ID.supabase.co'; 
         const SUPABASE_ANON_KEY = 'TVOJ-ANON-KEY';
+        const PHONE_NUMBER = "040 123 456"; // Tvoja telefonska številka za večja naročila
+
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let allProducts = [];
-        let cart = {}; // Vsebuje izbrane količine { product_id: quantity }
+        let cart = {};
 
-        // Pridobivanje podatkov iz baze
         async function fetchProducts() {
             const { data, error } = await _supabase.from('products').select('*');
             if (error) {
                 console.error("Napaka:", error);
-                document.getElementById('product-grid').innerHTML = '<p>Napaka pri nalaganju izdelkov.</p>';
+                document.getElementById('product-grid').innerHTML = '<p style="grid-column: 1/-1;">Napaka pri nalaganju izdelkov.</p>';
                 return;
             }
             allProducts = data;
             renderProducts(allProducts);
         }
 
-        // Prikaz izdelkov (Čist izgled: samo slika + gumbi)
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
@@ -298,42 +324,46 @@
         }
 
         function changeQty(id, delta) {
+            const currentTotal = Object.values(cart).reduce((a, b) => a + b, 0);
+            
+            // Omejitev na 25 kosov
+            if (delta > 0 && currentTotal >= 25) {
+                alert(`Za naročila večja od 25 kosov me prosim pokliči direktno na telefonsko številko:\n📞 ${PHONE_NUMBER}`);
+                return;
+            }
+
             const current = cart[id] || 0;
             const newQty = Math.max(0, current + delta);
+            
             if (newQty === 0) {
                 delete cart[id];
             } else {
                 cart[id] = newQty;
             }
+            
             const el = document.getElementById(`qty-${id}`);
             if (el) el.innerText = newQty;
             updateCartSummary();
         }
 
-        // Izračun cen in količinskih popustov
         function calculatePrice(count) {
             if (count === 0) return 0;
             let price = 0;
             let remaining = count;
 
-            // Paketi po 5 = 20€
             const p5 = Math.floor(remaining / 5);
             price += p5 * 20;
             remaining %= 5;
 
-            // Paketi po 3 = 15€
             const p3 = Math.floor(remaining / 3);
             price += p3 * 15;
             remaining %= 3;
 
-            // Paketi po 2 = 12€
             const p2 = Math.floor(remaining / 2);
             price += p2 * 12;
             remaining %= 2;
 
-            // Posamezne = 7€
             price += remaining * 7;
-
             return price;
         }
 
@@ -348,35 +378,47 @@
             
             const savingsEl = document.getElementById('savings-text');
             if (savings > 0) {
-                savingsEl.innerText = `Skupni prihranek s popustom: ${savings.toFixed(2)} €!`;
+                savingsEl.innerText = `Prihranek s popustom: ${savings.toFixed(2)} €!`;
             } else {
                 savingsEl.innerText = '';
             }
         }
 
-        // 1. Možnost plačila preko spleta (Stripe)
-        function payOnline() {
+        function sendEmailOrder() {
             const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
             if (totalQty === 0) {
                 alert("Prosimo, izberite vsaj eno kazalko.");
                 return;
             }
-            
-            // TUKAJ PRILEPIŠ SVOJO STRIPE PAYMENT LINK POVEZAVO:
-            const stripeUrl = "https://buy.stripe.com/TVOJA_STRIPE_POVEZAVA";
-            window.open(stripeUrl, '_blank');
-        }
 
-        // 2. Možnost povpraševanja po e-pošti
-        function sendEmailOrder() {
-            const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
-            if (totalQty === 0) {
-                alert("Košarica je prazna.");
+            const emailInput = document.getElementById('user-email').value.trim();
+            
+            // Preverjanje ali gre za veljaven Gmail naslov
+            const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+            
+            if (!gmailRegex.test(emailInput)) {
+                const jokes = [
+                    "Zakaj računalnik nima nikoli vročine? Ker ima odprta vsa okna! 💻\n\n(Prosim vnesi veljaven @gmail.com naslov za potrditev naročila.)",
+                    "Zakaj se 3D tiskalnik nikoli ne skrega? Ker vedno najde pravi sloj sporazumevanja! 🖨️\n\n(Vpiši pravi Gmail naslov, da gre naročilo naprej.)",
+                    "Kaj reče koda, ko naredi napako? 'To ni napaka, to je nova funkcionalnost!' 🐛\n\n(Sprejemamo le veljavne @gmail.com naslove!)"
+                ];
+                const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+                alert(randomJoke);
                 return;
             }
+
             const price = calculatePrice(totalQty);
-            const body = encodeURIComponent(`Pozdravljeni,\n\nŽelim naročiti skupaj ${totalQty} kazalk za ceno ${price.toFixed(2)} €.\n\nLep pozdrav!`);
-            window.location.href = `mailto:adam.sibgor@gmail.com?subject=Naročilo Kazalk&body=${body}`;
+            const body = encodeURIComponent(
+                `Pozdravljeni,\n\n` +
+                `Oddajam naročilo za 3D kazalke.\n\n` +
+                `Kupčev Gmail: ${emailInput}\n` +
+                `Skupno število kazalk: ${totalQty}\n` +
+                `Skupna cena: ${price.toFixed(2)} €\n` +
+                `Način plačila: Plačilo po povzetju\n\n` +
+                `Lep pozdrav!`
+            );
+            
+            window.location.href = `mailto:adam.sibgor@gmail.com?subject=Naročilo Kazalk (${emailInput})&body=${body}`;
         }
 
         fetchProducts();
