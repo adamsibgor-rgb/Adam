@@ -3,437 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog Kazalk - 3Dprojekti</title>
-    <!-- Supabase Client JS -->
+    <title>Katalog 3D Kazalk</title>
+    <!-- Povezava do Supabase kleti (JavaScript client) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #FFF8EC;
-            color: #546B41;
+            font-family: Arial, sans-serif;
+            background-color: #fdfbf7;
+            color: #333;
             margin: 0;
             padding: 20px;
-        }
-
-        .header-bar {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .back-btn {
-            display: inline-block;
-            background-color: #546B41;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            transition: background 0.2s;
-        }
-
-        .back-btn:hover {
-            background-color: #3f5230;
-        }
-
-        .price-box {
-            background-color: #DCCCAC;
-            border: 2px dashed #546B41;
-            border-radius: 15px;
-            padding: 15px;
-            max-width: 650px;
-            margin: 0 auto 30px auto;
-            text-align: center;
-        }
-
-        .price-box h3 {
-            margin: 0 0 10px 0;
-            color: #2C3E1F;
-            font-size: 1.2rem;
-        }
-
-        .price-tags {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 0.95rem;
-            font-weight: bold;
-        }
-
-        .tag {
-            background-color: #FFF8EC;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid #546B41;
-        }
-
-        .category-nav {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .cat-btn {
-            background-color: #DCCCAC;
-            border: 2px solid #546B41;
-            color: #546B41;
-            padding: 9px 18px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .cat-btn.active, .cat-btn:hover {
-            background-color: #546B41;
-            color: white;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background-color: #DCCCAC;
-            border: 2px solid #546B41;
-            border-radius: 16px;
-            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
-        .img-container {
-            width: 100%;
-            height: 200px;
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
+        h1 {
+            color: #4a5d4e;
+        }
+        .filters {
+            margin: 20px 0;
             display: flex;
-            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 12px;
         }
-
-        .img-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .qty-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background-color: #FFF8EC;
-            padding: 5px 12px;
-            border-radius: 20px;
-            border: 1px solid #546B41;
-        }
-
-        .qty-btn {
-            background-color: #546B41;
+        .filter-btn {
+            background-color: #556b2f;
             color: white;
             border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 20px;
             cursor: pointer;
-        }
-
-        .qty-count {
-            font-size: 1.1rem;
             font-weight: bold;
-            min-width: 20px;
-            text-align: center;
+            transition: background 0.3s;
         }
-
-        .cart-summary {
-            max-width: 550px;
-            margin: 40px auto;
-            background-color: #DCCCAC;
-            border: 3px solid #546B41;
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #3b4d20;
         }
-
-        .email-input-group {
-            margin: 20px 0 10px 0;
-            text-align: left;
-        }
-
-        .email-input-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #2C3E1F;
-        }
-
-        .email-input-group input {
+        #product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
             width: 100%;
-            padding: 10px;
-            border: 2px solid #546B41;
-            border-radius: 10px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            background-color: #FFF8EC;
+            max-width: 1000px;
+            margin-bottom: 30px;
         }
-
-        .payment-info {
-            background-color: #FFF8EC;
-            border: 1px solid #546B41;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #2C3E1F;
-        }
-
-        .send-btn {
-            background-color: #546B41;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.1rem;
-            font-weight: bold;
+        .product-card {
+            background: white;
             border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+        }
+        .product-card.selected {
+            border-color: #556b2f;
+            background-color: #f4f7f2;
+        }
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .order-box {
+            background: #f4f0e6;
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        input[type="email"] {
+            width: 80%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        button.order-btn {
+            background-color: #556b2f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
             cursor: pointer;
             width: 100%;
         }
-
-        .send-btn:hover {
-            background-color: #3f5230;
+        button.order-btn:hover {
+            background-color: #3b4d20;
+        }
+        .discount-info {
+            background: #f4f0e6;
+            border: 2px dashed #b5a48b;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-bar">
-        <a href="index.html" class="back-btn">← Nazaj na glavno stran</a>
-        <h1>Katalog 3D Kazalk</h1>
+    <h1>Katalog 3D Kazalk</h1>
+
+    <div class="discount-info">
+        🏷️ <strong>Količinski popusti</strong><br>
+        1x = 7,00 € &nbsp;|&nbsp; 2x = 12,00 € &nbsp;|&nbsp; 3x = 16,00 € &nbsp;|&nbsp; 5x = 24,00 €
     </div>
 
-    <!-- Cenik Opcija A -->
-    <div class="price-box">
-        <h3>🏷️ Količinski popusti</h3>
-        <div class="price-tags">
-            <div class="tag">1x = 7,00 €</div>
-            <div class="tag">2x = 12,00 €</div>
-            <div class="tag">3x = 16,00 €</div>
-            <div class="tag">5x = 24,00 €</div>
-        </div>
+    <!-- Gumbi za filtriranje kategorij (vključno z Geometrijo) -->
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterCategory('vse', event)">Vse</button>
+        <button class="filter-btn" onclick="filterCategory('kužki', event)">Psi</button>
+        <button class="filter-btn" onclick="filterCategory('mačke', event)">Mačke</button>
+        <button class="filter-btn" onclick="filterCategory('geometrija', event)">Geometrija</button>
+        <button class="filter-btn" onclick="filterCategory('ostalo', event)">Ostalo</button>
     </div>
 
-    <!-- Kategorije -->
-    <div class="category-nav">
-        <button class="cat-btn active" onclick="filterCategory('vse', event)">Vse</button>
-        <button class="cat-btn" onclick="filterCategory('psi', event)">Psi</button>
-        <button class="cat-btn" onclick="filterCategory('mačke', event)">Mačke</button>
-        <button class="cat-btn" onclick="filterCategory('ostalo', event)">Ostalo</button>
-    </div>
+    <div id="error-msg" style="color: red; margin-bottom: 15px;"></div>
 
-    <!-- Mreža izdelkov -->
-    <div class="product-grid" id="product-grid">
-        <p style="text-align: center; grid-column: 1/-1;">Nalaganje izdelkov...</p>
-    </div>
+    <!-- Mreža, kamor se nalagajo izdelki -->
+    <div id="product-grid">Nalaganje izdelkov...</div>
 
-    <!-- Košarica -->
-    <div class="cart-summary">
-        <h2>Izbrano: <span id="total-qty">0</span> / 25 kazalk</h2>
-        <h3>Skupni znesek: <span id="total-price">0.00</span> €</h3>
-        <p id="savings-text" style="color: #2C3E1F; font-weight: bold;"></p>
-
-        <div class="payment-info">
-            💳 Način plačila: Po povzetju ali preko Flik-a
-        </div>
-
-        <div class="email-input-group">
-            <label for="user-email">Vnesi svoj Gmail naslov za potrditev:</label>
-            <input type="email" id="user-email" placeholder="tvoje.ime@gmail.com">
-        </div>
-
-        <button class="send-btn" onclick="sendEmailOrder()">✉️ Oddaj naročilo na Email</button>
+    <!-- Košarica / Naročilnica -->
+    <div class="order-box">
+        <h3>Izbrano: <span id="selected-count">0</span> / 25 kazalk</h3>
+        <p>Skupni znesek: <span id="total-price">0.00</span> €</p>
+        <p style="font-size: 0.9em; color: #555;">Način plačila: Po povzetju ali preko Flik-a</p>
+        
+        <input type="email" id="user-email" placeholder="vnesi.svoj@gmail.com"><br>
+        <button class="order-btn" onclick="submitOrder()">Oddaj naročilo na Email</button>
     </div>
 
     <script>
-        // Nastavitve Supabase
-        const SUPABASE_URL = 'https://uvzphtvmscphptmvyuq.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'TVOJ_SUPABASE_ANON_KEY'; // Kopiraj iz: Supabase -> Project Settings -> API
-        const PHONE_NUMBER = "040 123 456";
-
+        // Supabase povezava
+        const SUPABASE_URL = 'TUKJ_VSTAVI_SVOJ_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'TUKAJ_VSTAVI_SUPABASE_ANON_KEY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let allProducts = [];
-        let cart = {};
+        let products = [];
+        let selectedProducts = [];
 
-        async function fetchProducts() {
-            const { data, error } = await _supabase.from('products').select('*');
-            if (error) {
-                console.error("Napaka:", error);
-                document.getElementById('product-grid').innerHTML = '<p style="grid-column: 1/-1;">Napaka pri nalaganju izdelkov z baze.</p>';
-                return;
-            }
-            allProducts = data || [];
-            renderProducts(allProducts);
+        // Cenik glede na količino
+        function calculatePrice(count) {
+            if (count === 0) return 0;
+            if (count === 1) return 7;
+            if (count === 2) return 12;
+            if (count === 3) return 16;
+            if (count === 5) return 24;
+            
+            // Za večje količine: 5-komplet (24€) + preostanek po 5€ na kos
+            let setsOf5 = Math.floor(count / 5);
+            let remainder = count % 5;
+            return (setsOf5 * 24) + (remainder * 5);
         }
 
-        function renderProducts(products) {
+        async function fetchProducts() {
+            try {
+                const { data, error } = await _supabase.from('products').select('*');
+                if (error) throw error;
+                products = data;
+                displayProducts(products);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('error-msg').innerText = "Napaka pri nalaganju izdelkov z baze.";
+            }
+        }
+
+        function displayProducts(items) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
-            if (products.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Ni izdelkov v tej kategoriji.</p>';
+
+            if (items.length === 0) {
+                grid.innerHTML = '<p>Ni izdelkov v tej kategoriji.</p>';
                 return;
             }
-            products.forEach(p => {
-                const qty = cart[p.id] || 0;
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="img-container">
-                            <img src="${p.img}" alt="${p.name || 'Kazalka'}" onerror="this.src='https://via.placeholder.com/200?text=Slika+ni+na+voljo'">
-                        </div>
-                        <div class="qty-controls">
-                            <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
-                            <span class="qty-count" id="qty-${p.id}">${qty}</span>
-                            <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
-                        </div>
-                    </div>
+
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = `product-card ${selectedProducts.includes(product.id) ? 'selected' : ''}`;
+                card.onclick = () => toggleSelect(product.id);
+
+                // Prikazuje se SAMO slika (ime in cena sta odstranjena)
+                card.innerHTML = `
+                    <img src="${product.img}" alt="Kazalka">
                 `;
+                grid.appendChild(card);
             });
         }
 
-        // Pametno filtriranje glede na različne zapise v bazi (kužki, cats, muca, itd.)
-        function filterCategory(cat, e) {
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            if (e && e.target) e.target.classList.add('active');
+        function filterCategory(category, event) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-            if (cat === 'vse') {
-                renderProducts(allProducts);
-            } else if (cat === 'psi') {
-                const filtered = allProducts.filter(p => {
-                    const c = (p.category || '').toLowerCase();
-                    return c === 'psi' || c === 'kužki' || c === 'kuzki' || c === 'pes';
-                });
-                renderProducts(filtered);
-            } else if (cat === 'mačke') {
-                const filtered = allProducts.filter(p => {
-                    const c = (p.category || '').toLowerCase();
-                    return c === 'mačke' || c === 'macke' || c === 'cats' || c === 'muca';
-                });
-                renderProducts(filtered);
+            if (category === 'vse') {
+                displayProducts(products);
             } else {
-                const filtered = allProducts.filter(p => {
-                    const c = (p.category || '').toLowerCase();
-                    const isDogOrCat = ['psi', 'kužki', 'kuzki', 'pes', 'mačke', 'macke', 'cats', 'muca'].includes(c);
-                    return !isDogOrCat;
-                });
-                renderProducts(filtered);
+                const filtered = products.filter(p => p.category === category);
+                displayProducts(filtered);
             }
         }
 
-        function changeQty(id, delta) {
-            const currentTotal = Object.values(cart).reduce((a, b) => a + b, 0);
+        function toggleSelect(id) {
+            const index = selectedProducts.indexOf(id);
+            if (index > -1) {
+                selectedProducts.splice(index, 1);
+            } else {
+                if (selectedProducts.length >= 25) {
+                    alert("Največje število izbranih kazalk je 25. Za večje količine prosimo pokličite lastnika direktno!");
+                    return;
+                }
+                selectedProducts.push(id);
+            }
+            updateOrderSummary();
+            displayProducts(products);
+        }
+
+        function updateOrderSummary() {
+            document.getElementById('selected-count').innerText = selectedProducts.length;
+            const price = calculatePrice(selectedProducts.length);
+            document.getElementById('total-price').innerText = price.toFixed(2);
+        }
+
+        function submitOrder() {
+            const email = document.getElementById('user-email').value.trim();
             
-            if (delta > 0 && currentTotal >= 25) {
-                alert(`Za naročila večja od 25 kosov me prosim pokliči direktno na telefonsko številko:\n📞 ${PHONE_NUMBER}`);
+            // Gmail validacija s humorjem
+            if (!email.endsWith('@gmail.com')) {
+                alert("Ej, gospodič/gospodična! Brez @gmail.com ne bo šlo. Pošteno vnesi svoj Gmail naslov! 🤖");
+                return;
+            }
+            if (selectedProducts.length === 0) {
+                alert("Nisi izbral nobene kazalke!");
                 return;
             }
 
-            const current = cart[id] || 0;
-            const newQty = Math.max(0, current + delta);
-            
-            if (newQty === 0) {
-                delete cart[id];
-            } else {
-                cart[id] = newQty;
-            }
-            
-            const el = document.getElementById(`qty-${id}`);
-            if (el) el.innerText = newQty;
-            updateCartSummary();
+            alert(`Naročilo uspešno oddano na ${email}! Hvala.`);
         }
 
-        function calculatePrice(count) {
-            if (count === 0) return 0;
-            let price = 0;
-            let remaining = count;
-
-            const p5 = Math.floor(remaining / 5);
-            price += p5 * 24;
-            remaining %= 5;
-
-            const p3 = Math.floor(remaining / 3);
-            price += p3 * 16;
-            remaining %= 3;
-
-            const p2 = Math.floor(remaining / 2);
-            price += p2 * 12;
-            remaining %= 2;
-
-            price += remaining * 7;
-            return price;
-        }
-
-        function updateCartSummary() {
-            const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
-            const totalPrice = calculatePrice(totalQty);
-            const regularPrice = totalQty * 7;
-            const savings = regularPrice - totalPrice;
-
-            document.getElementById('total-qty').innerText = totalQty;
-            document.getElementById('total-price').innerText = totalPrice.toFixed(2);
-            
-            const savingsEl = document.getElementById('savings-text');
-            if (savings > 0) {
-                savingsEl.innerText = `Prihranek s popustom: ${savings.toFixed(2)} €!`;
-            } else {
-                savingsEl.innerText = '';
-            }
-        }
-
-        function sendEmailOrder() {
-            const totalQty = Object.values(cart).reduce((a, b) => a + b, 0);
-            if (totalQty === 0) {
-                alert("Prosimo, izberite vsaj eno kazalko.");
-                return;
-            }
-
-            const emailInput = document.getElementById('user-email').value.trim();
-            const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
-            
-            if (!gmailRegex.test(emailInput)) {
-                const jokes = [
-                    "Zakaj računalnik nima nikoli vročine? Ker ima odprta vsa okna! 💻\n\n(Prosim vnesi veljaven @gmail.com naslov za potrditev naročila.)",
-                    "Zakaj se 3D tiskalnik nikoli ne skrega? Ker vedno najde pravi sloj sporazumevanja! 🖨️\n\n(Vpiši pravi Gmail naslov, da gre naročilo naprej.)",
-                    "Kaj reče koda, ko naredi napako? 'To ni napaka, to je nova funkcionalnost!' 🐛\n\n(Sprejemamo le veljavne @gmail.com naslove!)"
-                ];
-                const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-                alert(randomJoke);
-                return;
-            }
-
-            const price = calculatePrice(totalQty);
-            const body = encodeURIComponent(
-                `Pozdravljeni,\n\n` +
-                `Oddajam naročilo za 3D kazalke.\n\n` +
-                `Kupčev Gmail: ${emailInput}\n` +
-                `Skupno število kazalk: ${totalQty}\n` +
-                `Skupna cena: ${price.toFixed(2)} €\n` +
-                `Način plačila: Po povzetju ali Flik\n\n` +
-                `Lep pozdrav!`
-            );
-            
-            window.location.href = `mailto:adam.sibgor@gmail.com?subject=Naročilo Kazalk (${emailInput})&body=${body}`;
-        }
-
+        // Inicializacija ob nalaganju strani
         fetchProducts();
     </script>
 </body>
