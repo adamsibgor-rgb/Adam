@@ -3,22 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog 3D Kazalk</title>
+    <title>Katalog 3D Kazalk - 3Dprojekti</title>
     <!-- Supabase JavaScript client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fdfbf7;
-            color: #333;
+            background-color: #FFF8EC; /* Usklajeno z glavno stranjo */
+            color: #546B41;
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
+        /* Gumb za vrnitev na glavno stran */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #546B41;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        .back-btn:hover {
+            background-color: #435433;
+            transform: translateY(-2px);
+        }
+
         h1 {
-            color: #4a5d4e;
+            color: #2C3E1F;
+            margin-top: 20px;
         }
         .filters {
             margin: 20px 0;
@@ -28,7 +50,7 @@
             justify-content: center;
         }
         .filter-btn {
-            background-color: #556b2f;
+            background-color: #546B41;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -38,7 +60,7 @@
             transition: background 0.3s;
         }
         .filter-btn:hover, .filter-btn.active {
-            background-color: #3b4d20;
+            background-color: #2C3E1F;
         }
         #product-grid {
             display: grid;
@@ -50,7 +72,7 @@
         }
         .product-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 15px;
             padding: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
@@ -62,57 +84,63 @@
             transform: translateY(-3px);
         }
         .product-card.selected {
-            border-color: #556b2f;
+            border-color: #546B41;
             background-color: #f4f7f2;
         }
         .product-card img {
             width: 100%;
             height: 220px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
         }
         .order-box {
-            background: #f4f0e6;
+            background: #DCCCAC; /* Usklajeno z barvo kartic iz prve strani */
+            border: 3px solid #546B41;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 20px;
             width: 100%;
             max-width: 500px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             text-align: center;
         }
         input[type="text"], input[type="email"] {
             width: 80%;
             padding: 10px;
             border-radius: 6px;
-            border: 1px solid #ccc;
+            border: 1px solid #546B41;
             margin: 8px 0;
+            background-color: white;
         }
         button.order-btn {
-            background-color: #556b2f;
+            background-color: #546B41;
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
             margin-top: 10px;
         }
         button.order-btn:hover {
-            background-color: #3b4d20;
+            background-color: #2C3E1F;
         }
         .discount-info {
-            background: #f4f0e6;
-            border: 2px dashed #b5a48b;
-            padding: 10px;
-            border-radius: 8px;
+            background: #DCCCAC;
+            border: 2px dashed #546B41;
+            padding: 12px;
+            border-radius: 15px;
             margin-bottom: 20px;
             max-width: 600px;
             text-align: center;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
+
+    <!-- Gumb za vrnitev na glavno stran -->
+    <a href="index.html" class="back-btn">← Nazaj na glavno stran</a>
 
     <h1>Katalog 3D Kazalk</h1>
 
@@ -139,7 +167,7 @@
     <div class="order-box">
         <h3>Izbrano: <span id="selected-count">0</span> / 25 kazalk</h3>
         <p>Skupni znesek: <span id="total-price">0.00</span> €</p>
-        <p style="font-size: 0.9em; color: #555;">Način plačila: Po povzetju ali preko Flik-a</p>
+        <p style="font-size: 0.9em; color: #2C3E1F;">Način plačila: Po povzetju ali preko Flik-a</p>
         
         <input type="text" id="user-name" placeholder="Vnesi svoje ime"><br>
         <input type="text" id="user-surname" placeholder="Vnesi svoj priimek"><br>
@@ -195,7 +223,6 @@
                 card.className = `product-card ${selectedProducts.includes(product.id) ? 'selected' : ''}`;
                 card.onclick = () => toggleSelect(product.id);
 
-                // Prikazuje se SAMO slika (brez imena in cene pod njo)
                 card.innerHTML = `
                     <img src="${product.img}" alt="Kazalka">
                 `;
@@ -221,10 +248,10 @@
                 selectedProducts.splice(index, 1);
             } else {
                 if (selectedProducts.length >= 25) {
-                    alert("Če želite več kot 25 kazalk, me prosim pokličite na telefonsko številko: 041-XXX-XXX");
+                    alert("Če želite več kot 25 kazalk, me prosim pokličite na telefonsko številko: +38664172788");
                     return;
                 }
-                selectedProducts.push(id);
+                selectedProducts.items?.push ? selectedProducts.push(id) : selectedProducts.push(id);
             }
             updateOrderSummary();
             displayProducts(products);
@@ -259,7 +286,6 @@
             alert(`Hvala, ${name} ${surname}! Naročilo je bilo uspešno oddano na ${email}.`);
         }
 
-        // Zagon nalaganja ob odprtju strani
         fetchProducts();
     </script>
 </body>
