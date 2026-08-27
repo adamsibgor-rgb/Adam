@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog 3D Kazalk - 3Dprojekti</title>
-    <!-- Supabase JavaScript client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #FFF8EC;
@@ -18,7 +20,6 @@
             align-items: center;
         }
 
-        /* Gumb za vrnitev na glavno stran */
         .back-btn {
             position: absolute;
             top: 20px;
@@ -30,24 +31,30 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 0.95rem;
-            transition: background 0.2s, transform 0.2s;
             box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
         }
         .back-btn:hover {
             background-color: #435433;
-            transform: translateY(-2px);
         }
 
         h1 {
             color: #2C3E1F;
             margin-top: 20px;
         }
+
         .filters {
             margin: 20px 0;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
+            position: sticky;
+            top: 10px;
+            background: #FFF8EC;
+            padding: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 15px;
         }
         .filter-btn {
             background-color: #546B41;
@@ -57,18 +64,31 @@
             border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
-        .filter-btn:hover, .filter-btn.active {
+        .filter-btn:hover {
             background-color: #2C3E1F;
         }
-        #product-grid {
+
+        .category-section {
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+        .category-title {
+            color: #2C3E1F;
+            border-bottom: 2px solid #546B41;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 20px;
             width: 100%;
-            max-width: 1000px;
-            margin-bottom: 30px;
         }
         .product-card {
             background: white;
@@ -76,9 +96,9 @@
             padding: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
-            cursor: pointer;
             border: 3px solid transparent;
             transition: transform 0.2s, border-color 0.2s;
+            position: relative;
         }
         .product-card:hover {
             transform: translateY(-3px);
@@ -92,7 +112,56 @@
             height: 220px;
             object-fit: cover;
             border-radius: 10px;
+            cursor: pointer;
         }
+
+        /* Gumb za izbiro posameznega izdelka */
+        .select-btn {
+            background-color: #546B41;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 8px;
+            font-weight: bold;
+            width: 100%;
+        }
+        .select-btn:hover {
+            background-color: #2C3E1F;
+        }
+
+        /* Svetlobni okenček (Lightbox) za povečavo slike čez cel zaslon */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        #lightbox span {
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .order-box {
             background: #DCCCAC;
             border: 3px solid #546B41;
@@ -102,6 +171,8 @@
             max-width: 500px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
         }
         input[type="text"], input[type="email"] {
             width: 80%;
@@ -139,7 +210,6 @@
 </head>
 <body>
 
-    <!-- Gumb za vrnitev na glavno stran -->
     <a href="index.html" class="back-btn">← Nazaj na glavno stran</a>
 
     <h1>Katalog 3D Kazalk</h1>
@@ -149,19 +219,25 @@
         1x = 7,00 € &nbsp;|&nbsp; 2x = 12,00 € &nbsp;|&nbsp; 3x = 16,00 € &nbsp;|&nbsp; 5x = 24,00 €
     </div>
 
-    <!-- Gumbi za kategorije -->
+    <!-- Bližnjice do sekcij -->
     <div class="filters">
-        <button class="filter-btn active" onclick="filterCategory('vse', event)">Vse</button>
-        <button class="filter-btn" onclick="filterCategory('kužki', event)">Psi</button>
-        <button class="filter-btn" onclick="filterCategory('mačke', event)">Mačke</button>
-        <button class="filter-btn" onclick="filterCategory('geometrija', event)">Geometrija</button>
-        <button class="filter-btn" onclick="filterCategory('ostalo', event)">Ostalo</button>
+        <a href="#psi" class="filter-btn">Psi</a>
+        <a href="#macke" class="filter-btn">Mačke</a>
+        <a href="#geometrija" class="filter-btn">Geometrija</a>
+        <a href="#ostalo" class="filter-btn">Ostalo</a>
     </div>
 
     <div id="error-msg" style="color: red; margin-bottom: 15px;"></div>
 
-    <!-- Mreža izdelkov -->
-    <div id="product-grid">Nalaganje izdelkov...</div>
+    <div id="catalog-container" style="width: 100%; max-width: 1000px;">
+        Nalaganje katalogov...
+    </div>
+
+    <!-- Povečan okenček (Lightbox) za slike -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <span onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="Povečana slika">
+    </div>
 
     <!-- Naročilnica -->
     <div class="order-box">
@@ -177,7 +253,6 @@
     </div>
 
     <script>
-        // Supabase povezava s tvojimi vnesenimi podatki
         const SUPABASE_URL = 'https://uvzphptvnscphptmvyuq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_d9Nfy7-esxlS9_8Uxm_iYw_drUfUDky';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -202,44 +277,70 @@
                 const { data, error } = await _supabase.from('products').select('*');
                 if (error) throw error;
                 products = data;
-                displayProducts(products);
+                renderCatalog();
             } catch (err) {
                 console.error(err);
                 document.getElementById('error-msg').innerText = "Napaka pri nalaganju izdelkov z baze.";
             }
         }
 
-        function displayProducts(items) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
+        function renderCatalog() {
+            const container = document.getElementById('catalog-container');
+            container.innerHTML = '';
 
-            if (items.length === 0) {
-                grid.innerHTML = '<p>Ni izdelkov v tej kategoriji.</p>';
-                return;
-            }
+            const categories = [
+                { key: 'kužki', name: 'Psi', id: 'psi' },
+                { key: 'mačke', name: 'Mačke', id: 'macke' },
+                { key: 'geometrija', name: 'Geometrija', id: 'geometrija' },
+                { key: 'ostalo', name: 'Ostalo', id: 'ostalo' }
+            ];
 
-            items.forEach(product => {
-                const card = document.createElement('div');
-                card.className = `product-card ${selectedProducts.includes(product.id) ? 'selected' : ''}`;
-                card.onclick = () => toggleSelect(product.id);
+            categories.forEach(cat => {
+                // Prilagoditev, da ujame tudi alternativne zapise iz baze (npr. cats, muca itd.)
+                const catProducts = products.filter(p => {
+                    const c = (p.category || '').toLowerCase();
+                    if (cat.key === 'kužki') return c.includes('kuž') || c.includes('psi') || c.includes('dog');
+                    if (cat.key === 'mačke') return c.includes('mač') || c.includes('cat') || c.includes('muca');
+                    if (cat.key === 'geometrija') return c.includes('geometr');
+                    return c.includes('ostalo') || c.includes('narava') || c.includes('anime') || c.includes('ostali');
+                });
+                
+                if (catProducts.length > 0) {
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+                    section.id = cat.id;
 
-                card.innerHTML = `
-                    <img src="${product.img}" alt="Kazalka">
-                `;
-                grid.appendChild(card);
+                    section.innerHTML = `
+                        <h2 class="category-title">${cat.name}</h2>
+                        <div class="product-grid" id="grid-${cat.key}"></div>
+                    `;
+                    container.appendChild(section);
+
+                    const grid = document.getElementById(`grid-${cat.key}`);
+                    catProducts.forEach(product => {
+                        const isSelected = selectedProducts.includes(product.id);
+                        const card = document.createElement('div');
+                        card.className = `product-card ${isSelected ? 'selected' : ''}`;
+
+                        card.innerHTML = `
+                            <img src="${product.img}" alt="Kazalka" onclick="openLightbox('${product.img}')" title="Klikni za povečavo">
+                            <button class="select-btn" onclick="toggleSelect('${product.id}')">
+                                ${isSelected ? '✓ Izbrano' : '+ Izberi'}
+                            </button>
+                        `;
+                        grid.appendChild(card);
+                    });
+                }
             });
         }
 
-        function filterCategory(category, event) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        function openLightbox(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
 
-            if (category === 'vse') {
-                displayProducts(products);
-            } else {
-                const filtered = products.filter(p => p.category === category);
-                displayProducts(filtered);
-            }
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
         }
 
         function toggleSelect(id) {
@@ -254,7 +355,7 @@
                 selectedProducts.push(id);
             }
             updateOrderSummary();
-            displayProducts(products);
+            renderCatalog();
         }
 
         function updateOrderSummary() {
