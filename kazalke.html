@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #FFF8EC; /* Usklajeno z glavno stranjo */
+            background-color: #FFF8EC;
             color: #546B41;
             margin: 0;
             padding: 20px;
@@ -94,7 +94,7 @@
             border-radius: 10px;
         }
         .order-box {
-            background: #DCCCAC; /* Usklajeno z barvo kartic iz prve strani */
+            background: #DCCCAC;
             border: 3px solid #546B41;
             padding: 20px;
             border-radius: 20px;
@@ -177,9 +177,9 @@
     </div>
 
     <script>
-        // Supabase povezava (vstavi svoje podatke)
-        const SUPABASE_URL = 'TUKJ_VSTAVI_SVOJ_SUPABASE_URL';
-        const SUPABASE_ANON_KEY = 'TUKAJ_VSTAVI_SUPABASE_ANON_KEY';
+        // Supabase povezava s tvojimi pravimi podatki
+        const SUPABASE_URL = 'https://uvzphptvnscphptmvyuq.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_d9Nfy7-esxlS9_8Uxm_iYw_drUfU...'; // Vstavi svoj celoten ključ iz Supabase plošče
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let products = [];
@@ -251,7 +251,7 @@
                     alert("Če želite več kot 25 kazalk, me prosim pokličite na telefonsko številko: +38664172788");
                     return;
                 }
-                selectedProducts.items?.push ? selectedProducts.push(id) : selectedProducts.push(id);
+                selectedProducts.push(id);
             }
             updateOrderSummary();
             displayProducts(products);
