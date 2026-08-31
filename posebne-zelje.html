@@ -37,7 +37,7 @@
 
         h1 { font-size: 2.5rem; margin: 10px 0; }
 
-        .instructions-box {
+        .info-box {
             background-color: white;
             padding: 30px;
             border-radius: 25px;
@@ -46,9 +46,9 @@
             text-align: left;
             box-shadow: 0px 4px 12px rgba(0,0,0,0.03);
         }
-        .instructions-box h3 { margin-top: 0; color: #435433; }
-        .instructions-box ol { padding-left: 20px; margin-bottom: 0; }
-        .instructions-box li { margin-bottom: 8px; }
+        .info-box h3 { margin-top: 0; color: #435433; }
+        .info-box ol, .info-box ul { padding-left: 20px; margin-bottom: 0; }
+        .info-box li { margin-bottom: 8px; }
 
         .form-section {
             margin-top: 40px;
@@ -169,10 +169,29 @@
 
     <div class="hero-section">
         <h1>Imate posebne želje ali svoj 3D model?</h1>
-        <p>Izpolnite spodnji obrazec, naložite datoteko in pripravili vam bomo ponudbo po meri.</p>
+        <p>Oddajte svojo idejo v okviru spodnjih posebnih želja, naložite datoteko in pripravili vam bomo ponudbo po meri.</p>
     </div>
 
-    <div class="instructions-box">
+    <!-- Informativni cenik in potek -->
+    <div class="info-box">
+        <h3>Informativni cenik 3D tiska</h3>
+        <ul>
+            <li><strong>Priprava modela:</strong> od 10 do 20 EUR (glede na zahtevnost).</li>
+            <li><strong>Čas tiskanja:</strong> 2 EUR na uro tiska.</li>
+            <li><strong>Material:</strong> 25 EUR na kg.</li>
+            <li><strong>Nujno naročilo:</strong> Če je projekt potrebno zaključiti v roku krajšem od 5 dni, se doprlaša +8 EUR.</li>
+        </ul>
+        
+        <h3 style="margin-top: 25px;">Kako poteka sodelovanje?</h3>
+        <ol>
+            <li>Oddate svojo željo ali idejo preko spodnjega obrazca za posebne želje.</li>
+            <li>Odgovorim vam preko Gmaila ali vas pokličem, da se natančno pogovoriva o vaših željah in vzameva mere.</li>
+            <li>Izdelam in vam predstavim prototip.</li>
+            <li>Ko ste s končnim izgledom popolnoma zadovoljni, izdelek natiskam in dostavim na želeno lokacijo.</li>
+        </ol>
+    </div>
+
+    <div class="info-box">
         <h3>Vodič za pripravo datoteke (Bambu Studio)</h3>
         <ol>
             <li><strong>Najboljši format datoteke:</strong> Za tiskanje na tiskalnikih Bambu Lab je najbolj optimalna oblika format <strong>.3mf</strong>.</li>
@@ -225,8 +244,8 @@
                     </div>
                 </div>
                 
-                <label style="margin-top: 25px; display: block;"><strong>Opis projekta:</strong></label>
-                <textarea name="fi-text-message" rows="5" placeholder="Dodatne opombe glede dimenzij, polnil ali želenega roka izdelave..."></textarea>
+                <label style="margin-top: 25px; display: block;"><strong>Opis projekta in posebne želje:</strong></label>
+                <textarea name="fi-text-message" rows="5" placeholder="Opišite svojo idejo, dimenzije ali želeni rok izdelave..."></textarea>
                 
                 <button type="submit">Pošlji povpraševanje</button>
             </form>
