@@ -8,93 +8,107 @@
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 60px auto; 
-            max-width: 1125px; 
+            margin: 40px auto; 
+            max-width: 1400px; /* Povečana širina, da ni toliko neizkoriščenega prostora */
             background-color: #FFF8EC;
             color: #546B41;
-            padding: 0 20px;
+            padding: 0 30px;
         }
 
         .back-link { 
             display: inline-block; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
             color: #546B41; 
             text-decoration: none; 
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
         .back-link:hover { text-underline-offset: 4px; text-decoration: underline; }
 
         .hero-section {
             background-color: #99AD7A;
             color: white;
-            padding: 40px;
+            padding: 45px;
             border-radius: 25px;
             text-align: center;
             border: 3px solid #546B41;
             box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
         }
 
-        h1 { font-size: 2.5rem; margin: 10px 0; }
+        h1 { font-size: 2.8rem; margin: 10px 0; }
+        p { font-size: 1.15rem; }
 
         .info-box {
             background-color: white;
-            padding: 30px;
+            padding: 35px;
             border-radius: 25px;
             border: 2px solid #99AD7A;
             margin-top: 30px;
             text-align: left;
             box-shadow: 0px 4px 12px rgba(0,0,0,0.03);
+            font-size: 1.1rem;
         }
-        .info-box h3 { margin-top: 0; color: #435433; }
-        .info-box ol, .info-box ul { padding-left: 20px; margin-bottom: 0; }
-        .info-box li { margin-bottom: 8px; }
+        .info-box h3 { margin-top: 0; color: #435433; font-size: 1.5rem; }
+        .info-box ol, .info-box ul { padding-left: 25px; margin-bottom: 0; }
+        .info-box li { margin-bottom: 10px; }
 
         .form-section {
             margin-top: 40px;
             background-color: white;
-            padding: 45px;
+            padding: 50px;
             border-radius: 25px;
             border: 2px solid #DCCCAC;
             box-shadow: 0px 8px 24px rgba(0,0,0,0.06);
         }
 
+        .form-section h2 { font-size: 2rem; margin-top: 0; }
+
         .upload-box {
             background-color: #f9f4e8;
-            padding: 35px;
+            padding: 40px;
             border-radius: 20px;
             border: 2px dashed #546B41;
             text-align: left;
         }
 
+        .input-hint {
+            font-size: 0.95rem;
+            color: #6b8254;
+            margin-top: 6px;
+            margin-bottom: 20px;
+            display: block;
+            font-style: italic;
+        }
+
         .selection-group {
-            margin: 25px 0;
-            padding: 20px;
+            margin: 30px 0;
+            padding: 25px;
             background-color: white;
             border-radius: 15px;
             border: 1px solid #DCCCAC;
         }
-        .selection-title { font-weight: bold; margin-bottom: 15px; display: block; color: #435433; font-size: 1.1rem; }
+        .selection-title { font-weight: bold; margin-bottom: 15px; display: block; color: #435433; font-size: 1.2rem; }
         
         .radio-label {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            padding: 10px 15px;
-            border-radius: 10px;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 12px;
             background-color: #FFF8EC;
             border: 1px solid transparent;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 1.1rem;
         }
         .radio-label:hover {
             border-color: #99AD7A;
             background-color: #fcf6eb;
         }
-        .radio-label input[type="radio"] { width: 18px; height: 18px; accent-color: #546B41; cursor: pointer; }
+        .radio-label input[type="radio"] { width: 22px; height: 22px; accent-color: #546B41; cursor: pointer; }
 
-        .color-section { display: none; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #DCCCAC; }
+        .color-section { display: none; margin-top: 25px; padding-top: 25px; border-top: 1px dashed #DCCCAC; }
 
         .color-picker-grid {
             display: flex;
@@ -113,15 +127,15 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #546B41;
-            width: 100px;
+            width: 110px;
         }
 
         .color-dot {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             border: 3px solid #EAEAEA;
             box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
@@ -138,12 +152,19 @@
             box-shadow: 0px 0px 12px rgba(84, 107, 65, 0.6);
         }
 
+        label.main-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: block;
+            color: #435433;
+        }
+
         input[type="email"], input[type="file"], textarea {
             display: block; width: 100%;
-            margin-top: 10px; padding: 14px;
-            border-radius: 10px; border: 1px solid #546B41;
+            margin-top: 10px; padding: 16px;
+            border-radius: 12px; border: 1px solid #546B41;
             box-sizing: border-box;
-            font-size: 1rem;
+            font-size: 1.1rem;
             background-color: white;
         }
         input[type="email"]:focus, textarea:focus {
@@ -155,8 +176,8 @@
         button {
             display: block; width: 100%;
             background-color: #546B41; color: white;
-            font-weight: bold; cursor: pointer; border: none; margin-top: 30px;
-            padding: 15px; border-radius: 10px; font-size: 1.1rem;
+            font-weight: bold; cursor: pointer; border: none; margin-top: 35px;
+            padding: 18px; border-radius: 12px; font-size: 1.25rem;
             transition: all 0.2s;
             box-shadow: 0px 4px 10px rgba(84, 107, 65, 0.3);
         }
@@ -169,7 +190,7 @@
 
     <div class="hero-section">
         <h1>Imate posebne želje ali svoj 3D model?</h1>
-        <p>Oddajte svojo idejo v okviru spodnjih posebnih želja, naložite datoteko in pripravili vam bomo ponudbo po meri.</p>
+        <p>Oddajte svojo idejo preko spodnjega obrazca, naložite datoteko in pripravili vam bomo ponudbo po meri.</p>
     </div>
 
     <!-- Informativni cenik in potek -->
@@ -179,10 +200,10 @@
             <li><strong>Priprava modela:</strong> od 10 do 20 EUR (glede na zahtevnost).</li>
             <li><strong>Čas tiskanja:</strong> 2 EUR na uro tiska.</li>
             <li><strong>Material:</strong> 25 EUR na kg.</li>
-            <li><strong>Nujno naročilo:</strong> Če je projekt potrebno zaključiti v roku krajšem od 5 dni, se doprlaša +8 EUR.</li>
+            <li><strong>Nujno naročilo:</strong> Če je projekt potrebno zaključiti v roku krajšem od 5 dni, se doplača +8 EUR.</li>
         </ul>
         
-        <h3 style="margin-top: 25px;">Kako poteka sodelovanje?</h3>
+        <h3 style="margin-top: 30px;">Kako poteka sodelovanje?</h3>
         <ol>
             <li>Oddate svojo željo ali idejo preko spodnjega obrazca za posebne želje.</li>
             <li>Odgovorim vam preko Gmaila ali vas pokličem, da se natančno pogovoriva o vaših željah in vzameva mere.</li>
@@ -205,17 +226,21 @@
             
             <form action="https://getform.io/f/xw07q11t3iq" method="POST" enctype="multipart/form-data">
                 
-                <label><strong>Vaš E-naslov:</strong></label>
+                <label class="main-label">Vaš E-naslov:</label>
+                <span class="input-hint">Vnesite svoj aktivni e-naslov, na katerega vam bomo poslali ponudbo in nadaljnja navodila.</span>
                 <input type="email" name="fi-sender-email" placeholder="primer@gmail.com" required>
                 
-                <label style="margin-top: 20px; display: block;"><strong>Izberite 3D datoteko (.3mf, .stl, .obj):</strong></label>
+                <label class="main-label" style="margin-top: 30px;">Izberite 3D datoteko (.3mf, .stl, .obj):</label>
+                <span class="input-hint">Kliknite gumb "Izberi datoteko" in na računalniku poiščite svoj 3D model.</span>
                 <input type="file" name="fi-file-upload" accept=".stl,.obj,.3mf" required>
                 
                 <div class="selection-group">
                     <span class="selection-title">Izberite material za tiskanje:</span>
-                    <label class="radio-label"><input type="radio" name="fi-text-material" value="PLA" onclick="prikaziBarve('pla')" required> <span><strong>PLA</strong> (figurice, prototipi, dekoracije)</span></label>
-                    <label class="radio-label"><input type="radio" name="fi-text-material" value="PCTG" onclick="prikaziBarve('pctg')"> <span><strong>PCTG</strong> (močan material, odporen na udarce)</span></label>
-                    <label class="radio-label"><input type="radio" name="fi-text-material" value="TPU" onclick="prikaziBarve('tpu')"> <span><strong>TPU</strong> (fleksibilen, gumijast material)</span></label>
+                    <span class="input-hint" style="margin-top: -10px; margin-bottom: 15px;">Izberite vrsto materiala glede na to, čemu je izdelek namenjen.</span>
+                    
+                    <label class="radio-label"><input type="radio" name="fi-text-material" value="PLA" onclick="prikaziBarve('pla')" required> <span><strong>PLA</strong> (primerno za figurice, prototipe in dekoracije)</span></label>
+                    <label class="radio-label"><input type="radio" name="fi-text-material" value="PCTG" onclick="prikaziBarve('pctg')"> <span><strong>PCTG</strong> (močan material, visoko odporen na udarce)</span></label>
+                    <label class="radio-label"><input type="radio" name="fi-text-material" value="TPU" onclick="prikaziBarve('tpu')"> <span><strong>TPU</strong> (fleksibilen, prožen in gumijast material)</span></label>
                 </div>
 
                 <div id="barve-pla" class="color-section">
@@ -244,8 +269,9 @@
                     </div>
                 </div>
                 
-                <label style="margin-top: 25px; display: block;"><strong>Opis projekta in posebne želje:</strong></label>
-                <textarea name="fi-text-message" rows="5" placeholder="Opišite svojo idejo, dimenzije ali želeni rok izdelave..."></textarea>
+                <label class="main-label" style="margin-top: 30px;">Opis projekta in posebne želje:</label>
+                <span class="input-hint">Opišite dimenzije, želeno število kosov, rok izdelave ali druge posebne zahteve.</span>
+                <textarea name="fi-text-message" rows="6" placeholder="Napišite svoje želje tukaj..."></textarea>
                 
                 <button type="submit">Pošlji povpraševanje</button>
             </form>
