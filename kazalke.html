@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog 3D Kazalk - 3Dprojekti</title>
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("ZTUaQ3NrrN6CV6MUq"); // Tvoj Public Key
+        })();
+    </script>
     <style>
         html {
             scroll-behavior: smooth;
@@ -103,10 +111,6 @@
         .product-card:hover {
             transform: translateY(-3px);
         }
-        .product-card.selected {
-            border-color: #546B41;
-            background-color: #f4f7f2;
-        }
         .product-card img {
             width: 100%;
             height: 220px;
@@ -115,24 +119,57 @@
             cursor: pointer;
         }
 
-        /* Gumb za izbiro posameznega izdelka */
-        .select-btn {
+        /* Upravljanje količine (+ / -) */
+        .quantity-control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .qty-btn {
             background-color: #546B41;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin-top: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             font-weight: bold;
-            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
         }
-        .select-btn:hover {
+        .qty-btn:hover {
             background-color: #2C3E1F;
         }
+        .qty-display {
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 20px;
+            text-align: center;
+        }
 
-        /* Svetlobni okenček (Lightbox) za povečavo slike čez cel zaslon */
+        /* Vizualna pasica za popuste (podobno primeru) */
+        .promo-banner {
+            background: #2C3E1F;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .promo-banner h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+        }
+        .promo-steps {
+            font-size: 0.9rem;
+            color: #DCCCAC;
+        }
+
+        /* Lightbox */
         #lightbox {
             display: none;
             position: fixed;
@@ -174,13 +211,14 @@
             margin-top: 20px;
             margin-bottom: 40px;
         }
-        input[type="text"], input[type="email"] {
-            width: 80%;
+        input[type="text"], input[type="email"], select, textarea {
+            width: 90%;
             padding: 10px;
             border-radius: 6px;
             border: 1px solid #546B41;
             margin: 8px 0;
             background-color: white;
+            font-family: Arial, sans-serif;
         }
         button.order-btn {
             background-color: #546B41;
@@ -192,19 +230,27 @@
             cursor: pointer;
             width: 100%;
             margin-top: 10px;
+            font-size: 1rem;
         }
         button.order-btn:hover {
             background-color: #2C3E1F;
         }
-        .discount-info {
-            background: #DCCCAC;
-            border: 2px dashed #546B41;
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            max-width: 600px;
-            text-align: center;
-            font-weight: 500;
+        #address-fields {
+            display: none;
+            margin-top: 10px;
+            background: #f4f7f2;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px dashed #546B41;
+        }
+        #pickup-info {
+            display: none;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2C3E1F;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -214,12 +260,13 @@
 
     <h1>Katalog 3D Kazalk</h1>
 
-    <div class="discount-info">
-        🏷️ <strong>Količinski popusti</strong><br>
-        1x = 7,00 € &nbsp;|&nbsp; 2x = 12,00 € &nbsp;|&nbsp; 3x = 16,00 € &nbsp;|&nbsp; 5x = 24,00 €
+    <!-- Dinamična pasica za popuste in poštnino -->
+    <div class="promo-banner" id="promo-banner">
+        <h3>Izberi kazalke in unovči količinski popust!</h3>
+        <div class="promo-steps">1x = 7€ | 2x = 12€ | 3x = 16€ | 5x = 24€</div>
+        <div id="shipping-info" style="margin-top: 8px; font-weight: bold; color: #FFD700;">📦 Poštnina je BREZPLAČNA za naročila nad 2 kosi ali v Ljubljani!</div>
     </div>
 
-    <!-- Bližnjice do sekcij -->
     <div class="filters">
         <a href="#psi" class="filter-btn">Psi</a>
         <a href="#macke" class="filter-btn">Mačke</a>
@@ -233,7 +280,6 @@
         Nalaganje katalogov...
     </div>
 
-    <!-- Povečan okenček (Lightbox) za slike -->
     <div id="lightbox" onclick="closeLightbox()">
         <span onclick="closeLightbox()">&times;</span>
         <img id="lightbox-img" src="" alt="Povečana slika">
@@ -241,15 +287,32 @@
 
     <!-- Naročilnica -->
     <div class="order-box">
-        <h3>Izbrano: <span id="selected-count">0</span> / 25 kazalk</h3>
+        <h3>Izbrano skupaj: <span id="selected-count">0</span> kosov</h3>
         <p>Skupni znesek: <span id="total-price">0.00</span> €</p>
-        <p style="font-size: 0.9em; color: #2C3E1F;">Način plačila: Po povzetju ali preko Flik-a</p>
         
-        <input type="text" id="user-name" placeholder="Vnesi svoje ime"><br>
-        <input type="text" id="user-surname" placeholder="Vnesi svoj priimek"><br>
+        <input type="text" id="user-name" placeholder="Vnesi svoje ime in priimek"><br>
         <input type="email" id="user-email" placeholder="vnesi.svoj@gmail.com"><br>
         
-        <button class="order-btn" onclick="submitOrder()">Oddaj naročilo na Email</button>
+        <!-- Izbira načina prevzema -->
+        <label for="delivery-option" style="font-weight: bold; display: block; margin-top: 10px;">Način prevzema:</label>
+        <select id="delivery-option" onchange="handleDeliveryChange()">
+            <option value="">-- Izberi način prevzema --</option>
+            <option value="dogovor">Po dogovoru (Ljubljana / osebno)</option>
+            <option value="dom">Dostava na dom (Pošta Slovenije)</option>
+        </select>
+
+        <!-- Prikaz za prevzem po dogovoru -->
+        <div id="pickup-info">
+            📞 Pokliči me ali piši po dogovoru na tel: <strong>064 172 788</strong>
+        </div>
+
+        <!-- Vnosna polja za dostavo na dom -->
+        <div id="address-fields">
+            <input type="text" id="user-address" placeholder="Ulica in hišna številka"><br>
+            <input type="text" id="user-city" placeholder="Poštna številka in kraj"><br>
+        </div>
+        
+        <button class="order-btn" onclick="submitOrder()">Oddaj naročilo</button>
     </div>
 
     <script>
@@ -258,7 +321,7 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let products = [];
-        let selectedProducts = [];
+        let cart = {}; // Hranilo bo količine za posamezen izdelek: { productId: count }
 
         function calculatePrice(count) {
             if (count === 0) return 0;
@@ -296,7 +359,6 @@
             ];
 
             categories.forEach(cat => {
-                // Prilagoditev, da ujame tudi alternativne zapise iz baze (npr. cats, muca itd.)
                 const catProducts = products.filter(p => {
                     const c = (p.category || '').toLowerCase();
                     if (cat.key === 'kužki') return c.includes('kuž') || c.includes('psi') || c.includes('dog');
@@ -318,15 +380,17 @@
 
                     const grid = document.getElementById(`grid-${cat.key}`);
                     catProducts.forEach(product => {
-                        const isSelected = selectedProducts.includes(product.id);
+                        const count = cart[product.id] || 0;
                         const card = document.createElement('div');
-                        card.className = `product-card ${isSelected ? 'selected' : ''}`;
+                        card.className = `product-card`;
 
                         card.innerHTML = `
                             <img src="${product.img}" alt="Kazalka" onclick="openLightbox('${product.img}')" title="Klikni za povečavo">
-                            <button class="select-btn" onclick="toggleSelect('${product.id}')">
-                                ${isSelected ? '✓ Izbrano' : '+ Izberi'}
-                            </button>
+                            <div class="quantity-control">
+                                <button class="qty-btn" onclick="changeQty('${product.id}', -1)">-</button>
+                                <span class="qty-display">${count}</span>
+                                <button class="qty-btn" onclick="changeQty('${product.id}', 1)">+</button>
+                            </div>
                         `;
                         grid.appendChild(card);
                     });
@@ -343,33 +407,79 @@
             document.getElementById('lightbox').style.display = 'none';
         }
 
-        function toggleSelect(id) {
-            const index = selectedProducts.indexOf(id);
-            if (index > -1) {
-                selectedProducts.splice(index, 1);
-            } else {
-                if (selectedProducts.length >= 25) {
-                    alert("Če želite več kot 25 kazalk, me prosim pokličite na telefonsko številko: +38664172788");
-                    return;
-                }
-                selectedProducts.push(id);
+        function changeQty(productId, change) {
+            let current = cart[productId] || 0;
+            let totalCount = getTotalItemsCount();
+
+            if (change > 0 && totalCount >= 25) {
+                alert("Če želite več kot 25 kazalk, me prosim pokličite na: 064 172 788");
+                return;
             }
+
+            current += change;
+            if (current < 0) current = 0;
+
+            if (current === 0) {
+                delete cart[productId];
+            } else {
+                cart[productId] = current;
+            }
+
             updateOrderSummary();
             renderCatalog();
         }
 
+        function getTotalItemsCount() {
+            let sum = 0;
+            for (let id in cart) {
+                sum += cart[id];
+            }
+            return sum;
+        }
+
         function updateOrderSummary() {
-            document.getElementById('selected-count').innerText = selectedProducts.length;
-            const price = calculatePrice(selectedProducts.length);
+            const totalCount = getTotalItemsCount();
+            document.getElementById('selected-count').innerText = totalCount;
+            const price = calculatePrice(totalCount);
             document.getElementById('total-price').innerText = price.toFixed(2);
+
+            // Dinamično posodabljanje pasice za popuste
+            const banner = document.getElementById('promo-banner');
+            if (totalCount === 0) {
+                banner.innerHTML = `<h3>Izberi kazalke in unovči količinski popust!</h3><div class="promo-steps">1x = 7€ | 2x = 12€ | 3x = 16€ | 5x = 24€</div><div style="margin-top: 8px; font-weight: bold; color: #FFD700;">📦 Poštnina je BREZPLAČNA nad 2 kosi ali v Ljubljani!</div>`;
+            } else if (totalCount === 1) {
+                banner.innerHTML = `<h3>💡 Še 1 kos manjka do večjega popusta (2 kosa = 12 €)!</h3><div style="margin-top: 8px; font-weight: bold; color: #FFD700;">📦 Brezplačna poštnina v Ljubljani ali nad 2 kosi!</div>`;
+            } else if (totalCount === 2) {
+                banner.innerHTML = `<h3>🎉 Čestitke, izkoristili ste popust in BREZPLAČNO poštnino!</h3>`;
+            } else {
+                banner.innerHTML = `<h3>🔥 Super izbira! Aktiviran količinski popust in brezplačna poštnina.</h3>`;
+            }
+        }
+
+        function handleDeliveryChange() {
+            const val = document.getElementById('delivery-option').value;
+            const pickupInfo = document.getElementById('pickup-info');
+            const addressFields = document.getElementById('address-fields');
+
+            if (val === 'dogovor') {
+                pickupInfo.style.display = 'block';
+                addressFields.style.display = 'none';
+            } else if (val === 'dom') {
+                pickupInfo.style.display = 'none';
+                addressFields.style.display = 'block';
+            } else {
+                pickupInfo.style.display = 'none';
+                addressFields.style.display = 'none';
+            }
         }
 
         function submitOrder() {
             const name = document.getElementById('user-name').value.trim();
-            const surname = document.getElementById('user-surname').value.trim();
             const email = document.getElementById('user-email').value.trim();
-            
-            if (!name || !surname) {
+            const deliveryOption = document.getElementById('delivery-option').value;
+            const totalCount = getTotalItemsCount();
+
+            if (!name) {
                 alert("Prosim, vnesi svoje ime in priimek!");
                 return;
             }
@@ -379,12 +489,60 @@
                 return;
             }
 
-            if (selectedProducts.length === 0) {
+            if (!deliveryOption) {
+                alert("Prosim, izberi način prevzema!");
+                return;
+            }
+
+            let deliveryDetails = "";
+            if (deliveryOption === 'dogovor') {
+                deliveryDetails = "Prevzem: Po dogovoru (Ljubljana / Tel: 064 172 788)";
+            } else {
+                const address = document.getElementById('user-address').value.trim();
+                const city = document.getElementById('user-city').value.trim();
+                if (!address || !city) {
+                    alert("Prosim, izpolni podatke za dostavo na dom!");
+                    return;
+                }
+                deliveryDetails = `Dostava na dom:\nNaslov: ${address}\nKraj: ${city}`;
+            }
+
+            if (totalCount === 0) {
                 alert("Nisi izbral nobene kazalke!");
                 return;
             }
 
-            alert(`Hvala, ${name} ${surname}! Naročilo je bilo uspešno oddano na ${email}.`);
+            // Sestavi seznam izbranih izdelkov za EmailJS
+            let productListText = "";
+            for (let id in cart) {
+                productListText += `- Izdelek ID: ${id} (Količina: ${cart[id]} kos)\n`;
+            }
+
+            const totalPrice = calculatePrice(totalCount).toFixed(2);
+
+            // Podatki za EmailJS predlogo
+            const templateParams = {
+                name: name,
+                email: email,
+                message: `Naročnik: ${name}\nE-pošta: ${email}\n\nIzbrani izdelki:\n${productListText}\nSkupaj kosov: ${totalCount}\nSkupni znesek: ${totalPrice} €\n\n${deliveryDetails}`
+            };
+
+            // Pošiljanje preko EmailJS
+            emailjs.send('service_pxv5wgw', 'template_xf1e0im', templateParams)
+                .then(function(response) {
+                    alert("Hvala! Naročilo je bilo uspešno oddano.\n\nPOMINITE: Če v naslednjih 24 urah ne prejmete odgovora o prejetem sporočilu, je stran še v delu in vas prosimo, da nas kontaktirate preko telefona (064 172 788) ali direktno na Gmail.");
+                    // Ponastavi košarico
+                    cart = {};
+                    updateOrderSummary();
+                    renderCatalog();
+                    document.getElementById('user-name').value = '';
+                    document.getElementById('user-email').value = '';
+                    document.getElementById('delivery-option').value = '';
+                    handleDeliveryChange();
+                }, function(error) {
+                    console.error('Napaka pri pošiljanju:', error);
+                    alert("Prišlo je do napake pri pošiljanju naročila. Prosimo, pokličite nas na 064 172 788.");
+                });
         }
 
         fetchProducts();
