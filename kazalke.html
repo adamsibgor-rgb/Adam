@@ -222,7 +222,7 @@
             color: #7A8C6A;
         }
 
-        /* Zatemnjeno ozadje za Lightbox */
+        /* Lightbox za večjo in pregledno sliko */
         #lightbox {
             display: none;
             position: fixed;
@@ -237,8 +237,10 @@
             flex-direction: column;
         }
         #lightbox img {
-            max-width: 90%;
-            max-height: 80vh;
+            max-width: 95%;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
             border-radius: 10px;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
             object-fit: contain;
@@ -253,7 +255,7 @@
             cursor: pointer;
         }
 
-        /* Zgornja zelena pasica "Kupi" za razkritje naročilnice */
+        /* Zgornja zelena pasica za razkritje naročilnice (brez vozička) */
         .toggle-order-bar {
             background-color: #2C3E1F;
             color: white;
@@ -329,7 +331,7 @@
             border-radius: 8px;
         }
 
-        /* Opozorilo za večje količine z majhno kljukico/puščico za razkritje kontaktov */
+        /* Opozorilo za večje količine z zložljivim menijem na kljukico */
         .call-more-banner {
             display: none;
             flex-direction: column;
@@ -381,7 +383,7 @@
     <div id="catalog-view" class="page-view">
         <h1>Katalog 3D Kazalk</h1>
 
-        <!-- Bambu style linearna pasica za popuste (prilagojena do 3) -->
+        <!-- Bambu style linearna pasica za popuste (omejena do 3) -->
         <div class="bambu-progress-container" id="bambu-banner">
             <div class="bambu-title" id="bambu-text">Izberi kazalke za odklenitev količinskega popusta!</div>
             <div class="progress-bar-track">
@@ -406,14 +408,14 @@
             </div>
         </div>
 
-        <!-- Gozdno zelena črta / gumb za razkritje naročilnice -->
+        <!-- Gozdno zelena črta / gumb za razkritje naročilnice brez vozička -->
         <div class="toggle-order-bar" onclick="toggleOrderBox()">
-            🛒 KUPI (Klikni za oddajo naročila in vnos podatkov) ▼
+            Nakup (Klikni za oddajo naročila in vnos podatkov) ▼
         </div>
 
         <!-- Naročilnica na vrhu, ki se skriva/prikazuje -->
         <div class="order-box" id="order-box-container">
-            <!-- Opozorilo za večje količine z zložljivim menijem na kljukico -->
+            <!-- Opozorilo za večje količine s pravim Gmail naslovom -->
             <div id="call-more-notification" class="call-more-banner">
                 <div class="call-more-header" onclick="toggleContactDetails()">
                     <span>📞 Želiš več? Klikni za kontakte</span>
@@ -422,7 +424,7 @@
                 <div id="contact-info-box" class="contact-details">
                     👤 <strong>Adam</strong><br>
                     📞 Tel: <a href="tel:064172788">064 172 788</a><br>
-                    📧 Gmail: adamqdqm@gmail.com<br>
+                    📧 Gmail: <a href="mailto:adamsibgor@gmail.com">adamsibgor@gmail.com</a><br>
                     📸 Instagram: <a href="https://instagram.com/adamsibgor" target="_blank">@adamsibgor</a>
                 </div>
             </div>
@@ -466,6 +468,7 @@
         </div>
     </div>
 
+    <!-- Povečana slika (Lightbox) -->
     <div id="lightbox" onclick="closeLightbox()">
         <span onclick="closeLightbox()">&times;</span>
         <img id="lightbox-img" alt="Povečana slika">
@@ -483,7 +486,7 @@
             if (count === 0) return 0;
             if (count === 1) return 7;
             if (count === 2) return 13;
-            if (count >= 3) return 18; // 3 in več kosov ostane na osnovi 18€ ali po dogovoru
+            if (count >= 3) return 18;
             return 0;
         }
 
