@@ -113,11 +113,11 @@
         .product-card:hover {
             transform: translateY(-3px);
         }
-        /* Večje in strogo enakomerne dimenzije slik */
         .product-card img {
             width: 100%;
             height: 260px;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;
             border-radius: 10px;
             cursor: pointer;
             background-color: #f7f3e9;
@@ -159,7 +159,7 @@
             border: 2px solid #D1C2A5;
             border-radius: 15px;
             padding: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
             text-align: center;
         }
@@ -222,21 +222,7 @@
             color: #7A8C6A;
         }
 
-        /* Mehkejši in nežnejši izgled cenika na dnu */
-        .soft-pricing-footer {
-            background-color: #F7F3E9;
-            border: 1px solid #E2D7BE;
-            padding: 15px;
-            border-radius: 12px;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #546B41;
-            margin-bottom: 30px;
-        }
-
-        /* Lightbox */
+        /* Zatemnjeno ozadje za Lightbox */
         #lightbox {
             display: none;
             position: fixed;
@@ -245,7 +231,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.92);
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -254,7 +240,7 @@
             max-width: 90%;
             max-height: 80vh;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
             object-fit: contain;
         }
         #lightbox span {
@@ -267,7 +253,29 @@
             cursor: pointer;
         }
 
+        /* Zgornja zelena pasica "Kupi" za razkritje naročilnice */
+        .toggle-order-bar {
+            background-color: #2C3E1F;
+            color: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            transition: background-color 0.2s;
+        }
+        .toggle-order-bar:hover {
+            background-color: #3d562b;
+        }
+
+        /* Naročilnica, ki se pokaže/skrije */
         .order-box {
+            display: none;
             background: #DCCCAC;
             border: 3px solid #546B41;
             padding: 20px;
@@ -276,8 +284,7 @@
             max-width: 500px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         input[type="text"], input[type="email"], select, textarea {
             width: 90%;
@@ -310,6 +317,7 @@
             padding: 10px;
             border-radius: 10px;
             border: 1px dashed #546B41;
+            text-align: left;
         }
         #pickup-info {
             display: none;
@@ -321,7 +329,6 @@
             border-radius: 8px;
         }
 
-        /* Stil za opozorilo "Želite več pokliči" z ikono puščice */
         .call-more-banner {
             display: none;
             align-items: center;
@@ -335,63 +342,19 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            animation: bounce 1.5s infinite;
         }
-        .call-more-banner span {
-            font-size: 1.2rem;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        /* Stili za podstran plačila */
         .page-view {
             width: 100%;
-            max-width: 600px;
+            max-width: 1000px;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .payment-card {
-            background: white;
-            border: 2px solid #546B41;
-            border-radius: 15px;
-            padding: 25px;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .payment-card h3 {
-            color: #2C3E1F;
-            margin-top: 0;
-            border-bottom: 1px solid #E2D7BE;
-            padding-bottom: 8px;
-        }
-        .sub-page-btn {
-            background-color: #546B41;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-        .sub-page-btn:hover {
-            background-color: #2C3E1F;
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn" id="main-back-btn">← Nazaj na glavno stran</a>
-
-    <!-- GLAVNI KATALOG IN NAROČILNICA -->
+    <!-- GLAVNI KATALOG IN NAROČILNICA NA VRHU -->
     <div id="catalog-view" class="page-view">
         <h1>Katalog 3D Kazalk</h1>
 
@@ -430,54 +393,25 @@
             </div>
         </div>
 
-        <div class="filters">
-            <a href="#psi" class="filter-btn">Psi</a>
-            <a href="#macke" class="filter-btn">Mačke</a>
-            <a href="#geometrija" class="filter-btn">Geometrija</a>
-            <a href="#ostalo" class="filter-btn">Ostalo</a>
+        <!-- Gozdno zelena črta / gumb za razkritje naročilnice -->
+        <div class="toggle-order-bar" onclick="toggleOrderBox()">
+            🛒 KUPI (Klikni za oddajo naročila in vnos podatkov) ▼
         </div>
 
-        <div id="error-msg" style="color: red; margin-bottom: 15px;"></div>
+        <!-- Naročilnica na vrhu, ki se skriva/prikazuje -->
+        <div class="order-box" id="order-box-container">
+            <!-- Opozorilo za večje količine -->
+            <div id="call-more-notification" class="call-more-banner" onclick="callPhone()">
+                <span>📞</span> Želite več? Pokličite nas! <span style="font-size: 1rem;">➔</span>
+            </div>
 
-        <div id="catalog-container" style="width: 100%;">
-            Nalaganje katalogov...
-        </div>
-
-        <!-- Mehkejši cenik na dnu -->
-        <div class="soft-pricing-footer">
-            <strong>Cenik in ugodnosti:</strong><br>
-            1x = 7€ | 2x = 13€ | 3x = 18€ | 4x = 23€ | 5x = 28€<br>
-            🚲 <em>Brezplačna dostava z kolesom velja za naročila nad 2 kosi ali za prevzeme v Ljubljani!</em>
-        </div>
-
-        <!-- Naročilnica -->
-        <div class="order-box">
             <h3>Izbrano skupaj: <span id="selected-count">0</span> kosov</h3>
             <p>Skupni znesek: <span id="total-price">0.00</span> €</p>
-            
-            <!-- Gumb za prehod na podstran za plačilo -->
-            <button class="order-btn" style="background-color: #2C3E1F; margin-bottom: 15px;" onclick="goToPaymentPage()">Nadaljuj na plačilo in podatke →</button>
-        </div>
-    </div>
-
-    <!-- PODSTRAN ZA PLAČILO IN ODDAJO -->
-    <div id="payment-view" class="page-view hidden">
-        <h1>Zaključek naročila in plačilo</h1>
-
-        <!-- Opozorilo "Želite več pokliči" z ikono puščice (prikazano, če je izbranih > 4) -->
-        <div id="call-more-notification" class="call-more-banner" onclick="callPhone()">
-            <span>📞</span> Želite več? Pokličite nas! <span style="font-size: 1rem;">➔</span>
-        </div>
-
-        <div class="payment-card">
-            <h3>Podatki o naročilu</h3>
-            <p><strong>Izbranih kosov:</strong> <span id="pay-selected-count">0</span></p>
-            <p><strong>Skupni znesek:</strong> <span id="pay-total-price">0.00</span> €</p>
 
             <input type="text" id="user-name" placeholder="Vnesi svoje ime in priimek"><br>
             <input type="email" id="user-email" placeholder="vnesi.svoj@gmail.com"><br>
             
-            <label for="delivery-option" style="font-weight: bold; display: block; margin-top: 10px;">Način prevzema:</label>
+            <label for="delivery-option" style="font-weight: bold; display: block; margin-top: 10px; text-align: left;">Način prevzema:</label>
             <select id="delivery-option" onchange="handleDeliveryChange()">
                 <option value="">-- Izberi način prevzema --</option>
                 <option value="dogovor">Po dogovoru / Osebno (Ljubljana)</option>
@@ -494,7 +428,19 @@
             </div>
 
             <button class="order-btn" onclick="submitOrder()">Oddaj naročilo</button>
-            <button class="sub-page-btn" onclick="backToCatalog()">← Nazaj na izbiro kazalk</button>
+        </div>
+
+        <div class="filters">
+            <a href="#psi" class="filter-btn">Psi</a>
+            <a href="#macke" class="filter-btn">Mačke</a>
+            <a href="#geometrija" class="filter-btn">Geometrija</a>
+            <a href="#ostalo" class="filter-btn">Ostalo</a>
+        </div>
+
+        <div id="error-msg" style="color: red; margin-bottom: 15px;"></div>
+
+        <div id="catalog-container" style="width: 100%;">
+            Nalaganje katalogov...
         </div>
     </div>
 
@@ -511,7 +457,6 @@
         let products = [];
         let cart = {};
 
-        // Nova cena: 1=7, 2=13, 3=18, 4=23, 5=28 (nato se ponavlja)
         function calculatePrice(count) {
             if (count === 0) return 0;
             if (count === 1) return 7;
@@ -597,6 +542,16 @@
             document.getElementById('lightbox').style.display = 'none';
         }
 
+        function toggleOrderBox() {
+            const box = document.getElementById('order-box-container');
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'block';
+                box.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
         function changeQty(productId, change) {
             let current = cart[productId] || 0;
             let totalCount = getTotalItemsCount();
@@ -630,13 +585,10 @@
         function updateOrderSummary() {
             const totalCount = getTotalItemsCount();
             document.getElementById('selected-count').innerText = totalCount;
-            document.getElementById('pay-selected-count').innerText = totalCount;
             
             const price = calculatePrice(totalCount);
             document.getElementById('total-price').innerText = price.toFixed(2);
-            document.getElementById('pay-total-price').innerText = price.toFixed(2);
 
-            // Prikaz opozorila "Želite več pokliči" s puščico, če je izbranih več kot 4 kose
             const callBanner = document.getElementById('call-more-notification');
             if (totalCount > 4) {
                 callBanner.style.display = 'flex';
@@ -644,7 +596,6 @@
                 callBanner.style.display = 'none';
             }
 
-            // Posodobitev Bambu style črte in napredka
             let fillPercent = 0;
             if (totalCount === 1) fillPercent = 0;
             else if (totalCount === 2) fillPercent = 25;
@@ -654,7 +605,6 @@
 
             document.getElementById('progress-fill').style.width = fillPercent + '%';
 
-            // Označi aktivne vozle na črti
             for (let i = 1; i <= 5; i++) {
                 const node = document.getElementById(`node-${i}`);
                 if (totalCount >= i || (i === 1 && totalCount >= 1)) {
@@ -672,25 +622,6 @@
             } else {
                 bannerText.innerText = "🎉 Vrhunsko! Dosegel/a si maksimalni količinski popust!";
             }
-        }
-
-        function goToPaymentPage() {
-            const totalCount = getTotalItemsCount();
-            if (totalCount === 0) {
-                alert("Najprej izberite vsaj eno kazalko!");
-                return;
-            }
-            document.getElementById('catalog-view').classList.add('hidden');
-            document.getElementById('payment-view').classList.remove('hidden');
-            document.getElementById('main-back-btn').style.display = 'none';
-            window.scrollTo(0, 0);
-        }
-
-        function backToCatalog() {
-            document.getElementById('payment-view').classList.add('hidden');
-            document.getElementById('catalog-view').classList.remove('hidden');
-            document.getElementById('main-back-btn').style.display = 'block';
-            window.scrollTo(0, 0);
         }
 
         function callPhone() {
@@ -768,11 +699,11 @@
 
             emailjs.send('service_pxv5wgw', 'template_xf1e0im', templateParams)
                 .then(function(response) {
-                    alert("Hvala! Naročilo je bilo uspešno oddano.\n\nPOMINITE: Če v naslednjih 24 urah ne prejmete odgovora o prejetem sporočilu, je stran še v delu in vas prosimo, da nas kontaktirate preko telefona (064 172 788) ali direktno na Gmail.");
+                    alert("Hvala! Naročilo je bilo uspešno oddano.\n\nPOMNI: Če v naslednjih 24 urah ne prejmete odgovora o prejetem sporočilu, je stran še v delu in vas prosimo, da nas kontaktirate preko telefona (064 172 788) ali direktno na Gmail.");
                     cart = {};
                     updateOrderSummary();
                     renderCatalog();
-                    backToCatalog();
+                    document.getElementById('order-box-container').style.display = 'none';
                     document.getElementById('user-name').value = '';
                     document.getElementById('user-email').value = '';
                     document.getElementById('delivery-option').value = '';
