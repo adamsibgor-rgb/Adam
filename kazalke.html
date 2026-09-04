@@ -28,23 +28,6 @@
             align-items: center;
         }
 
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #546B41;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-        }
-        .back-btn:hover {
-            background-color: #435433;
-        }
-
         h1 {
             color: #2C3E1F;
             margin-top: 20px;
@@ -255,7 +238,7 @@
             cursor: pointer;
         }
 
-        /* Zgornja zelena pasica za razkritje naročilnice (brez vozička) */
+        /* Zgornja zelena pasica za razkritje naročilnice */
         .toggle-order-bar {
             background-color: #2C3E1F;
             color: white;
@@ -408,14 +391,14 @@
             </div>
         </div>
 
-        <!-- Gozdno zelena črta / gumb za razkritje naročilnice brez vozička -->
+        <!-- Gozdno zelena črta / gumb za razkritje naročilnice -->
         <div class="toggle-order-bar" onclick="toggleOrderBox()">
             Nakup (Klikni za oddajo naročila in vnos podatkov) ▼
         </div>
 
         <!-- Naročilnica na vrhu, ki se skriva/prikazuje -->
         <div class="order-box" id="order-box-container">
-            <!-- Opozorilo za večje količine s pravim Gmail naslovom -->
+            <!-- Opozorilo za večje količine -->
             <div id="call-more-notification" class="call-more-banner">
                 <div class="call-more-header" onclick="toggleContactDetails()">
                     <span>📞 Želiš več? Klikni za kontakte</span>
@@ -430,7 +413,7 @@
             </div>
 
             <h3>Izbrano skupaj: <span id="selected-count">0</span> kosov</h3>
-            <p>Skupni znesek: <span id="total-price">0.00</span> €</p>
+            <p>Skupni znesek izdelkov: <span id="total-price">0.00</span> € <span id="shipping-label" style="font-size: 0.9rem; display:block;"></span></p>
 
             <input type="text" id="user-name" placeholder="Vnesi svoje ime in priimek"><br>
             <input type="email" id="user-email" placeholder="vnesi.svoj@gmail.com"><br>
@@ -438,16 +421,16 @@
             <label for="delivery-option" style="font-weight: bold; display: block; margin-top: 10px; text-align: left;">Način prevzema:</label>
             <select id="delivery-option" onchange="handleDeliveryChange()">
                 <option value="">-- Izberi način prevzema --</option>
-                <option value="dogovor">Po dogovoru / Osebno (Ljubljana)</option>
-                <option value="dom">Dostava na dom s kolesom (samo Ljubljana)</option>
+                <option value="lokacija">Osebna dostava na želeno lokacijo (znotraj Ljubljana)</option>
+                <option value="posta">Dostava na dom preko pošte (+3 € strošek dostave)</option>
             </select>
 
             <div id="pickup-info">
-                📞 Pokliči me za osebni prevzem v Ljubljani na tel: <strong>064 172 788</strong>
+                📍 Dogovoriva se za točno lokacijo in uro osebne dostave znotraj Ljubljane (Tel: <strong>064 172 788</strong>).
             </div>
 
             <div id="address-fields">
-                <input type="text" id="user-address" placeholder="Ulica in hišna številka (Ljubljana)"><br>
+                <input type="text" id="user-street" placeholder="Ulica in hišna številka"><br>
                 <input type="text" id="user-city" placeholder="Poštna številka in kraj (npr. 1000 Ljubljana)"><br>
             </div>
 
@@ -618,8 +601,19 @@
             const totalCount = getTotalItemsCount();
             document.getElementById('selected-count').innerText = totalCount;
             
-            const price = calculatePrice(totalCount);
-            document.getElementById('total-price').innerText = price.toFixed(2);
+            let basePrice = calculatePrice(totalCount);
+            const deliveryOption = document.getElementById('delivery-option').value;
+            let shippingCost = (deliveryOption === 'posta') ? 3 : 0;
+            let finalPrice = basePrice + shippingCost;
+
+            document.getElementById('total-price').innerText = finalPrice.toFixed(2);
+            
+            const shippingLabel = document.getElementById('shipping-label');
+            if (shippingCost > 0) {
+                shippingLabel.innerText = `(vključuje 3 € poštnine)`;
+            } else {
+                shippingLabel.innerText = ``;
+            }
 
             const callBanner = document.getElementById('call-more-notification');
             if (totalCount >= 4) {
@@ -663,16 +657,17 @@
             const pickupInfo = document.getElementById('pickup-info');
             const addressFields = document.getElementById('address-fields');
 
-            if (val === 'dogovor') {
+            if (val === 'lokacija') {
                 pickupInfo.style.display = 'block';
                 addressFields.style.display = 'none';
-            } else if (val === 'dom') {
+            } else if (val === 'posta') {
                 pickupInfo.style.display = 'none';
                 addressFields.style.display = 'block';
             } else {
                 pickupInfo.style.display = 'none';
                 addressFields.style.display = 'none';
             }
+            updateOrderSummary();
         }
 
         function submitOrder() {
@@ -697,16 +692,19 @@
             }
 
             let deliveryDetails = "";
-            if (deliveryOption === 'dogovor') {
-                deliveryDetails = "Prevzem: Po dogovoru / Osebno v Ljubljani (Tel: 064 172 788)";
+            let shippingCost = 0;
+
+            if (deliveryOption === 'lokacija') {
+                deliveryDetails = "Način prevzema: Osebna dostava na želeno lokacijo znotraj Ljubljane";
             } else {
-                const address = document.getElementById('user-address').value.trim();
+                const street = document.getElementById('user-street').value.trim();
                 const city = document.getElementById('user-city').value.trim();
-                if (!address || !city) {
-                    alert("Prosim, izpolni naslov za dostavo s kolesom v Ljubljani!");
+                if (!street || !city) {
+                    alert("Prosim, vnesi polni naslov za dostavo preko pošte (ulica, hišna številka, poštna številka in kraj)!");
                     return;
                 }
-                deliveryDetails = `Dostava s kolesom (Ljubljana):\nNaslov: ${address}\nKraj: ${city}`;
+                shippingCost = 3;
+                deliveryDetails = `Način prevzema: Dostava na dom preko pošte (+3 €)\nUlica in hišna številka: ${street}\nPošta in kraj: ${city}`;
             }
 
             if (totalCount === 0) {
@@ -719,12 +717,12 @@
                 productListText += `- Izdelek ID: ${id} (Količina: ${cart[id]} kos)\n`;
             }
 
-            const totalPrice = calculatePrice(totalCount).toFixed(2);
+            const totalPrice = (calculatePrice(totalCount) + shippingCost).toFixed(2);
 
             const templateParams = {
                 name: name,
                 email: email,
-                message: `Naročnik: ${name}\nE-pošta: ${email}\n\nIzbrani izdelki:\n${productListText}\nSkupaj kosov: ${totalCount}\nSkupni znesek: ${totalPrice} €\n\n${deliveryDetails}`
+                message: `Naročnik: ${name}\nE-pošta: ${email}\n\nIzbrani izdelki:\n${productListText}\nSkupaj kosov: ${totalCount}\nSkupni znesek (s poštnino vred): ${totalPrice} €\n\n${deliveryDetails}`
             };
 
             emailjs.send('service_pxv5wgw', 'template_xf1e0im', templateParams)
@@ -737,6 +735,8 @@
                     document.getElementById('user-name').value = '';
                     document.getElementById('user-email').value = '';
                     document.getElementById('delivery-option').value = '';
+                    document.getElementById('user-street').value = '';
+                    document.getElementById('user-city').value = '';
                     handleDeliveryChange();
                 }, function(error) {
                     console.error('Napaka pri pošiljanju:', error);
