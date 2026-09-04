@@ -151,7 +151,7 @@
             text-align: center;
         }
 
-        /* Bambu Style Linearni Vizualni Prikaz Popustov */
+        /* Bambu Style Linearni Vizualni Prikaz Popustov (do 3) */
         .bambu-progress-container {
             width: 100%;
             max-width: 600px;
@@ -329,20 +329,43 @@
             border-radius: 8px;
         }
 
+        /* Opozorilo za večje količine z majhno kljukico/puščico za razkritje kontaktov */
         .call-more-banner {
             display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            flex-direction: column;
             background: #2C3E1F;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 12px;
             margin-bottom: 15px;
             font-weight: bold;
-            cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            text-align: left;
         }
+        .call-more-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .dropdown-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .contact-details {
+            display: none;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-weight: normal;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .contact-details a {
+            color: #FFF8EC;
+            text-decoration: underline;
+        }
+
         .page-view {
             width: 100%;
             max-width: 1000px;
@@ -358,7 +381,7 @@
     <div id="catalog-view" class="page-view">
         <h1>Katalog 3D Kazalk</h1>
 
-        <!-- Bambu style linearna pasica za popuste -->
+        <!-- Bambu style linearna pasica za popuste (prilagojena do 3) -->
         <div class="bambu-progress-container" id="bambu-banner">
             <div class="bambu-title" id="bambu-text">Izberi kazalke za odklenitev količinskega popusta!</div>
             <div class="progress-bar-track">
@@ -377,18 +400,8 @@
                 </div>
                 <div class="step-node" id="node-3">
                     <div class="step-dot"></div>
-                    <div class="step-label">3 kosi</div>
-                    <div class="step-sub">18 €</div>
-                </div>
-                <div class="step-node" id="node-4">
-                    <div class="step-dot"></div>
-                    <div class="step-label">4 kosi</div>
-                    <div class="step-sub">23 €</div>
-                </div>
-                <div class="step-node" id="node-5">
-                    <div class="step-dot"></div>
-                    <div class="step-label">5 kosov</div>
-                    <div class="step-sub">28 €</div>
+                    <div class="step-label">Želiš več</div>
+                    <div class="step-sub">Kontakt</div>
                 </div>
             </div>
         </div>
@@ -400,9 +413,18 @@
 
         <!-- Naročilnica na vrhu, ki se skriva/prikazuje -->
         <div class="order-box" id="order-box-container">
-            <!-- Opozorilo za večje količine -->
-            <div id="call-more-notification" class="call-more-banner" onclick="callPhone()">
-                <span>📞</span> Želite več? Pokličite nas! <span style="font-size: 1rem;">➔</span>
+            <!-- Opozorilo za večje količine z zložljivim menijem na kljukico -->
+            <div id="call-more-notification" class="call-more-banner">
+                <div class="call-more-header" onclick="toggleContactDetails()">
+                    <span>📞 Želiš več? Klikni za kontakte</span>
+                    <span id="arrow-icon" class="dropdown-arrow">▼</span>
+                </div>
+                <div id="contact-info-box" class="contact-details">
+                    👤 <strong>Adam</strong><br>
+                    📞 Tel: <a href="tel:064172788">064 172 788</a><br>
+                    📧 Gmail: adamqdqm@gmail.com<br>
+                    📸 Instagram: <a href="https://instagram.com/adamsibgor" target="_blank">@adamsibgor</a>
+                </div>
             </div>
 
             <h3>Izbrano skupaj: <span id="selected-count">0</span> kosov</h3>
@@ -461,13 +483,8 @@
             if (count === 0) return 0;
             if (count === 1) return 7;
             if (count === 2) return 13;
-            if (count === 3) return 18;
-            if (count === 4) return 23;
-            if (count === 5) return 28;
-            
-            let setsOf5 = Math.floor(count / 5);
-            let remainder = count % 5;
-            return (setsOf5 * 28) + calculatePrice(remainder);
+            if (count >= 3) return 18; // 3 in več kosov ostane na osnovi 18€ ali po dogovoru
+            return 0;
         }
 
         async function fetchProducts() {
@@ -552,6 +569,18 @@
             }
         }
 
+        function toggleContactDetails() {
+            const infoBox = document.getElementById('contact-info-box');
+            const arrow = document.getElementById('arrow-icon');
+            if (infoBox.style.display === 'block') {
+                infoBox.style.display = 'none';
+                arrow.innerText = '▼';
+            } else {
+                infoBox.style.display = 'block';
+                arrow.innerText = '▲';
+            }
+        }
+
         function changeQty(productId, change) {
             let current = cart[productId] || 0;
             let totalCount = getTotalItemsCount();
@@ -590,22 +619,22 @@
             document.getElementById('total-price').innerText = price.toFixed(2);
 
             const callBanner = document.getElementById('call-more-notification');
-            if (totalCount > 4) {
+            if (totalCount >= 4) {
                 callBanner.style.display = 'flex';
             } else {
                 callBanner.style.display = 'none';
+                document.getElementById('contact-info-box').style.display = 'none';
+                document.getElementById('arrow-icon').innerText = '▼';
             }
 
             let fillPercent = 0;
             if (totalCount === 1) fillPercent = 0;
-            else if (totalCount === 2) fillPercent = 25;
-            else if (totalCount === 3) fillPercent = 50;
-            else if (totalCount === 4) fillPercent = 75;
-            else if (totalCount >= 5) fillPercent = 100;
+            else if (totalCount === 2) fillPercent = 50;
+            else if (totalCount >= 3) fillPercent = 100;
 
             document.getElementById('progress-fill').style.width = fillPercent + '%';
 
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 3; i++) {
                 const node = document.getElementById(`node-${i}`);
                 if (totalCount >= i || (i === 1 && totalCount >= 1)) {
                     node.classList.add('active');
@@ -617,15 +646,13 @@
             const bannerText = document.getElementById('bambu-text');
             if (totalCount === 0) {
                 bannerText.innerText = "Izberi kazalke za odklenitev količinskega popusta!";
-            } else if (totalCount < 5) {
-                bannerText.innerText = `🔥 Dodaj še ${5 - (totalCount % 5 === 0 ? 0 : totalCount % 5)} kos(e) do naslednjega paketa popustov!`;
+            } else if (totalCount === 1) {
+                bannerText.innerText = "🔥 Dodaj še 1 kos do naslednjega popusta!";
+            } else if (totalCount === 2) {
+                bannerText.innerText = "🔥 Dodaj še 1 kos do maksimalnega paketa!";
             } else {
-                bannerText.innerText = "🎉 Vrhunsko! Dosegel/a si maksimalni količinski popust!";
+                bannerText.innerText = "🎉 Vrhunsko! Dosegel/a si maksimalni paket ali želiš več!";
             }
-        }
-
-        function callPhone() {
-            window.location.href = 'tel:064172788';
         }
 
         function handleDeliveryChange() {
