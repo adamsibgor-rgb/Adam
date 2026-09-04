@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog 3D Kazalk - 3Dprojekti</title>
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
@@ -362,11 +360,9 @@
 </head>
 <body>
 
-    <!-- GLAVNI KATALOG IN NAROČILNICA NA VRHU -->
     <div id="catalog-view" class="page-view">
         <h1>Katalog 3D Kazalk</h1>
 
-        <!-- Bambu style linearna pasica za popuste (omejena do 3) -->
         <div class="bambu-progress-container" id="bambu-banner">
             <div class="bambu-title" id="bambu-text">Izberi kazalke za odklenitev količinskega popusta!</div>
             <div class="progress-bar-track">
@@ -391,14 +387,11 @@
             </div>
         </div>
 
-        <!-- Gozdno zelena črta / gumb za razkritje naročilnice -->
         <div class="toggle-order-bar" onclick="toggleOrderBox()">
             Nakup (Klikni za oddajo naročila in vnos podatkov) ▼
         </div>
 
-        <!-- Naročilnica na vrhu, ki se skriva/prikazuje -->
         <div class="order-box" id="order-box-container">
-            <!-- Opozorilo za večje količine -->
             <div id="call-more-notification" class="call-more-banner">
                 <div class="call-more-header" onclick="toggleContactDetails()">
                     <span>📞 Želiš več? Klikni za kontakte</span>
@@ -421,7 +414,7 @@
             <label for="delivery-option" style="font-weight: bold; display: block; margin-top: 10px; text-align: left;">Način prevzema:</label>
             <select id="delivery-option" onchange="handleDeliveryChange()">
                 <option value="">-- Izberi način prevzema --</option>
-                <option value="lokacija">Osebna dostava na želeno lokacijo (znotraj Ljubljana)</option>
+                <option value="lokacija">Osebna dostava na želeno lokacijo znotraj Ljubljane</option>
                 <option value="posta">Dostava na dom preko pošte (+3 € strošek dostave)</option>
             </select>
 
@@ -451,7 +444,6 @@
         </div>
     </div>
 
-    <!-- Povečana slika (Lightbox) -->
     <div id="lightbox" onclick="closeLightbox()">
         <span onclick="closeLightbox()">&times;</span>
         <img id="lightbox-img" alt="Povečana slika">
