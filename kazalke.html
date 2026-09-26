@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog 3D Kazalk - 3Dprojekti</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="data/products.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
@@ -434,6 +434,9 @@
             <a href="#psi" class="filter-btn">Psi</a>
             <a href="#macke" class="filter-btn">Mačke</a>
             <a href="#geometrija" class="filter-btn">Geometrija</a>
+            <a href="#anime" class="filter-btn">Anime</a>
+            <a href="#sezonske" class="filter-btn">Sezonske</a>
+            <a href="#kompleti" class="filter-btn">Kompleti</a>
             <a href="#ostalo" class="filter-btn">Ostalo</a>
         </div>
 
@@ -450,14 +453,25 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://uvzphptvnscphptmvyuq.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_d9Nfy7-esxlS9_8Uxm_iYw_drUfUDky';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         let products = [];
         let cart = {};
 
-        function calculatePrice(count) {
+        function getProductById(id) {
+            return products.find(p => p.id === id);
+        }
+
+        function getRegularItemCount() {
+            let sum = 0;
+            for (let id in cart) {
+                const product = getProductById(id);
+                if (product && product.category !== 'kompleti') {
+                    sum += cart[id];
+                }
+            }
+            return sum;
+        }
+
+        function calculateRegularPrice(count) {
             if (count === 0) return 0;
             if (count === 1) return 7;
             if (count === 2) return 13;
@@ -465,16 +479,32 @@
             return 0;
         }
 
-        async function fetchProducts() {
-            try {
-                const { data, error } = await _supabase.from('products').select('*');
-                if (error) throw error;
-                products = data;
-                renderCatalog();
-            } catch (err) {
-                console.error(err);
-                document.getElementById('error-msg').innerText = "Napaka pri nalaganju izdelkov z baze.";
+        function calculateCartTotal() {
+            let total = 0;
+            let regularCount = 0;
+
+            for (let id in cart) {
+                const product = getProductById(id);
+                const qty = cart[id];
+                if (!product) continue;
+
+                if (product.category === 'kompleti') {
+                    total += product.price * qty;
+                } else {
+                    regularCount += qty;
+                }
             }
+
+            return total + calculateRegularPrice(regularCount);
+        }
+
+        function loadProducts() {
+            if (!window.PRODUCTS || !Array.isArray(window.PRODUCTS)) {
+                document.getElementById('error-msg').innerText = "Napaka pri nalaganju izdelkov.";
+                return;
+            }
+            products = window.PRODUCTS;
+            renderCatalog();
         }
 
         function renderCatalog() {
@@ -485,6 +515,9 @@
                 { key: 'kužki', name: 'Psi', id: 'psi' },
                 { key: 'mačke', name: 'Mačke', id: 'macke' },
                 { key: 'geometrija', name: 'Geometrija', id: 'geometrija' },
+                { key: 'anime', name: 'Anime', id: 'anime' },
+                { key: 'sezonske', name: 'Sezonske', id: 'sezonske' },
+                { key: 'kompleti', name: 'Kompleti', id: 'kompleti' },
                 { key: 'ostalo', name: 'Ostalo', id: 'ostalo' }
             ];
 
@@ -494,7 +527,10 @@
                     if (cat.key === 'kužki') return c.includes('kuž') || c.includes('psi') || c.includes('dog');
                     if (cat.key === 'mačke') return c.includes('mač') || c.includes('cat') || c.includes('muca');
                     if (cat.key === 'geometrija') return c.includes('geometr');
-                    return c.includes('ostalo') || c.includes('narava') || c.includes('anime') || c.includes('ostali');
+                    if (cat.key === 'anime') return c === 'anime';
+                    if (cat.key === 'sezonske') return c === 'sezonske';
+                    if (cat.key === 'kompleti') return c === 'kompleti';
+                    return c.includes('ostalo') || c.includes('narava') || c.includes('ostali');
                 });
                 
                 if (catProducts.length > 0) {
@@ -514,8 +550,13 @@
                         const card = document.createElement('div');
                         card.className = `product-card`;
 
+                        const priceLabel = product.category === 'kompleti'
+                            ? `<p style="font-weight:bold;margin:8px 0 0;color:#2C3E1F;">${product.price} €</p>`
+                            : '';
+
                         card.innerHTML = `
                             <img src="${product.img}" alt="Kazalka" onclick="openLightbox('${product.img}')" title="Klikni za povečavo">
+                            ${priceLabel}
                             <div class="quantity-control">
                                 <button class="qty-btn" onclick="changeQty('${product.id}', -1)">-</button>
                                 <span class="qty-display">${count}</span>
@@ -591,9 +632,10 @@
 
         function updateOrderSummary() {
             const totalCount = getTotalItemsCount();
+            const regularCount = getRegularItemCount();
             document.getElementById('selected-count').innerText = totalCount;
             
-            let basePrice = calculatePrice(totalCount);
+            let basePrice = calculateCartTotal();
             const deliveryOption = document.getElementById('delivery-option').value;
             let shippingCost = (deliveryOption === 'posta') ? 3 : 0;
             let finalPrice = basePrice + shippingCost;
@@ -608,7 +650,7 @@
             }
 
             const callBanner = document.getElementById('call-more-notification');
-            if (totalCount >= 4) {
+            if (regularCount >= 4) {
                 callBanner.style.display = 'flex';
             } else {
                 callBanner.style.display = 'none';
@@ -617,15 +659,16 @@
             }
 
             let fillPercent = 0;
-            if (totalCount === 1) fillPercent = 0;
-            else if (totalCount === 2) fillPercent = 50;
-            else if (totalCount >= 3) fillPercent = 100;
+            if (regularCount === 0) fillPercent = 0;
+            else if (regularCount === 1) fillPercent = 0;
+            else if (regularCount === 2) fillPercent = 50;
+            else if (regularCount >= 3) fillPercent = 100;
 
             document.getElementById('progress-fill').style.width = fillPercent + '%';
 
             for (let i = 1; i <= 3; i++) {
                 const node = document.getElementById(`node-${i}`);
-                if (totalCount >= i || (i === 1 && totalCount >= 1)) {
+                if (regularCount >= i || (i === 1 && regularCount >= 1)) {
                     node.classList.add('active');
                 } else {
                     node.classList.remove('active');
@@ -635,9 +678,11 @@
             const bannerText = document.getElementById('bambu-text');
             if (totalCount === 0) {
                 bannerText.innerText = "Izberi kazalke za odklenitev količinskega popusta!";
-            } else if (totalCount === 1) {
+            } else if (regularCount === 0) {
+                bannerText.innerText = "Izbran je komplet kazalk.";
+            } else if (regularCount === 1) {
                 bannerText.innerText = "🔥 Dodaj še 1 kos do naslednjega popusta!";
-            } else if (totalCount === 2) {
+            } else if (regularCount === 2) {
                 bannerText.innerText = "🔥 Dodaj še 1 kos do maksimalnega paketa!";
             } else {
                 bannerText.innerText = "🎉 Vrhunsko! Dosegel/a si maksimalni paket ali želiš več!";
@@ -709,7 +754,7 @@
                 productListText += `- Izdelek ID: ${id} (Količina: ${cart[id]} kos)\n`;
             }
 
-            const totalPrice = (calculatePrice(totalCount) + shippingCost).toFixed(2);
+            const totalPrice = (calculateCartTotal() + shippingCost).toFixed(2);
 
             const templateParams = {
                 name: name,
@@ -736,7 +781,7 @@
                 });
         }
 
-        fetchProducts();
+        loadProducts();
     </script>
 </body>
 </html>

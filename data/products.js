@@ -1,0 +1,436 @@
+window.PRODUCTS = [
+    {
+        "id":  "kuza-2",
+        "name":  "Kuža 2",
+        "category":  "kužki",
+        "img":  "slike/kuzki/Kuza2.png",
+        "price":  7
+    },
+    {
+        "id":  "kuza-tek",
+        "name":  "Kuža med Tekom",
+        "category":  "kužki",
+        "img":  "slike/kuzki/Kuža_med_tekom.png",
+        "price":  7
+    },
+    {
+        "id":  "kuza-psenica",
+        "name":  "Kuža v Pšenici",
+        "category":  "kužki",
+        "img":  "slike/kuzki/Kuza_pšenica.png",
+        "price":  7
+    },
+    {
+        "id":  "Kuza-1",
+        "name":  "Kuža1",
+        "category":  "kužki",
+        "img":  "slike/kuzki/Kuza1.png",
+        "price":  7
+    },
+    {
+        "id":  "abstraktne-macke",
+        "name":  "abstrakne_mačke",
+        "category":  "mačke",
+        "img":  "slike/macke/abstrakne_mačke.png",
+        "price":  7
+    },
+    {
+        "id":  "bela",
+        "name":  "Bela Muca",
+        "category":  "mačke",
+        "img":  "slike/macke/Bela.png",
+        "price":  7
+    },
+    {
+        "id":  "crna",
+        "name":  "Črna Muca",
+        "category":  "mačke",
+        "img":  "slike/macke/Črna.png",
+        "price":  7
+    },
+    {
+        "id":  "hecna",
+        "name":  "hecna",
+        "category":  "mačke",
+        "img":  "slike/macke/hecna.png",
+        "price":  7
+    },
+    {
+        "id":  "luskana-gor",
+        "name":  "Luškana gor",
+        "category":  "mačke",
+        "img":  "slike/macke/Luškana gor.png",
+        "price":  7
+    },
+    {
+        "id":  "macek-lilije",
+        "name":  "Maček med lilijami",
+        "category":  "mačke",
+        "img":  "slike/macke/Maček med lilijami.jpg",
+        "price":  7
+    },
+    {
+        "id":  "luskana-gora",
+        "name":  "majhna muca",
+        "category":  "mačke",
+        "img":  "slike/macke/Luškanabela.png",
+        "price":  7
+    },
+    {
+        "id":  "nagajiva-muca",
+        "name":  "nagajiva_muca",
+        "category":  "mačke",
+        "img":  "slike/macke/nagajiva_muca.png",
+        "price":  7
+    },
+    {
+        "id":  "realisticna",
+        "name":  "realistična",
+        "category":  "mačke",
+        "img":  "slike/macke/realistična.png",
+        "price":  7
+    },
+    {
+        "id":  "sproscena",
+        "name":  "Spreščena",
+        "category":  "mačke",
+        "img":  "slike/macke/Spreščena.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija",
+        "name":  "geometrija",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geometrija.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-3d",
+        "name":  "geometrija_3D",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geometrija_3D.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-iluzija",
+        "name":  "Geometrija_iluzija",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/Geometrija_iluzija.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-prt",
+        "name":  "geometrija_prt",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geometrija_prt.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-umetnost",
+        "name":  "geometrija_umetnost",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geometrija_umetnost.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-vzorec",
+        "name":  "Geometrija_vzorec",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/Geometrija_vzorec.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-kocke",
+        "name":  "geometrijakocke",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geometrijakocke.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrijski-liki",
+        "name":  "geometriski_liki",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geometriski_liki.png",
+        "price":  7
+    },
+    {
+        "id":  "geometrija-valovi",
+        "name":  "geopetrija_valovi",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/geopetrija_valovi.png",
+        "price":  7
+    },
+    {
+        "id":  "komplet-geometrija",
+        "name":  "Komplet_geometrija",
+        "category":  "geometrija",
+        "img":  "slike/geometrija/Komplet_geometrija.png",
+        "price":  7
+    },
+    {
+        "id":  "anime",
+        "name":  "anime",
+        "category":  "anime",
+        "img":  "slike/anime/anime.png",
+        "price":  7
+    },
+    {
+        "id":  "anime-death-note",
+        "name":  "Death Note",
+        "category":  "anime",
+        "img":  "slike/anime/Anime Death note.jpg",
+        "price":  7
+    },
+    {
+        "id":  "anime-kakashi",
+        "name":  "Kakashi",
+        "category":  "anime",
+        "img":  "slike/anime/Anime prozoen ne svetleč.jpg",
+        "price":  7
+    },
+    {
+        "id":  "anime-kakashi-svetlec",
+        "name":  "Kakashi svetleč",
+        "category":  "anime",
+        "img":  "slike/anime/Anime prozoren svetleč.jpg",
+        "price":  7
+    },
+    {
+        "id":  "anime-tanjiro",
+        "name":  "Tanjiro",
+        "category":  "anime",
+        "img":  "slike/anime/Anime Tanjiro.jpg",
+        "price":  7
+    },
+    {
+        "id":  "sezona-grinch",
+        "name":  "Grinch",
+        "category":  "sezonske",
+        "img":  "slike/sezonske/Sezona Grinsh.jpg",
+        "price":  7
+    },
+    {
+        "id":  "sezona-medved",
+        "name":  "Polarni medved",
+        "category":  "sezonske",
+        "img":  "slike/sezonske/Sezona medved.jpg",
+        "price":  7
+    },
+    {
+        "id":  "sezona-snezak",
+        "name":  "Snežaki",
+        "category":  "sezonske",
+        "img":  "slike/sezonske/Sezona snežak.jpg",
+        "price":  7
+    },
+    {
+        "id":  "sezona-jelen",
+        "name":  "Zimski jelen",
+        "category":  "sezonske",
+        "img":  "slike/sezonske/Sezona jelen.png",
+        "price":  7
+    },
+    {
+        "id":  "komplet-gore-2",
+        "name":  "Komplet gore",
+        "category":  "kompleti",
+        "img":  "slike/kompleti/Komplet gore.jpg",
+        "price":  12
+    },
+    {
+        "id":  "komplet-samuraj",
+        "name":  "Komplet samuraj",
+        "category":  "kompleti",
+        "img":  "slike/kompleti/Komplet samuraj.jpg",
+        "price":  15
+    },
+    {
+        "id":  "komplet-japonski-stil",
+        "name":  "komplet_japonski_stil",
+        "category":  "kompleti",
+        "img":  "slike/kompleti/komplet_japonski_stil.png",
+        "price":  15
+    },
+    {
+        "id":  "lisicke-piksel",
+        "name":  "Lisičke piksel",
+        "category":  "kompleti",
+        "img":  "slike/kompleti/Lisičke piksel.png",
+        "price":  12
+    },
+    {
+        "id":  "zvezdna-noc",
+        "name":  "Zvezdna noč",
+        "category":  "kompleti",
+        "img":  "slike/kompleti/stary night.jpg",
+        "price":  15
+    },
+    {
+        "id":  "avto-gozd",
+        "name":  "avto_gozd",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/avto_gozd.png",
+        "price":  7
+    },
+    {
+        "id":  "ume+++++++++++cvetje-rasline",
+        "name":  "Cvetje rastline",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/cvetje-rastline.png",
+        "price":  7
+    },
+    {
+        "id":  "cesnja",
+        "name":  "Češnja",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Češnja.png",
+        "price":  7
+    },
+    {
+        "id":  "crna-pada",
+        "name":  "črnapada",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/črnapada.png",
+        "price":  7
+    },
+    {
+        "id":  "gozd",
+        "name":  "gozd",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/gozd.png",
+        "price":  7
+    },
+    {
+        "id":  "han-jisung",
+        "name":  "Han Jisung",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Han Jisung.jpg",
+        "price":  7
+    },
+    {
+        "id":  "wang-jeong-in",
+        "name":  "I.N",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Wang Jeong_in.jpg",
+        "price":  7
+    },
+    {
+        "id":  "modra-roza",
+        "name":  "Modraroža",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Modraroža.png",
+        "price":  7
+    },
+    {
+        "id":  "gora",
+        "name":  "Motiv gora",
+        "category":  "narava",
+        "img":  "slike/ostalo/Gora.png",
+        "price":  7
+    },
+    {
+        "id":  "palma",
+        "name":  "palma",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/palma.png",
+        "price":  7
+    },
+    {
+        "id":  "rdece-cvetje",
+        "name":  "rdececetje",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/rdececetje.png",
+        "price":  7
+    },
+    {
+        "id":  "rdeca-veja",
+        "name":  "Rdečaveja",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Rdečaveja.png",
+        "price":  7
+    },
+    {
+        "id":  "rdece-roze",
+        "name":  "rdečeroze",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/rdečeroze.png",
+        "price":  7
+    },
+    {
+        "id":  "roza-drevo",
+        "name":  "Roza drevo",
+        "category":  "narava",
+        "img":  "slike/ostalo/Roza drevo votlo.jpg",
+        "price":  7
+    },
+    {
+        "id":  "rumene-roze",
+        "name":  "Rože rumene",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/roze-rumene.png",
+        "price":  7
+    },
+    {
+        "id":  "samuraj",
+        "name":  "samuraj",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/samuraj.png",
+        "price":  7
+    },
+    {
+        "id":  "samuraj-rdec",
+        "name":  "Samuraj rdeč",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Samuraj rdeč.jpg",
+        "price":  7
+    },
+    {
+        "id":  "sova",
+        "name":  "Sova",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Sova.png",
+        "price":  7
+    },
+    {
+        "id":  "srna-na-jezeru",
+        "name":  "Srna na jezeru",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Srna na jezeru.png",
+        "price":  7
+    },
+    {
+        "id":  "srnjak",
+        "name":  "srnjak",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/srnjak.png",
+        "price":  7
+    },
+    {
+        "id":  "tulipani",
+        "name":  "Tulipani",
+        "category":  "narava",
+        "img":  "slike/ostalo/Tulipani.png",
+        "price":  7
+    },
+    {
+        "id":  "valovi",
+        "name":  "valovi",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/valovi.png",
+        "price":  7
+    },
+    {
+        "id":  "valovi-votli",
+        "name":  "Veliki val",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Valovi votelj.jpg",
+        "price":  7
+    },
+    {
+        "id":  "zunaj",
+        "name":  "zunaj",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/zunaj.png",
+        "price":  7
+    }
+];
