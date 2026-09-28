@@ -55,6 +55,7 @@
         .generator-image img { 
             width: 100%; height: auto; border-radius: 15px; 
             box-shadow: 4px 4px 15px rgba(0,0,0,0.15); display: block;
+            background-color: white;
         }
         
         .generator-text { flex: 4; text-align: left; padding-left: 10px; }
@@ -148,7 +149,7 @@
         <h2>Ustvari svojo vazo (PrintPal)</h2>
         <div class="generator-container">
             <div class="generator-image">
-                <img src="slike/slikazaslona.png" alt="PrintPal Generator">
+                <img src="slikazaslona.png" alt="PrintPal Generator">
             </div>
             <div class="generator-text">
                 <h3>Brezplačni generator vaz</h3>
@@ -162,8 +163,8 @@
         <h2>Že pripravljene vaze</h2>
         <div class="grid">
             <div class="vaza-item">
-                <div class="image-box" onclick="openLightbox('slike/Grška vaza.png')">
-                    <img src="slike/Grška vaza.png" alt="Grška vaza">
+                <div class="image-box" onclick="openLightbox('Grška vaza.png')">
+                    <img src="Grška vaza.png" alt="Grška vaza">
                 </div>
                 <strong>Grška vaza</strong>
                 <div class="counter">
@@ -173,8 +174,8 @@
                 </div>
             </div>
             <div class="vaza-item">
-                <div class="image-box" onclick="openLightbox('slike/Moderna vaza.png')">
-                    <img src="slike/Moderna vaza.png" alt="Moderna vaza">
+                <div class="image-box" onclick="openLightbox('Moderna Vaza.png')">
+                    <img src="Moderna Vaza.png" alt="Moderna vaza">
                 </div>
                 <strong>Moderna vaza</strong>
                 <div class="counter">
@@ -184,8 +185,8 @@
                 </div>
             </div>
             <div class="vaza-item">
-                <div class="image-box" onclick="openLightbox('slike/Oznka vaza.png')">
-                    <img src="slike/Oznka vaza.png" alt="Oznka vaza">
+                <div class="image-box" onclick="openLightbox('Oznka Vaza.png')">
+                    <img src="Oznka Vaza.png" alt="Oznka vaza">
                 </div>
                 <strong>Oznka vaza</strong>
                 <div class="counter">
@@ -195,8 +196,8 @@
                 </div>
             </div>
             <div class="vaza-item">
-                <div class="image-box" onclick="openLightbox('slike/Umetniška vaza.png')">
-                    <img src="slike/Umetniška vaza.png" alt="Umetniška vaza">
+                <div class="image-box" onclick="openLightbox('Umetniška Vaza.png')">
+                    <img src="Umetniška Vaza.png" alt="Umetniška vaza">
                 </div>
                 <strong>Umetniška vaza</strong>
                 <div class="counter">
@@ -218,33 +219,52 @@
                     <input type="email" name="fi-sender-email" placeholder="primer@gmail.com" required>
                     <label style="margin-top: 20px; display: block;"><strong>Izberite 3D datoteko (.stl, .obj):</strong></label>
                     <input type="file" name="fi-file-upload" accept=".stl,.obj" required>
+                    
                     <div class="selection-group">
                         <span class="selection-title">Izberite material za tiskanje:</span>
                         <label class="radio-label"><input type="radio" name="fi-text-material" value="PLA" onclick="prikaziBarve('pla')" required> <span><strong>PLA</strong></span></label>
                         <label class="radio-label"><input type="radio" name="fi-text-material" value="PCTG" onclick="prikaziBarve('pctg')"> <span><strong>PCTG</strong></span></label>
                         <label class="radio-label"><input type="radio" name="fi-text-material" value="TPU" onclick="prikaziBarve('tpu')"> <span><strong>TPU</strong></span></label>
+                        <label class="radio-label"><input type="radio" name="fi-text-material" value="ABS" onclick="prikaziBarve('abs')"> <span><strong>ABS</strong> <small style="color: #8c6d46; font-weight: normal;">(A1 je odprt tiskalnik – priporočljivo za manjše kose)</small></span></label>
                     </div>
 
+                    <!-- PLA BARVE -->
                     <div id="barve-pla" class="color-section">
                         <span class="selection-title">Izberite barvo za PLA:</span>
                         <div class="color-picker-grid">
                             <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Zelena"><div class="color-dot" style="background-color: #4CAF50;"></div><span>Zelena</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Temno zelena"><div class="color-dot" style="background-color: #1e4620;"></div><span>Temno zelena</span></label>
                             <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Rdeča"><div class="color-dot" style="background-color: #F44336;"></div><span>Rdeča</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Roza"><div class="color-dot" style="background-color: #ffb6c1;"></div><span>Roza</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Rumena"><div class="color-dot" style="background-color: #FFD700;"></div><span>Rumena</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Peščena"><div class="color-dot" style="background-color: #d4b28c;"></div><span>Peščena</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Matt rjava"><div class="color-dot" style="background-color: #6b4423;"></div><span>Matt rjava</span></label>
                             <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Črna"><div class="color-dot" style="background-color: #111111;"></div><span>Črna</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Matt črna"><div class="color-dot" style="background-color: #222222; border: 2px dashed #666;"></div><span>Matt črna</span></label>
                             <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Bela"><div class="color-dot" style="background-color: #FFFFFF; border-color: #D3D3D3;"></div><span>Bela</span></label>
                             <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Modra"><div class="color-dot" style="background-color: #0D47A1;"></div><span>Modra</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Sivo modra"><div class="color-dot" style="background-color: #708090;"></div><span>Sivo modra</span></label>
+                            <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Modroprozoren"><div class="color-dot" style="background-color: #3a88c8; opacity: 0.85;"></div><span>Modroprozoren</span></label>
                             <label class="color-circle-label"><input type="radio" name="fi-text-color" value="Turkizna"><div class="color-dot" style="background-color: #00BCD4;"></div><span>Turkizna</span></label>
                         </div>
                     </div>
 
+                    <!-- PCTG BARVE -->
                     <div id="barve-pctg" class="color-section">
                         <span class="selection-title">Izberite barvo za PCTG:</span>
                         <div class="color-picker-grid"><label class="color-circle-label"><input type="radio" name="fi-text-color" value="Siva" id="pctg-siva"><div class="color-dot" style="background-color: #9E9E9E;"></div><span>Siva</span></label></div>
                     </div>
 
+                    <!-- TPU BARVE -->
                     <div id="barve-tpu" class="color-section">
                         <span class="selection-title">Izberite barvo za TPU:</span>
                         <div class="color-picker-grid"><label class="color-circle-label"><input type="radio" name="fi-text-color" value="Bela" id="tpu-bela"><div class="color-dot" style="background-color: #FFFFFF; border-color: #D3D3D3;"></div><span>Bela</span></label></div>
+                    </div>
+
+                    <!-- ABS BARVE -->
+                    <div id="barve-abs" class="color-section">
+                        <span class="selection-title">Izberite barvo za ABS:</span>
+                        <div class="color-picker-grid"><label class="color-circle-label"><input type="radio" name="fi-text-color" value="ABS črna" id="abs-crna"><div class="color-dot" style="background-color: #111111;"></div><span>ABS črna</span></label></div>
                     </div>
                     
                     <label style="margin-top: 25px; display: block;"><strong>Opombe:</strong></label>
@@ -309,13 +329,27 @@
             document.getElementById('barve-pla').style.display = 'none';
             document.getElementById('barve-pctg').style.display = 'none';
             document.getElementById('barve-tpu').style.display = 'none';
+            document.getElementById('barve-abs').style.display = 'none';
 
             const vseBarve = document.querySelectorAll('input[name="fi-text-color"]');
-            vseBarve.forEach(gumb => { if(gumb.id !== "pctg-siva" && gumb.id !== "tpu-bela") { gumb.checked = false; } });
+            vseBarve.forEach(gumb => { 
+                if(gumb.id !== "pctg-siva" && gumb.id !== "tpu-bela" && gumb.id !== "abs-crna") { 
+                    gumb.checked = false; 
+                } 
+            });
 
-            if (material === 'pla') { document.getElementById('barve-pla').style.display = 'block'; } 
-            else if (material === 'pctg') { document.getElementById('barve-pctg').style.display = 'block'; document.getElementById('pctg-siva').checked = true; } 
-            else if (material === 'tpu') { document.getElementById('barve-tpu').style.display = 'block'; document.getElementById('tpu-bela').checked = true; }
+            if (material === 'pla') { 
+                document.getElementById('barve-pla').style.display = 'block'; 
+            } else if (material === 'pctg') { 
+                document.getElementById('barve-pctg').style.display = 'block'; 
+                document.getElementById('pctg-siva').checked = true; 
+            } else if (material === 'tpu') { 
+                document.getElementById('barve-tpu').style.display = 'block'; 
+                document.getElementById('tpu-bela').checked = true; 
+            } else if (material === 'abs') { 
+                document.getElementById('barve-abs').style.display = 'block'; 
+                document.getElementById('abs-crna').checked = true; 
+            }
         }
     </script>
 </body>
