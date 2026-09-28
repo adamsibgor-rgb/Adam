@@ -54,9 +54,12 @@
 
         .intro {
             text-align: center;
-            margin-bottom: 50px;
-            font-size: 1.5rem; 
+            margin: 0 auto 50px auto;
+            max-width: 900px;
+            font-size: 1.35rem; 
             font-weight: 500;
+            line-height: 1.8;
+            color: #2C3E1F;
         }
 
         .ločilna-črta {
@@ -122,11 +125,12 @@
             height: 240px;
             border-radius: 15px;
             margin-bottom: 20px;
-            background-color: white;
-            object-fit: contain;
-            padding: 15px;
+            background-color: #ffffff;
+            object-fit: cover; /* Lepši prikaz slike, da bolj zapolni prostor */
+            padding: 8px;
             box-sizing: border-box;
-            border: 1px solid rgba(84, 107, 65, 0.15);
+            border: 2px solid rgba(84, 107, 65, 0.2);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .card-title {
@@ -219,7 +223,7 @@
         .navodila-box ol {
             margin: 0;
             padding-left: 25px;
-            font-size: 1.45rem; 
+            font-size: 1.35rem; 
             color: #2C3E1F;
             line-height: 1.7;
             font-weight: 500;
@@ -236,18 +240,72 @@
             text-align: center;
             width: 100%;
             font-size: 1.2rem;
+            background-color: rgba(220, 204, 172, 0.3);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .contact-info-box {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
         .contact-link {
-            color: #546B41;
+            color: #2C3E1F;
             text-decoration: none;
             font-weight: bold;
+            background: #ECECEC;
+            padding: 8px 16px;
+            border-radius: 10px;
+            display: inline-block;
         }
 
         .contact-link:hover {
+            background: #dcdcdc;
             text-decoration: underline;
         }
 
+        .phone-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #546B41;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.25rem;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .phone-container a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .phone-container a:hover {
+            text-decoration: underline;
+        }
+
+        .copy-btn {
+            background-color: #DCCCAC;
+            color: #2C3E1F;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #c9b493;
+        }
+
+        /* Prilagodljivost za tablice in telefone */
         @media (max-width: 1200px) {
             .glavna-gora {
                 flex-direction: column;
@@ -260,9 +318,22 @@
                 max-width: 700px;
                 min-width: 100%;
             }
+            /* Na mobilnih napravah: Kazalke/vsebina najprej, Bambu Handy drugi, Onshape čisto na koncu */
+            .vsebina-sredina {
+                order: 1;
+            }
+            .stranski-stolpec-levo {
+                order: 2;
+            }
+            .stranski-stolpec-desno {
+                order: 3;
+            }
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 0 15px;
+            }
             .brand-header {
                 flex-direction: column;
                 gap: 15px;
@@ -288,12 +359,15 @@
     </div>
 
     <h1>Dobrodošli na moji spletni strani</h1>
-    <p class="intro">Kot začetnik v podjetništvu se ukvarjam s 3D tiskanjem in modeliranjem. <br> Spodaj preverite mojo ponudbo.</p>
+    <p class="intro">
+        Pozdravljeni! Sem mlad podjetnik, ki je stopil na pot samostojnosti in združil svojo globoko strast do umetnosti ter tehnike. Kot ustvarjalec v duši združujem natančnost 3D tiska z unikatnim dizajnom v izdelke, na katere sem izjemno ponosen – od čudovitih kazalk za knjige do unikatnih projektov po meri. Z vašo podporo mi pomagate uresničevati moje sanje. Vabljeni, da raziščete mojo ponudbo!
+    </p>
 
     <hr class="ločilna-črta">
 
     <div class="glavna-gora">
         
+        <!-- Leva kolona: Bambu Handy -->
         <div class="stranski-stolpec-levo">
             <div class="bambu-card">
                 <div class="bambu-title-box">
@@ -313,13 +387,14 @@
                     <ol>
                         <li>Kliknite na <strong>Splet za 3D modele</strong> in poiščite želeni izdelek.</li>
                         <li>Naložite si aplikacijo <strong>Bambu Handy</strong> na svojo mobilno napravo.</li>
-                        <li>In pošljite željo na moj gmail.</li>
-                        <li>Cena po dogovoru</li>
+                        <li>Pošljite željo na moj gmail.</li>
+                        <li>Cena po dogovoru.</li>
                     </ol>
                 </div>
             </div>
         </div>
 
+        <!-- Srednja kolona: Izdelki (Kazalke prvi na vrsti) -->
         <div class="vsebina-sredina">
             <div class="container">
                 
@@ -356,6 +431,7 @@
             </div>
         </div>
 
+        <!-- Desna kolona: Onshape (se na mobilnih napravah pomakne na sam konec) -->
         <div class="stranski-stolpec-desno">
             <div class="bambu-card">
                 <div class="bambu-title-box">
@@ -386,14 +462,21 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 Vse pravice pridržane.</p>
-        <span class="label">Gmail:</span>
-        <a href="mailto:adam.sibgor@gmail.com" class="contact-link">adam.sibgor@gmail.com</a>
-        <br>
-        <span class="label">Telefon: +38664172788</span>
+        <p>&copy; 2026 3Dprojekti. Vse pravice pridržane.</p>
+        <div class="contact-info-box">
+            <div>
+                <span style="font-weight: bold;">Gmail:</span>
+                <a href="mailto:adam.sibgor@gmail.com" class="contact-link">adam.sibgor@gmail.com</a>
+            </div>
+            <div class="phone-container">
+                <span>📞 <a href="tel:+38664172788">+386 64 172 788</a></span>
+                <button class="copy-btn" onclick="kopirajTelefonsko()">Kopiraj</button>
+            </div>
+        </div>
     </footer>
 
     <script>
+        // Samodejno prepoznavanje mobilne naprave za Bambu Handy povezavo
         window.addEventListener('DOMContentLoaded', () => {
             const mobilniGumb = document.getElementById('mobilniLink');
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -402,6 +485,16 @@
                 mobilniGumb.href = "https://apps.apple.com/us/app/bambu-handy/id1637418641";
             }
         });
+
+        // Funkcija za hitro kopiranje telefonske številke
+        function kopirajTelefonsko() {
+            const stevilka = "+38664172788";
+            navigator.clipboard.writeText(stevilka).then(() => {
+                alert("Telefonska številka (+386 64 172 788) je bila kopirana v odložišče!");
+            }).catch(err => {
+                console.error('Napaka pri kopiranju: ', err);
+            });
+        }
     </script>
 
 </body>
