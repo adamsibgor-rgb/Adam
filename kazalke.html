@@ -31,6 +31,15 @@
             margin-top: 20px;
         }
 
+        .intro-text {
+            max-width: 650px;
+            text-align: center;
+            font-size: 1.05rem;
+            color: #4A5D3A;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
         .filters {
             margin: 20px 0;
             display: flex;
@@ -46,7 +55,7 @@
             border-radius: 15px;
         }
         .filter-btn {
-            background-color: #546B41;
+            background-color: #6B8E55;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -55,9 +64,10 @@
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
+            transition: background-color 0.2s;
         }
         .filter-btn:hover {
-            background-color: #2C3E1F;
+            background-color: #4B6B38;
         }
 
         .category-section {
@@ -67,7 +77,7 @@
         }
         .category-title {
             color: #2C3E1F;
-            border-bottom: 2px solid #546B41;
+            border-bottom: 2px solid #6B8E55;
             padding-bottom: 5px;
             margin-bottom: 15px;
             font-size: 1.5rem;
@@ -112,7 +122,7 @@
             margin-top: 12px;
         }
         .qty-btn {
-            background-color: #546B41;
+            background-color: #6B8E55;
             color: white;
             border: none;
             width: 32px;
@@ -121,9 +131,10 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 1rem;
+            transition: background-color 0.2s;
         }
         .qty-btn:hover {
-            background-color: #2C3E1F;
+            background-color: #4B6B38;
         }
         .qty-display {
             font-weight: bold;
@@ -132,7 +143,7 @@
             text-align: center;
         }
 
-        /* Bambu Style Linearni Vizualni Prikaz Popustov (do 3) */
+        /* Progresivni prikaz popustov (4+1 akcija) */
         .bambu-progress-container {
             width: 100%;
             max-width: 600px;
@@ -162,7 +173,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            background-color: #546B41;
+            background-color: #6B8E55;
             border-radius: 4px;
             width: 0%;
             transition: width 0.3s ease;
@@ -184,13 +195,13 @@
             width: 16px;
             height: 16px;
             background-color: #E2D7BE;
-            border: 3px solid #546B41;
+            border: 3px solid #6B8E55;
             border-radius: 50%;
             z-index: 2;
             transition: background-color 0.3s;
         }
         .step-node.active .step-dot {
-            background-color: #546B41;
+            background-color: #6B8E55;
         }
         .step-label {
             font-size: 0.85rem;
@@ -203,7 +214,7 @@
             color: #7A8C6A;
         }
 
-        /* Lightbox za večjo in pregledno sliko */
+        /* Lightbox za večjo sliko */
         #lightbox {
             display: none;
             position: fixed;
@@ -236,9 +247,9 @@
             cursor: pointer;
         }
 
-        /* Zgornja zelena pasica za razkritje naročilnice */
+        /* Nežnejša zelena pasica z ikono košarice */
         .toggle-order-bar {
-            background-color: #2C3E1F;
+            background-color: #6B8E55;
             color: white;
             width: 100%;
             max-width: 600px;
@@ -247,20 +258,20 @@
             text-align: center;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
             font-size: 1.1rem;
             transition: background-color 0.2s;
         }
         .toggle-order-bar:hover {
-            background-color: #3d562b;
+            background-color: #557342;
         }
 
-        /* Naročilnica, ki se pokaže/skrije */
+        /* Naročilnica */
         .order-box {
             display: none;
             background: #DCCCAC;
-            border: 3px solid #546B41;
+            border: 3px solid #6B8E55;
             padding: 20px;
             border-radius: 20px;
             width: 100%;
@@ -273,13 +284,13 @@
             width: 90%;
             padding: 10px;
             border-radius: 6px;
-            border: 1px solid #546B41;
+            border: 1px solid #6B8E55;
             margin: 8px 0;
             background-color: white;
             font-family: Arial, sans-serif;
         }
         button.order-btn {
-            background-color: #546B41;
+            background-color: #6B8E55;
             color: white;
             border: none;
             padding: 12px 20px;
@@ -289,9 +300,10 @@
             width: 100%;
             margin-top: 10px;
             font-size: 1rem;
+            transition: background-color 0.2s;
         }
         button.order-btn:hover {
-            background-color: #2C3E1F;
+            background-color: #4B6B38;
         }
         #address-fields {
             display: none;
@@ -299,7 +311,7 @@
             background: #f4f7f2;
             padding: 10px;
             border-radius: 10px;
-            border: 1px dashed #546B41;
+            border: 1px dashed #6B8E55;
             text-align: left;
         }
         #pickup-info {
@@ -312,7 +324,7 @@
             border-radius: 8px;
         }
 
-        /* Opozorilo za večje količine z zložljivim menijem na kljukico */
+        /* Kontaktni pas */
         .call-more-banner {
             display: none;
             flex-direction: column;
@@ -356,15 +368,59 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Animacija ob uspešnem nakupu (cvetje + Hvala) */
+        #success-animation-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 62, 31, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        .success-card {
+            background: #FFF8EC;
+            color: #2C3E1F;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 400px;
+        }
+        .success-card h2 {
+            margin-top: 0;
+            font-size: 2rem;
+            color: #6B8E55;
+        }
+        .flower-emojis {
+            font-size: 3rem;
+            margin: 15px 0;
+            animation: bounceFlowers 1s infinite alternate;
+        }
+        @keyframes bounceFlowers {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
     </style>
 </head>
 <body>
 
     <div id="catalog-view" class="page-view">
         <h1>Katalog 3D Kazalk</h1>
+        
+        <div class="intro-text">
+            Dobrodošli v čudovitem svetu ročno izdelanih 3D kazalk! Okrasite svoje najljubše knjige z edinstvenimi motivi narave, cvetja in živali. Izberite svoje favorite in uživajte v branju.
+        </div>
 
         <div class="bambu-progress-container" id="bambu-banner">
-            <div class="bambu-title" id="bambu-text">Izberi kazalke za odklenitev količinskega popusta!</div>
+            <div class="bambu-title" id="bambu-text">Ena kazalka stane 7 €. Če kupiš 4, dobiš 1 zastonj poleg!</div>
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
@@ -376,19 +432,19 @@
                 </div>
                 <div class="step-node" id="node-2">
                     <div class="step-dot"></div>
-                    <div class="step-label">2 kosa</div>
-                    <div class="step-sub">13 €</div>
+                    <div class="step-label">3 kosi</div>
+                    <div class="step-sub">Popust</div>
                 </div>
                 <div class="step-node" id="node-3">
                     <div class="step-dot"></div>
-                    <div class="step-label">Želiš več</div>
-                    <div class="step-sub">Kontakt</div>
+                    <div class="step-label">4 + 1 gratis</div>
+                    <div class="step-sub">Najboljša izbira</div>
                 </div>
             </div>
         </div>
 
         <div class="toggle-order-bar" onclick="toggleOrderBox()">
-            Nakup (Klikni za oddajo naročila in vnos podatkov) ▼
+            🛒 Nakup (Klikni za oddajo naročila in vnos podatkov) ▼
         </div>
 
         <div class="order-box" id="order-box-container">
@@ -423,6 +479,7 @@
             </div>
 
             <div id="address-fields">
+                <p style="margin: 0 0 5px 0; font-size: 0.9rem; font-weight: bold; color: #2C3E1F;">Vnesite podatke za dostavo na dom:</p>
                 <input type="text" id="user-street" placeholder="Ulica in hišna številka"><br>
                 <input type="text" id="user-city" placeholder="Poštna številka in kraj (npr. 1000 Ljubljana)"><br>
             </div>
@@ -431,11 +488,12 @@
         </div>
 
         <div class="filters">
+            <a href="#rastline" class="filter-btn">Rastline in cvetje</a>
+            <a href="#sezonske" class="filter-btn">Sezonske</a>
             <a href="#psi" class="filter-btn">Psi</a>
             <a href="#macke" class="filter-btn">Mačke</a>
             <a href="#geometrija" class="filter-btn">Geometrija</a>
             <a href="#anime" class="filter-btn">Anime</a>
-            <a href="#sezonske" class="filter-btn">Sezonske</a>
             <a href="#kompleti" class="filter-btn">Kompleti</a>
             <a href="#ostalo" class="filter-btn">Ostalo</a>
         </div>
@@ -450,6 +508,16 @@
     <div id="lightbox" onclick="closeLightbox()">
         <span onclick="closeLightbox()">&times;</span>
         <img id="lightbox-img" alt="Povečana slika">
+    </div>
+
+    <!-- Uspešna animacija ob oddaji -->
+    <div id="success-animation-overlay">
+        <div class="success-card">
+            <h2>Hvala!</h2>
+            <div class="flower-emojis">🌷 🌸 🌻 🌹</div>
+            <p>Vaše naročilo je bilo uspešno oddano. Kmalu prejmete potrditev!</p>
+            <button class="order-btn" onclick="closeSuccessAnimation()">Nazaj na katalog</button>
+        </div>
     </div>
 
     <script>
@@ -475,8 +543,13 @@
             if (count === 0) return 0;
             if (count === 1) return 7;
             if (count === 2) return 13;
-            if (count >= 3) return 18;
-            return 0;
+            if (count === 3) return 18;
+            if (count === 4) return 24;
+            if (count === 5) return 28; // 4 + 1 gratis (4 * 7 = 28, petnajsta zastonj)
+            // Splošna formula za večje količine z upoštevanjem 4+1 gratis akcije
+            let sets = Math.floor(count / 5);
+            let remainder = count % 5;
+            return (sets * 28) + (remainder === 4 ? 24 : calculateRegularPrice(remainder));
         }
 
         function calculateCartTotal() {
@@ -512,26 +585,42 @@
             container.innerHTML = '';
 
             const categories = [
+                { key: 'rastline', name: 'Rastline in cvetje', id: 'rastline' },
+                { key: 'sezonske', name: 'Sezonske', id: 'sezonske' },
                 { key: 'kužki', name: 'Psi', id: 'psi' },
                 { key: 'mačke', name: 'Mačke', id: 'macke' },
                 { key: 'geometrija', name: 'Geometrija', id: 'geometrija' },
                 { key: 'anime', name: 'Anime', id: 'anime' },
-                { key: 'sezonske', name: 'Sezonske', id: 'sezonske' },
                 { key: 'kompleti', name: 'Kompleti', id: 'kompleti' },
                 { key: 'ostalo', name: 'Ostalo', id: 'ostalo' }
             ];
 
             categories.forEach(cat => {
-                const catProducts = products.filter(p => {
+                let catProducts = products.filter(p => {
                     const c = (p.category || '').toLowerCase();
+                    const name = (p.name || '').toLowerCase();
+                    const img = (p.img || '').toLowerCase();
+                    
+                    if (cat.key === 'rastline') return c.includes('rastlin') || c.includes('cvet') || c.includes('tulipan') || name.includes('tulipan') || img.includes('tulipan');
+                    if (cat.key === 'sezonske') return c === 'sezonske' || c.includes('sezonsk');
                     if (cat.key === 'kužki') return c.includes('kuž') || c.includes('psi') || c.includes('dog');
                     if (cat.key === 'mačke') return c.includes('mač') || c.includes('cat') || c.includes('muca');
                     if (cat.key === 'geometrija') return c.includes('geometr');
                     if (cat.key === 'anime') return c === 'anime';
-                    if (cat.key === 'sezonske') return c === 'sezonske';
                     if (cat.key === 'kompleti') return c === 'kompleti';
                     return c.includes('ostalo') || c.includes('narava') || c.includes('ostali');
                 });
+
+                // Če gre za rastline, poskrbimo, da so Tulipani čisto prvi
+                if (cat.key === 'rastline') {
+                    catProducts.sort((a, b) => {
+                        const aIsTulip = (a.name + a.img).toLowerCase().includes('tulipan');
+                        const bIsTulip = (b.name + b.img).toLowerCase().includes('tulipan');
+                        if (aIsTulip && !bIsTulip) return -1;
+                        if (!aIsTulip && bIsTulip) return 1;
+                        return 0;
+                    });
+                }
                 
                 if (catProducts.length > 0) {
                     const section = document.createElement('div');
@@ -550,13 +639,9 @@
                         const card = document.createElement('div');
                         card.className = `product-card`;
 
-                        const priceLabel = product.category === 'kompleti'
-                            ? `<p style="font-weight:bold;margin:8px 0 0;color:#2C3E1F;">${product.price} €</p>`
-                            : '';
-
+                        // Brez nobenega napisa ali cene pod sliko – samo slika in gumbi za količino
                         card.innerHTML = `
                             <img src="${product.img}" alt="Kazalka" onclick="openLightbox('${product.img}')" title="Klikni za povečavo">
-                            ${priceLabel}
                             <div class="quantity-control">
                                 <button class="qty-btn" onclick="changeQty('${product.id}', -1)">-</button>
                                 <span class="qty-display">${count}</span>
@@ -650,7 +735,7 @@
             }
 
             const callBanner = document.getElementById('call-more-notification');
-            if (regularCount >= 4) {
+            if (regularCount >= 5) {
                 callBanner.style.display = 'flex';
             } else {
                 callBanner.style.display = 'none';
@@ -660,15 +745,15 @@
 
             let fillPercent = 0;
             if (regularCount === 0) fillPercent = 0;
-            else if (regularCount === 1) fillPercent = 0;
-            else if (regularCount === 2) fillPercent = 50;
-            else if (regularCount >= 3) fillPercent = 100;
+            else if (regularCount <= 2) fillPercent = 33;
+            else if (regularCount <= 4) fillPercent = 66;
+            else fillPercent = 100;
 
             document.getElementById('progress-fill').style.width = fillPercent + '%';
 
             for (let i = 1; i <= 3; i++) {
                 const node = document.getElementById(`node-${i}`);
-                if (regularCount >= i || (i === 1 && regularCount >= 1)) {
+                if ((i === 1 && regularCount >= 1) || (i === 2 && regularCount >= 3) || (i === 3 && regularCount >= 5)) {
                     node.classList.add('active');
                 } else {
                     node.classList.remove('active');
@@ -677,15 +762,13 @@
 
             const bannerText = document.getElementById('bambu-text');
             if (totalCount === 0) {
-                bannerText.innerText = "Izberi kazalke za odklenitev količinskega popusta!";
-            } else if (regularCount === 0) {
-                bannerText.innerText = "Izbran je komplet kazalk.";
-            } else if (regularCount === 1) {
-                bannerText.innerText = "🔥 Dodaj še 1 kos do naslednjega popusta!";
-            } else if (regularCount === 2) {
-                bannerText.innerText = "🔥 Dodaj še 1 kos do maksimalnega paketa!";
+                bannerText.innerText = "Ena kazalka stane 7 €. Če kupiš 4, dobiš 1 zastonj poleg!";
+            } else if (regularCount === 4) {
+                bannerText.innerText = "🎉 Dodaj še 1 kos in dobiš akciju 4+1 gratis!";
+            } else if (regularCount >= 5) {
+                bannerText.innerText = "✨ Čestitke, unovčili ste akcijo 4+1 gratis!";
             } else {
-                bannerText.innerText = "🎉 Vrhunsko! Dosegel/a si maksimalni paket ali želiš več!";
+                bannerText.innerText = `Izbranih je ${regularCount} kosov redne ponudbe.`;
             }
         }
 
@@ -718,8 +801,8 @@
                 return;
             }
 
-            if (!email.endsWith('@gmail.com')) {
-                alert("Prosim, vnesi veljaven Gmail naslov (@gmail.com).");
+            if (!email.includes('@')) {
+                alert("Prosim, vnesi veljaven e-poštni naslov.");
                 return;
             }
 
@@ -737,7 +820,7 @@
                 const street = document.getElementById('user-street').value.trim();
                 const city = document.getElementById('user-city').value.trim();
                 if (!street || !city) {
-                    alert("Prosim, vnesi polni naslov za dostavo preko pošte (ulica, hišna številka, poštna številka in kraj)!");
+                    alert("Ker ste izbrali dostavo na dom preko pošte, je vnos ulice, hišne številke in kraja obvezen!");
                     return;
                 }
                 shippingCost = 3;
@@ -764,7 +847,10 @@
 
             emailjs.send('service_pxv5wgw', 'template_xf1e0im', templateParams)
                 .then(function(response) {
-                    alert("Hvala! Naročilo je bilo uspešno oddano.\n\nPOMNI: Če v naslednjih 24 urah ne prejmete odgovora o prejetem sporočilu, je stran še v delu in vas prosimo, da nas kontaktirate preko telefona (064 172 788) ali direktno na Gmail.");
+                    // Pokaži čudovito animacijo uspeha z rožami
+                    document.getElementById('success-animation-overlay').style.display = 'flex';
+
+                    // Počisti košarico in vnose
                     cart = {};
                     updateOrderSummary();
                     renderCatalog();
@@ -779,6 +865,10 @@
                     console.error('Napaka pri pošiljanju:', error);
                     alert("Prišlo je do napake pri pošiljanju naročila. Prosimo, pokličite nas na 064 172 788.");
                 });
+        }
+
+        function closeSuccessAnimation() {
+            document.getElementById('success-animation-overlay').style.display = 'none';
         }
 
         loadProducts();
