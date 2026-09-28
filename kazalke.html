@@ -594,53 +594,61 @@
                 { key: 'ostalo', name: 'Ostalo', id: 'ostalo' }
             ];
 
-            // Sledilnik prikazanih izdelkov, da preprečimo podvajanje
             const displayedProductIds = new Set();
 
             categories.forEach(cat => {
                 let catProducts = products.filter(p => {
                     if (displayedProductIds.has(p.id)) return false;
 
-                    const c = (p.category || '').toLowerCase();
                     const name = (p.name || '').toLowerCase();
                     const img = (p.img || '').toLowerCase();
-                    const combined = c + ' ' + name + ' ' + img;
+                    const catField = (p.category || '').toLowerCase();
+                    const combined = name + ' ' + img;
+
+                    // Stroga detekcija živali (mačke, psi) ne glede na bazo
+                    const isCat = combined.includes('mač') || combined.includes('cat') || combined.includes('muca') || combined.includes('mucek') || img.includes('cat') || img.includes('mack');
+                    const isDog = combined.includes('kuž') || combined.includes('psi') || combined.includes('pes') || combined.includes('dog') || img.includes('dog');
+                    const isAnime = combined.includes('anime') || combined.includes('manga');
+                    const isGeometry = combined.includes('geometr') || combined.includes('vzorec');
 
                     if (cat.key === 'rastline') {
+                        // Kategorično prepreči kateri koli živali ali mačku vstop med rastline
+                        if (isCat || isDog || isAnime || isGeometry) return false;
+                        
                         return combined.includes('rastlin') || combined.includes('cvet') || combined.includes('tulipan') || 
                                combined.includes('rož') || combined.includes('vrtnic') || combined.includes('sakura') || 
-                               combined.includes('češnj') || combined.includes('drevo') || combined.includes('list') || 
-                               combined.includes('narav') || combined.includes('gora') || combined.includes('cveto') ||
-                               combined.includes('cvetje');
+                               combined.includes('češnj') || combined.includes('drevo') || combined.includes('gozd') ||
+                               combined.includes('prozorn') || combined.includes('veja') || combined.includes('rdeč') ||
+                               combined.includes('sončnic') || combined.includes('narav') || combined.includes('gora');
                     }
                     if (cat.key === 'sezonske') {
+                        if (isCat || isDog || isAnime || isGeometry) return false;
                         return combined.includes('sezonsk') || combined.includes('zima') || combined.includes('poletje') || 
                                combined.includes('jesen') || combined.includes('pomlad');
                     }
                     if (cat.key === 'kužki') {
-                        return combined.includes('kuž') || combined.includes('psi') || combined.includes('pes') || combined.includes('dog');
+                        return isDog || catField === 'psi' || catField === 'kužki';
                     }
                     if (cat.key === 'mačke') {
-                        return combined.includes('mač') || combined.includes('cat') || combined.includes('muca') || combined.includes('mucek');
+                        return isCat || catField === 'mačke' || catField === 'macke';
                     }
                     if (cat.key === 'geometrija') {
-                        return combined.includes('geometr') || combined.includes('vzorec');
+                        return isGeometry || catField === 'geometrija';
                     }
                     if (cat.key === 'anime') {
-                        return combined.includes('anime') || combined.includes('manga');
+                        return isAnime || catField === 'anime';
                     }
                     if (cat.key === 'kompleti') {
-                        return combined.includes('komplet') || combined.includes('set');
+                        return combined.includes('komplet') || combined.includes('set') || catField === 'kompleti';
                     }
                     return false;
                 });
 
-                // Če je kategorija 'Ostalo', vanjo uvrstimo vse preostale izdelke, ki še niso bili prikazani
+                // Če je kategorija 'Ostalo', vanjo uvrstimo preostale neporazdeljene izdelke
                 if (cat.key === 'ostalo') {
                     catProducts = products.filter(p => !displayedProductIds.has(p.id));
                 }
 
-                // Označimo te izdelke kot prikazane
                 catProducts.forEach(p => displayedProductIds.add(p.id));
 
                 // Posebna ureditev za 'Rastline in cvetje': Tulipani morajo biti obvezno čisto na vrhu
@@ -671,7 +679,6 @@
                         const card = document.createElement('div');
                         card.className = `product-card`;
 
-                        // Brez nobenega napisa ali cene pod sliko – samo slika in gumbi za količino
                         card.innerHTML = `
                             <img src="${product.img}" alt="Kazalka" onclick="openLightbox('${product.img}')" title="Klikni za povečavo">
                             <div class="quantity-control">
