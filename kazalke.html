@@ -545,8 +545,7 @@
             if (count === 2) return 13;
             if (count === 3) return 18;
             if (count === 4) return 24;
-            if (count === 5) return 28; // 4 + 1 gratis (4 * 7 = 28, petnajsta zastonj)
-            // Splošna formula za večje količine z upoštevanjem 4+1 gratis akcije
+            if (count === 5) return 28;
             let sets = Math.floor(count / 5);
             let remainder = count % 5;
             return (sets * 28) + (remainder === 4 ? 24 : calculateRegularPrice(remainder));
@@ -595,23 +594,56 @@
                 { key: 'ostalo', name: 'Ostalo', id: 'ostalo' }
             ];
 
+            // Sledilnik prikazanih izdelkov, da preprečimo podvajanje
+            const displayedProductIds = new Set();
+
             categories.forEach(cat => {
                 let catProducts = products.filter(p => {
+                    if (displayedProductIds.has(p.id)) return false;
+
                     const c = (p.category || '').toLowerCase();
                     const name = (p.name || '').toLowerCase();
                     const img = (p.img || '').toLowerCase();
-                    
-                    if (cat.key === 'rastline') return c.includes('rastlin') || c.includes('cvet') || c.includes('tulipan') || name.includes('tulipan') || img.includes('tulipan');
-                    if (cat.key === 'sezonske') return c === 'sezonske' || c.includes('sezonsk');
-                    if (cat.key === 'kužki') return c.includes('kuž') || c.includes('psi') || c.includes('dog');
-                    if (cat.key === 'mačke') return c.includes('mač') || c.includes('cat') || c.includes('muca');
-                    if (cat.key === 'geometrija') return c.includes('geometr');
-                    if (cat.key === 'anime') return c === 'anime';
-                    if (cat.key === 'kompleti') return c === 'kompleti';
-                    return c.includes('ostalo') || c.includes('narava') || c.includes('ostali');
+                    const combined = c + ' ' + name + ' ' + img;
+
+                    if (cat.key === 'rastline') {
+                        return combined.includes('rastlin') || combined.includes('cvet') || combined.includes('tulipan') || 
+                               combined.includes('rož') || combined.includes('vrtnic') || combined.includes('sakura') || 
+                               combined.includes('češnj') || combined.includes('drevo') || combined.includes('list') || 
+                               combined.includes('narav') || combined.includes('gora') || combined.includes('cveto') ||
+                               combined.includes('cvetje');
+                    }
+                    if (cat.key === 'sezonske') {
+                        return combined.includes('sezonsk') || combined.includes('zima') || combined.includes('poletje') || 
+                               combined.includes('jesen') || combined.includes('pomlad');
+                    }
+                    if (cat.key === 'kužki') {
+                        return combined.includes('kuž') || combined.includes('psi') || combined.includes('pes') || combined.includes('dog');
+                    }
+                    if (cat.key === 'mačke') {
+                        return combined.includes('mač') || combined.includes('cat') || combined.includes('muca') || combined.includes('mucek');
+                    }
+                    if (cat.key === 'geometrija') {
+                        return combined.includes('geometr') || combined.includes('vzorec');
+                    }
+                    if (cat.key === 'anime') {
+                        return combined.includes('anime') || combined.includes('manga');
+                    }
+                    if (cat.key === 'kompleti') {
+                        return combined.includes('komplet') || combined.includes('set');
+                    }
+                    return false;
                 });
 
-                // Če gre za rastline, poskrbimo, da so Tulipani čisto prvi
+                // Če je kategorija 'Ostalo', vanjo uvrstimo vse preostale izdelke, ki še niso bili prikazani
+                if (cat.key === 'ostalo') {
+                    catProducts = products.filter(p => !displayedProductIds.has(p.id));
+                }
+
+                // Označimo te izdelke kot prikazane
+                catProducts.forEach(p => displayedProductIds.add(p.id));
+
+                // Posebna ureditev za 'Rastline in cvetje': Tulipani morajo biti obvezno čisto na vrhu
                 if (cat.key === 'rastline') {
                     catProducts.sort((a, b) => {
                         const aIsTulip = (a.name + a.img).toLowerCase().includes('tulipan');
@@ -847,10 +879,7 @@
 
             emailjs.send('service_pxv5wgw', 'template_xf1e0im', templateParams)
                 .then(function(response) {
-                    // Pokaži čudovito animacijo uspeha z rožami
                     document.getElementById('success-animation-overlay').style.display = 'flex';
-
-                    // Počisti košarico in vnose
                     cart = {};
                     updateOrderSummary();
                     renderCatalog();
