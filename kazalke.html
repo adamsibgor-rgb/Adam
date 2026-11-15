@@ -214,7 +214,30 @@
             color: #7A8C6A;
         }
 
-        /* Lightbox za večjo sliko */
+        .site-logo-link {
+            display: block;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .site-logo {
+            height: 100px;
+            width: auto;
+            object-fit: contain;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: #546B41;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            color: #2C3E1F;
+            text-decoration: underline;
+        }
+
+        /* Lightbox: ena slika naenkrat, puščici za več slik */
         #lightbox {
             display: none;
             position: fixed;
@@ -227,17 +250,57 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 12px;
         }
-        #lightbox img {
-            max-width: 95%;
-            max-height: 90vh;
+        #lightbox-stage {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            max-height: 85vh;
+        }
+        #lightbox-img {
+            max-width: min(520px, 85vw);
+            max-height: 80vh;
             width: auto;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
             object-fit: contain;
+            background: #111;
         }
-        #lightbox span {
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.18);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.35);
+        }
+        .lightbox-nav.prev { left: 8px; }
+        .lightbox-nav.next { right: 8px; }
+        .lightbox-nav.visible { display: flex; }
+        #lightbox-counter {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.95rem;
+            min-height: 1.2em;
+        }
+        #lightbox span.close-lightbox {
             color: white;
             position: absolute;
             top: 20px;
@@ -245,6 +308,7 @@
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
+            z-index: 1001;
         }
 
         /* Nežnejša zelena pasica z ikono košarice */
@@ -413,6 +477,10 @@
 <body>
 
     <div id="catalog-view" class="page-view">
+        <a href="index.html" class="site-logo-link">
+            <img src="slike Prva str/Logo.png" alt="3Dprojekti" class="site-logo">
+        </a>
+        <a href="index.html" class="back-link">← Nazaj na domov</a>
         <h1>Katalog 3D Kazalk</h1>
         
         <div class="intro-text">
@@ -506,8 +574,13 @@
     </div>
 
     <div id="lightbox" onclick="closeLightbox()">
-        <span onclick="closeLightbox()">&times;</span>
-        <img id="lightbox-img" alt="Povečana slika">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <div id="lightbox-stage" onclick="event.stopPropagation()">
+            <button type="button" class="lightbox-nav prev" id="lightbox-prev" onclick="lightboxPrev()" aria-label="Prejšnja">‹</button>
+            <img id="lightbox-img" alt="Povečana slika">
+            <button type="button" class="lightbox-nav next" id="lightbox-next" onclick="lightboxNext()" aria-label="Naslednja">›</button>
+        </div>
+        <div id="lightbox-counter" onclick="event.stopPropagation()"></div>
     </div>
 
     <!-- Uspešna animacija ob oddaji -->
@@ -526,6 +599,20 @@
 
         function getProductById(id) {
             return products.find(p => p.id === id);
+        }
+
+        function getProductImages(product) {
+            if (!product || product.img == null) return [];
+            return Array.isArray(product.img) ? product.img.filter(Boolean) : [product.img];
+        }
+
+        function getPrimaryImage(product) {
+            const images = getProductImages(product);
+            return images[0] || '';
+        }
+
+        function getImageSearchText(product) {
+            return getProductImages(product).join(' ').toLowerCase();
         }
 
         function getRegularItemCount() {
@@ -601,7 +688,7 @@
                     if (displayedProductIds.has(p.id)) return false;
 
                     const name = (p.name || '').toLowerCase();
-                    const img = (p.img || '').toLowerCase();
+                    const img = getImageSearchText(p);
                     const catField = (p.category || '').toLowerCase();
                     const combined = name + ' ' + img;
 
@@ -654,8 +741,8 @@
                 // Posebna ureditev za 'Rastline in cvetje': Tulipani morajo biti obvezno čisto na vrhu
                 if (cat.key === 'rastline') {
                     catProducts.sort((a, b) => {
-                        const aIsTulip = (a.name + a.img).toLowerCase().includes('tulipan');
-                        const bIsTulip = (b.name + b.img).toLowerCase().includes('tulipan');
+                        const aIsTulip = (a.name + ' ' + getImageSearchText(a)).includes('tulipan');
+                        const bIsTulip = (b.name + ' ' + getImageSearchText(b)).includes('tulipan');
                         if (aIsTulip && !bIsTulip) return -1;
                         if (!aIsTulip && bIsTulip) return 1;
                         return 0;
@@ -679,8 +766,9 @@
                         const card = document.createElement('div');
                         card.className = `product-card`;
 
+                        const primaryImg = getPrimaryImage(product);
                         card.innerHTML = `
-                            <img src="${product.img}" alt="Kazalka" onclick="openLightbox('${product.img}')" title="Klikni za povečavo">
+                            <img src="${primaryImg}" alt="Kazalka" onclick="openLightboxById('${product.id}')" title="Klikni za povečavo">
                             <div class="quantity-control">
                                 <button class="qty-btn" onclick="changeQty('${product.id}', -1)">-</button>
                                 <span class="qty-display">${count}</span>
@@ -693,14 +781,59 @@
             });
         }
 
-        function openLightbox(imgSrc) {
-            document.getElementById('lightbox-img').src = imgSrc;
+        let lightboxImages = [];
+        let lightboxIndex = 0;
+
+        function updateLightboxView() {
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('lightbox-counter');
+            const prevBtn = document.getElementById('lightbox-prev');
+            const nextBtn = document.getElementById('lightbox-next');
+            const hasMultiple = lightboxImages.length > 1;
+
+            img.src = lightboxImages[lightboxIndex] || '';
+            counter.textContent = hasMultiple
+                ? `${lightboxIndex + 1} / ${lightboxImages.length}`
+                : '';
+            prevBtn.classList.toggle('visible', hasMultiple);
+            nextBtn.classList.toggle('visible', hasMultiple);
+        }
+
+        function openLightboxById(productId) {
+            const product = getProductById(productId);
+            lightboxImages = getProductImages(product);
+            lightboxIndex = 0;
+            if (!lightboxImages.length) return;
+            updateLightboxView();
             document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function lightboxPrev() {
+            if (lightboxImages.length < 2) return;
+            lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+            updateLightboxView();
+        }
+
+        function lightboxNext() {
+            if (lightboxImages.length < 2) return;
+            lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+            updateLightboxView();
         }
 
         function closeLightbox() {
             document.getElementById('lightbox').style.display = 'none';
+            document.getElementById('lightbox-img').src = '';
+            lightboxImages = [];
+            lightboxIndex = 0;
         }
+
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.style.display !== 'flex') return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lightboxPrev();
+            if (e.key === 'ArrowRight') lightboxNext();
+        });
 
         function toggleOrderBox() {
             const box = document.getElementById('order-box-container');

@@ -479,7 +479,17 @@ window.PRODUCTS = [
         "id":  "savana",
         "name":  "Savana",
         "category":  "narava",
-        "img":  "slike/ostalo/Savana.jpg",
+        "img":  [
+            "slike/ostalo/Savana.jpg",
+            "slike/ostalo/Savana2.jpg"
+        ],
+        "price":  7
+    },
+    {
+        "id":  "roza-lilija",
+        "name":  "Roza lilija",
+        "category":  "narava",
+        "img":  "slike/ostalo/Roza_lilija.jpg",
         "price":  7
     }
 ];
