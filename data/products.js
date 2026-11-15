@@ -28,6 +28,20 @@ window.PRODUCTS = [
         "price":  7
     },
     {
+        "id":  "civava",
+        "name":  "Čivava",
+        "category":  "kužki",
+        "img":  "slike/kuzki/Civava.jpg",
+        "price":  7
+    },
+    {
+        "id":  "labrador",
+        "name":  "Labrador",
+        "category":  "kužki",
+        "img":  "slike/kuzki/Labrador.jpg",
+        "price":  7
+    },
+    {
         "id":  "abstraktne-macke",
         "name":  "abstrakne_mačke",
         "category":  "mačke",
@@ -81,6 +95,13 @@ window.PRODUCTS = [
         "name":  "nagajiva_muca",
         "category":  "mačke",
         "img":  "slike/macke/nagajiva_muca.png",
+        "price":  7
+    },
+    {
+        "id":  "muca-sledi",
+        "name":  "Muca sledi",
+        "category":  "mačke",
+        "img":  "slike/macke/Muca_sledi.jpg",
         "price":  7
     },
     {
@@ -189,13 +210,6 @@ window.PRODUCTS = [
         "price":  7
     },
     {
-        "id":  "anime-kakashi-svetlec",
-        "name":  "Kakashi svetleč",
-        "category":  "anime",
-        "img":  "slike/anime/Anime prozoren svetleč.jpg",
-        "price":  7
-    },
-    {
         "id":  "anime-tanjiro",
         "name":  "Tanjiro",
         "category":  "anime",
@@ -252,13 +266,6 @@ window.PRODUCTS = [
         "price":  15
     },
     {
-        "id":  "lisicke-piksel",
-        "name":  "Lisičke piksel",
-        "category":  "kompleti",
-        "img":  "slike/kompleti/Lisičke piksel.png",
-        "price":  12
-    },
-    {
         "id":  "zvezdna-noc",
         "name":  "Zvezdna noč",
         "category":  "kompleti",
@@ -289,8 +296,8 @@ window.PRODUCTS = [
     {
         "id":  "crna-pada",
         "name":  "črnapada",
-        "category":  "ostalo",
-        "img":  "slike/ostalo/črnapada.png",
+        "category":  "mačke",
+        "img":  "slike/macke/črnapada.png",
         "price":  7
     },
     {
@@ -336,13 +343,6 @@ window.PRODUCTS = [
         "price":  7
     },
     {
-        "id":  "rdece-cvetje",
-        "name":  "rdececetje",
-        "category":  "ostalo",
-        "img":  "slike/ostalo/rdececetje.png",
-        "price":  7
-    },
-    {
         "id":  "rdeca-veja",
         "name":  "Rdečaveja",
         "category":  "ostalo",
@@ -357,13 +357,6 @@ window.PRODUCTS = [
         "price":  7
     },
     {
-        "id":  "roza-drevo",
-        "name":  "Roza drevo",
-        "category":  "narava",
-        "img":  "slike/ostalo/Roza drevo votlo.jpg",
-        "price":  7
-    },
-    {
         "id":  "rumene-roze",
         "name":  "Rože rumene",
         "category":  "ostalo",
@@ -373,22 +366,15 @@ window.PRODUCTS = [
     {
         "id":  "samuraj",
         "name":  "samuraj",
-        "category":  "ostalo",
-        "img":  "slike/ostalo/samuraj.png",
+        "category":  "anime",
+        "img":  "slike/anime/samuraj.png",
         "price":  7
     },
     {
         "id":  "samuraj-rdec",
         "name":  "Samuraj rdeč",
-        "category":  "ostalo",
-        "img":  "slike/ostalo/Samuraj rdeč.jpg",
-        "price":  7
-    },
-    {
-        "id":  "sova",
-        "name":  "Sova",
-        "category":  "ostalo",
-        "img":  "slike/ostalo/Sova.png",
+        "category":  "anime",
+        "img":  "slike/anime/Samuraj rdeč.jpg",
         "price":  7
     },
     {
@@ -431,6 +417,69 @@ window.PRODUCTS = [
         "name":  "zunaj",
         "category":  "ostalo",
         "img":  "slike/ostalo/zunaj.png",
+        "price":  7
+    },
+    {
+        "id":  "jagode",
+        "name":  "Jagode",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Jagode.jpg",
+        "price":  7
+    },
+    {
+        "id":  "kameleon",
+        "name":  "Kameleon",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Kameleon.jpg",
+        "price":  7
+    },
+    {
+        "id":  "lisica",
+        "name":  "Lisica",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Lisica.jpg",
+        "price":  7
+    },
+    {
+        "id":  "makovi",
+        "name":  "Makovi",
+        "category":  "narava",
+        "img":  "slike/ostalo/Makovi.jpg",
+        "price":  7
+    },
+    {
+        "id":  "megleni-gozd",
+        "name":  "Megleni gozd",
+        "category":  "narava",
+        "img":  "slike/ostalo/Megleni_gozd.jpg",
+        "price":  7
+    },
+    {
+        "id":  "peresa",
+        "name":  "Peresa",
+        "category":  "ostalo",
+        "img":  "slike/ostalo/Peresa.jpg",
+        "price":  7
+    },
+    {
+        "id":  "rdece-bele-roze",
+        "name":  "Rdeče bele vrtnice",
+        "category":  "narava",
+        "img":  "slike/ostalo/Rdece_bele_roze.jpg",
+        "price":  7
+    },
+    {
+        "id":  "rumeno-cvetje",
+        "name":  "Rumeno cvetje",
+        "category":  "narava",
+        "img":  "slike/ostalo/Rumeno_cvetje.jpg",
+        "price":  7
+    },
+    {
+        "id":  "savana",
+        "name":  "Savana",
+        "category":  "narava",
+        "img":  "slike/ostalo/Savana.jpg",
         "price":  7
     }
 ];
