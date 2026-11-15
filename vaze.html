@@ -16,9 +16,17 @@
             padding: 0 20px;
         }
         
+        .page-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 24px;
+            text-align: center;
+        }
         .site-logo-link {
             display: block;
-            text-align: center;
+            line-height: 0;
             margin-bottom: 10px;
         }
         .site-logo {
@@ -28,13 +36,13 @@
         }
         .back-link { 
             display: inline-block; 
-            margin-bottom: 30px; 
+            margin: 0; 
             color: #546B41; 
             text-decoration: none; 
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
-        .back-link:hover { text-underline-offset: 4px; text-decoration: underline; }
+        .back-link:hover { color: #2C3E1F; text-decoration: underline; }
         
         h1, h2 { 
             color: #546B41; 
@@ -151,10 +159,12 @@
         <img id="lightbox-img" src="" alt="Povečava">
     </div>
 
-    <a href="index.html" class="site-logo-link">
-        <img src="slike Prva str/Logo.png" alt="3Dprojekti" class="site-logo">
-    </a>
-    <a href="index.html" class="back-link">← Nazaj na glavno stran</a>
+    <header class="page-top">
+        <a href="index.html" class="site-logo-link" aria-label="3Dprojekti – domov">
+            <img src="slike Prva str/Logo.png" alt="3Dprojekti" class="site-logo">
+        </a>
+        <a href="index.html" class="back-link">← Nazaj na domačo stran</a>
+    </header>
 
     <h1>3D Vaze & Generator</h1>
 
@@ -289,7 +299,7 @@
     </div>
 
     <div class="back-link-container">
-        <a href="index.html" class="back-link">← Nazaj na glavno stran</a>
+        <a href="index.html" class="back-link">← Nazaj na domačo stran</a>
     </div>
 
     <script>

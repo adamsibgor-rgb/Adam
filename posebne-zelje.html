@@ -21,27 +21,35 @@
             padding: 0 40px;
         }
 
-        .brand-header {
+        .page-top {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 35px;
-            margin-bottom: 20px;
             width: 100%;
+            margin-bottom: 24px;
+            text-align: center;
         }
-
-        .brand-logo {
-            height: 220px; 
+        .site-logo-link {
+            display: block;
+            line-height: 0;
+            margin-bottom: 10px;
+        }
+        .site-logo {
+            height: 100px;
             width: auto;
             object-fit: contain;
         }
-
-        .brand-name {
-            font-size: 5.5rem;
-            font-weight: 900;
-            color: #2C3E1F;
+        .back-link {
+            display: inline-block;
             margin: 0;
-            letter-spacing: -1.5px;
+            color: #546B41;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+        }
+        .back-link:hover {
+            color: #2C3E1F;
+            text-decoration: underline;
         }
 
         h1 {
@@ -126,7 +134,7 @@
             border-radius: 15px;
             margin-bottom: 20px;
             background-color: #ffffff;
-            object-fit: cover;
+            object-fit: contain;
             padding: 8px;
             box-sizing: border-box;
             border: 2px solid rgba(84, 107, 65, 0.2);
@@ -334,15 +342,8 @@
             body {
                 padding: 0 15px;
             }
-            .brand-header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .brand-logo {
-                height: 140px;
-            }
-            .brand-name {
-                font-size: 3.5rem;
+            .site-logo {
+                height: 80px;
             }
             .container {
                 grid-template-columns: 1fr;
@@ -353,10 +354,12 @@
 
 <body>
 
-    <div class="brand-header">
-        <img src="slike Prva str/Logo.png" alt="3Dprojekti Logo" class="brand-logo">
-        <h2 class="brand-name">3Dprojekti</h2>
-    </div>
+    <header class="page-top">
+        <a href="index.html" class="site-logo-link" aria-label="3Dprojekti – domov">
+            <img src="slike Prva str/Logo.png" alt="3Dprojekti" class="site-logo">
+        </a>
+        <a href="index.html" class="back-link">← Nazaj na domačo stran</a>
+    </header>
 
     <h1>Dobrodošli na moji spletni strani</h1>
     <p class="intro">
